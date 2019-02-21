@@ -55,26 +55,27 @@ public class UsuarioController {
 
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	public ModelAndView form(Usuario usuario) {
-		ModelAndView modelAndView = new ModelAndView("usuarios/formUsuarios");
+		ModelAndView modelAndView = new ModelAndView("usuarios/form");
 		return modelAndView;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(@Valid Usuario usuario, BindingResult result, RedirectAttributes redirectAttributes) {
 
-		if (result.hasErrors()) {
-			return form(usuario);
-		}
+		System.out.println(usuario);
+		
+		usuarioDao.gravar(usuario);
+		redirectAttributes.addFlashAttribute("message", "Usuário cadastrado com sucesso!");
 
-		if (usuarioDao.usuarioJaExiste(usuario)) {
+		/*if (usuarioDao.usuarioJaExiste(usuario)) {
 			redirectAttributes.addFlashAttribute("message", "Erro! Usuario já existe!");
 			return new ModelAndView("redirect:/usuarios/form");
 		} else {
 			usuarioDao.gravar(usuario);
 			redirectAttributes.addFlashAttribute("message", "usuario cadastrado com sucesso!");
-		}
+		}*/
 
-		return new ModelAndView("redirect:/usuarios");
+		return new ModelAndView("redirect:/");
 	}
 	
 	

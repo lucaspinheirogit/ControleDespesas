@@ -37,10 +37,10 @@ public class HomeController {
 	public String urlMagicaMaluca() {
 				
 		Role admin = new Role("ROLE_ADMIN");
-		Role colaborador = new Role("ROLE_COLABORADOR");
+		Role user = new Role("ROLE_USER");
 		
 		roleDAO.gravar(admin);
-		roleDAO.gravar(colaborador);
+		roleDAO.gravar(user);
 
 		Usuario usuario = new Usuario(); 
 	    usuario.setNome("Admin");

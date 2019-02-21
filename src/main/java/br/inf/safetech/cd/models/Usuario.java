@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,7 +29,8 @@ public class Usuario implements UserDetails {
 	private String nome;
 	private String login;
 	private String senha;
-	private Situacao situacao;
+	@Column(name = "situacao")
+	private Situacao situacao = Situacao.I;
 
 	@ManyToMany
 	private List<Role> roles = new ArrayList<>();
@@ -115,9 +117,10 @@ public class Usuario implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Nome: " + this.nome + ", Login: " +this.login+ ", senha: " +this.senha;
+		return "Nome: " + this.nome + ", Login: " + this.login + ", senha: " + this.senha + ", tipo: " + this.roles
+				+ ", situacao: " + this.situacao;
 	}
 }

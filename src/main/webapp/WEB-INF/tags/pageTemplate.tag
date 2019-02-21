@@ -1,8 +1,11 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <%@ attribute name="titulo" required="true"%>
+
+<c:url value="/" var="contextPath" />
 
 <!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -15,25 +18,14 @@
 <link rel="stylesheet" href="${contextPath}resources/css/footer.css" />
 <link rel="stylesheet" href="${contextPath}resources/css/header.css" />
 <link rel="stylesheet" href="${contextPath}resources/css/home.css" />
-
-<style>
-h4 {
-	color: red;
-}
-</style>
-
+<link rel="stylesheet" href="${contextPath}resources/css/login.css" />
 </head>
 
 <body>
-
 	<div class="container-fluid">
-
 		<%@ include file="/WEB-INF/views/componentes/header.jsp"%>
-
 		<jsp:doBody />
-
 	</div>
-
 	<footer>
 		<h6>Desenvolvido por Lucas Pinheiro &copy</h6>
 	</footer>
@@ -51,5 +43,4 @@ h4 {
 		crossorigin="anonymous"></script>
 
 </body>
-
 </html>

@@ -1,23 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
+<%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
 
-<title>Login</title>
-<c:url value="/resources/css" var="cssPath" />
-<link rel="stylesheet" href="${cssPath}/bootstrap.min.css" />
-<link rel="stylesheet" href="${cssPath}/main.css" />
-<link rel="stylesheet" href="${cssPath}/login.css" />
-</head>
-<body>
+<tags:pageTemplate titulo="Login">
 
-	<div class="container">
-		<h2>Login</h2>
+	<div class="container container-login">
+		<h2 class="titulo-login">Login</h2>
+		<h5 class="color-red">${ error }</h5>
 		<form:form servletRelativeAction="/login" method="post">
 			<div class="form-group">
 				<label>Login</label> <input type="text" name="username"
@@ -31,5 +22,4 @@
 		</form:form>
 	</div>
 
-</body>
-</html>
+</tags:pageTemplate>

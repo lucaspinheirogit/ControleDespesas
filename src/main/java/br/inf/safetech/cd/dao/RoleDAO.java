@@ -15,7 +15,7 @@ public class RoleDAO {
 	@PersistenceContext
 	private EntityManager manager;
 
-	public void gravar(Role tipo) {
-		manager.persist(tipo);
+	public void gravar(Role role) {
+		manager.persist(role);
 	}
 }

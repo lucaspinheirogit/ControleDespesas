@@ -8,6 +8,8 @@
 
 	<main class="container">
 
+	<h5 style="color: red; text-align: center" class="color-red">${ message }</h5>
+
 	<div class="nova-conta">
 		<button class="btn btn-primary">Criar nova conta +</button>
 		<form class="form-inline my-2 my-lg-0">

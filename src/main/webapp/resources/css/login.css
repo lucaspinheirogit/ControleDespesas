@@ -1,9 +1,8 @@
-h2 {
+.titulo-login{
 	text-align: center;
 }
-
 @media ( min-width : 768px) {
-	.container {
+	.container-login {
 		width: 50%;
 	}
 }

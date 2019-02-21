@@ -44,9 +44,6 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 				.createQuery("select u from Usuario u join fetch u.roles where login = :login", Usuario.class)
 				.setParameter("login", login).getResultList();
 
-		System.out.println(usuarios.get(0));
-		System.out.println("era pra ter listado o usuario kkk");
-
 		if (usuarios.isEmpty()) {
 			throw new UsernameNotFoundException("Usuario " + login + " não foi encontrado");
 		}
@@ -56,6 +53,7 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 
 	public void gravar(Usuario usuario) {
 		System.out.println("usuariodao.gravar");
+		System.out.println(usuario);
 		usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 		manager.persist(usuario);
 	}
