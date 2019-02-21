@@ -1,0 +1,174 @@
+/* MAIN */
+.container {
+	padding: 1em 0;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.nova-conta {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0;
+}
+
+.nova-conta button {
+	margin: .5em 0 1.8em 0;
+}
+
+.nova-conta form {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: .5em;
+}
+
+.filtrar {
+	width: 100%;
+	display: flex;
+	margin: 0;
+}
+
+.search {
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.search button {
+	margin: 0;
+	margin-left: .5em;
+}
+
+select {
+	margin: 0 0 0 1em;
+}
+/* CONTAS */
+.contas {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+/* CARD */
+.card {
+	height: 18em;
+	width: 19em;
+	border: 1px solid #2C3E50;
+	margin: 0 auto;
+}
+
+.card-body {
+	display: flex;
+	flex-direction: column;
+}
+
+.card-header {
+	background-color: #2C3E50;
+	display: flex;
+	justify-content: space-between;
+}
+
+.card-header small {
+	font-size: 1em;
+}
+
+.card-body-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.movimentacoes {
+	margin-bottom: auto;
+}
+
+.data-inicio {
+	color: lightgreen;
+}
+
+.data-fim {
+	color: red;
+}
+
+.cliente {
+	flex-grow: 1;
+}
+
+small {
+	margin-left: 1em;
+	font-size: 1.10em;
+	color: #aaa;
+}
+
+.cliente {
+	margin-bottom: 1.5em;
+}
+
+@media ( min-width : 576px) and (max-width: 768px) {
+	.filtrar {
+		margin-bottom: .5em !important;
+	}
+	.nav-link {
+		padding: 0.5rem 1rem;
+	}
+	.form-control{
+		flex-grow: 1;
+	}
+}
+
+@media ( min-width : 768px) {
+	main {
+		align-items: inherit;
+	}
+	.nova-conta {
+		flex-direction: row;
+		margin-bottom: 2em;
+	}
+	.nova-conta button {
+		margin: 0;
+	}
+	.nova-conta form {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		width: auto;
+		padding: .5em;
+	}
+	.filtrar {
+		width: auto;
+		display: flex;
+		margin: 0;
+	}
+	.search {
+		width: auto;
+		display: flex;
+		align-items: center;
+	}
+	select {
+		margin-left: .5em;
+	}
+	.search input {
+		margin: 0 .5em;
+	}
+	.search button {
+		margin: 0;
+	}
+	.card {
+		margin: .5em;
+	}
+	.nav-link {
+		padding: 0.5rem 1rem;
+	}
+}
+
+@media ( min-width : 1200px) {
+	.card {
+		width: 23em;
+	}
+}

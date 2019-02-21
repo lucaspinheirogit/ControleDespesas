@@ -1,0 +1,12 @@
+footer {
+    flex-shrink: 0;
+  }
+h6{
+	height: 3em;
+	vertical-align: middle;
+    text-align: center;
+    background-color: #2C3E50;
+    color: white;
+    padding: 1em; 
+    margin: 0;
+}
