@@ -25,30 +25,10 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioDAO usuarioDao;
 
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		//binder.addValidators(new UsuarioValidation());
-	}
-	
-	@RequestMapping(value="/roles/form", method = RequestMethod.POST)
-	public ModelAndView alterarRoles(@RequestParam String email) {
-		
-		Usuario usuario = usuarioDao.find(email.substring(1));
-		System.out.println(usuario.getNome());
-		System.out.println(usuario.getLogin());
-		System.out.println(usuario.getSenha());
-		System.out.println(usuario.getRoles());
-		
-		
-		ModelAndView modelAndView = new ModelAndView("usuarios/formRoles");
-		modelAndView.addObject("usuario", usuario);
-		return modelAndView;
-	}
-
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView listar() {
 		List<Usuario> usuarios = usuarioDao.listar();
-		ModelAndView modelAndView = new ModelAndView("usuarios/listaUsuarios");
+		ModelAndView modelAndView = new ModelAndView("usuarios/lista");
 		modelAndView.addObject("usuarios", usuarios);
 		return modelAndView;
 	}
@@ -76,18 +56,6 @@ public class UsuarioController {
 		}*/
 
 		return new ModelAndView("redirect:/");
-	}
-	
-	
-	@RequestMapping(value= "/roles/gravar", method = RequestMethod.POST)
-	public ModelAndView gravarRoles(Usuario usuario, RedirectAttributes redirectAttributes) {
-		
-		System.out.println("ROLES:" + usuario.getRoles());
-		
-		usuarioDao.gravarRoles(usuario.getLogin(), usuario.getRoles());
-
-		redirectAttributes.addFlashAttribute("message", "Permissoes alteradas com sucesso!");
-		return new ModelAndView("redirect:/usuarios");
 	}
 
 }
