@@ -143,7 +143,7 @@
 	    <groupId>mysql</groupId>
 	    <artifactId>mysql-connector-java</artifactId>
 	    <version>${mysql.connector.version}</version>
-	</dependency>
+	</dependency>  
 
 	<!-- dependencia driver postgres para heroku -->	
 	<dependency>

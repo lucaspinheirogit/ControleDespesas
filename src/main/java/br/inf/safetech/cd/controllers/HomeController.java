@@ -46,7 +46,7 @@ public class HomeController {
 	    usuario.setNome("Admin");
 	    usuario.setLogin("admin@123");
 	    usuario.setSenha("123456");
-	    usuario.setSituacao(Situacao.A);
+	    usuario.setSituacao(Situacao.ATIVO);
 	    usuario.setRoles(Arrays.asList(admin));
 
 	    usuarioDAO.gravar(usuario);
