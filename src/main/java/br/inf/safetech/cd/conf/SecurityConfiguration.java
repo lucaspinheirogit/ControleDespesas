@@ -23,6 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 //			.antMatchers("/resources/**").permitAll()
 				.antMatchers("/").permitAll()
+				.antMatchers("/**").permitAll()
 				.antMatchers("/magia").permitAll()
 				.anyRequest().authenticated().and().formLogin().loginPage("/login")
 				.defaultSuccessUrl("/")

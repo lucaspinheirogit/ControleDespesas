@@ -23,6 +23,15 @@ public class Usuario implements UserDetails {
 
 	}
 
+	public Usuario(Integer id, String nome, String login, String senha, Situacao situacao, List<Role> roles) {
+		this.id = id;
+		this.nome = nome;
+		this.login = login;
+		this.senha = senha;
+		this.situacao = situacao;
+		this.roles = roles;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
