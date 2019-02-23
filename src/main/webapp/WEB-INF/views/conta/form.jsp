@@ -3,6 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
 
 <c:url value="/" var="contextPath" />
@@ -16,19 +17,34 @@
 		<form:form action="${s:mvcUrl('CDC#gravar').build() }" method="post"
 			commandName="contaDespesa">
 			<div class="form-group">
-
+				<label>Cliente: </label>
 				<form:select path="cliente.id">
 					<c:forEach items="${clientes }" var="cliente">
 						<form:option value="${ cliente.id }" label="${ cliente.nome }" />
 					</c:forEach>
 				</form:select>
-
-				<%-- 				<form:input path="cliente.id"></form:input> --%>
-				<%-- 				<form:input path="cliente.nome"></form:input> --%>
-
+			</div>
+			<div class="form-group">
+				<label>Colaborador: </label>
+				<form:select path="usuario.id">
+					<c:forEach items="${usuarios }" var="usuario">
+						<form:option value="${ usuario.id }" label="${ usuario.nome }" />
+					</c:forEach>
+				</form:select>
+			</div>
+			<div class="form-group">
+				<label>Data de início: </label>
+				<form:input path="dataInicio" type="date" />
+			</div>
+			<div class="form-group">
+				<label>Data de fim: </label>
+				<form:input path="dataFim" type="date" />
 			</div>
 			<button type="submit" class="btn btn-primary">Cadastrar</button>
 		</form:form>
 	</div>
+
+	<!-- 	dataInicio; -->
+	<!-- 	dataFim; -->
 
 </tags:pageTemplate>

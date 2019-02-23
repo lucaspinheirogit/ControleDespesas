@@ -27,6 +27,11 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 
 	@PersistenceContext
 	private EntityManager manager;
+	
+	public Usuario find(Integer id) {
+		System.out.println("finding Usuario");
+		return manager.find(Usuario.class, id);
+	}
 
 	public Usuario find(String login) {
 		System.out.println("usuariodao.find");

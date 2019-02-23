@@ -1,12 +1,12 @@
 package br.inf.safetech.cd.models;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -18,7 +18,7 @@ public class ContaDespesa {
 
 	}
 
-	public ContaDespesa(Usuario usuario, Cliente cliente, Calendar dataInicio, Calendar dataFim,
+	public ContaDespesa(Usuario usuario, Cliente cliente, Date dataInicio, Date dataFim,
 			Situacao situacao) {
 		this.usuario = usuario;
 		this.cliente = cliente;
@@ -38,8 +38,8 @@ public class ContaDespesa {
 	//@JoinColumn(name = "id")
 	private Cliente cliente;
 	
-	private Calendar dataInicio;
-	private Calendar dataFim;
+	private Date dataInicio;
+	private Date dataFim;
 	private Situacao situacao;
 
 	public Integer getId() {
@@ -66,19 +66,19 @@ public class ContaDespesa {
 		this.cliente = cliente;
 	}
 
-	public Calendar getDataInicio() {
+	public Date getDataInicio() {
 		return dataInicio;
 	}
 
-	public void setDataInicio(Calendar dataInicio) {
+	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
 	}
 
-	public Calendar getDataFim() {
+	public Date getDataFim() {
 		return dataFim;
 	}
 
-	public void setDataFim(Calendar dataFim) {
+	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
 	}
 

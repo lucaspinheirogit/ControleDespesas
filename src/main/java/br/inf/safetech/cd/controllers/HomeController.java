@@ -2,6 +2,7 @@ package br.inf.safetech.cd.controllers;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,14 +84,12 @@ public class HomeController {
 		usuarioDAO.gravar(usuario);
 		usuarioDAO.gravar(usuario2);
 
-		ContaDespesa conta1 = new ContaDespesa(usuario2, cliente1, new GregorianCalendar(2018, 2, 2),
-				new GregorianCalendar(2018, 2, 10), Situacao.ATIVO);
-		ContaDespesa conta2 = new ContaDespesa(usuario2, cliente2, new GregorianCalendar(2018, 2, 2),
-				new GregorianCalendar(2018, 2, 10), Situacao.ATIVO);
-		ContaDespesa conta3 = new ContaDespesa(usuario, cliente2, new GregorianCalendar(2018, 2, 2),
-				new GregorianCalendar(2018, 2, 10), Situacao.ATIVO);
+		ContaDespesa conta1 = new ContaDespesa(usuario2, cliente1, new Date(), new Date(), Situacao.ATIVO);
+		ContaDespesa conta2 = new ContaDespesa(usuario2, cliente2, new Date(), new Date(), Situacao.ATIVO);
+		ContaDespesa conta3 = new ContaDespesa(usuario, cliente2, new Date(), new Date(), Situacao.ATIVO);
 
-		MovimentacaoConta mc1 = new MovimentacaoConta(conta1, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(300), "Taxi");
+		MovimentacaoConta mc1 = new MovimentacaoConta(conta1, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(300),
+				"Taxi");
 		MovimentacaoConta mc2 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(500), "Uber");
 
 		movimentacaoContaDAO.gravar(mc1);

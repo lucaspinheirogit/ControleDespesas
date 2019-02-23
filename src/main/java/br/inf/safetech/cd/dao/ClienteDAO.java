@@ -22,6 +22,11 @@ public class ClienteDAO{
 
 	@PersistenceContext
 	private EntityManager manager;
+	
+	public Cliente find(Integer id) {
+		System.out.println("Finding Cliente");
+		return manager.find(Cliente.class, id);
+	}
 
 	public List<Cliente> listar() {
 		System.out.println("listando clientes");

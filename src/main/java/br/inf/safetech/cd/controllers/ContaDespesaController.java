@@ -23,17 +23,17 @@ import br.inf.safetech.cd.models.Usuario;
 public class ContaDespesaController {
 
 	@Autowired
-	private ClienteDAO clienteDao;
+	private ClienteDAO clienteDAO;
 
 	@Autowired
-	private ContaDespesaDAO contaDespesaDao;
+	private ContaDespesaDAO contaDespesaDAO;
 
 	@Autowired
-	private UsuarioDAO usuarioDao;
+	private UsuarioDAO usuarioDAO;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView listar() {
-		List<Cliente> clientes = clienteDao.listar();
+		List<Cliente> clientes = clienteDAO.listar();
 		System.out.println(clientes);
 		System.out.println(clientes.get(0));
 		ModelAndView modelAndView = new ModelAndView("clientes/lista");
@@ -45,10 +45,10 @@ public class ContaDespesaController {
 	public ModelAndView form(ContaDespesa contaDespesa) {
 		ModelAndView modelAndView = new ModelAndView("conta/form");
 
-		List<Cliente> clientes = clienteDao.listar();
+		List<Cliente> clientes = clienteDAO.listar();
 		modelAndView.addObject("clientes", clientes);
 
-		List<Usuario> usuarios = usuarioDao.listar();
+		List<Usuario> usuarios = usuarioDAO.listar();
 		modelAndView.addObject("usuarios", usuarios);
 
 		return modelAndView;
@@ -58,8 +58,13 @@ public class ContaDespesaController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(ContaDespesa conta, RedirectAttributes redirectAttributes) {
 
-		System.out.println(conta.getCliente());
-		System.out.println(conta.getCliente().getId());
+		Cliente c = clienteDAO.find(conta.getCliente().getId());
+		Usuario u = usuarioDAO.find(conta.getUsuario().getId());
+		System.out.println(conta.getDataInicio());
+		System.out.println(conta.getDataFim());
+		
+		System.out.println(c);
+		System.out.println(u);
 
 		// contaDespesaDao.gravar(conta);
 		redirectAttributes.addFlashAttribute("message", "Conta cadastrada com sucesso!");
