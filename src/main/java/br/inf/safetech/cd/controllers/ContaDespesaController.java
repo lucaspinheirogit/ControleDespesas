@@ -1,11 +1,14 @@
 package br.inf.safetech.cd.controllers;
 
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,7 +21,7 @@ import br.inf.safetech.cd.models.Cliente;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.Usuario;
 
-@RequestMapping("/conta")
+@RequestMapping("/contas")
 @Controller
 public class ContaDespesaController {
 
@@ -30,14 +33,19 @@ public class ContaDespesaController {
 
 	@Autowired
 	private UsuarioDAO usuarioDAO;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder webDataBinder) {
+	 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	 dateFormat.setLenient(false);
+	 webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	 }
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView listar() {
-		List<Cliente> clientes = clienteDAO.listar();
-		System.out.println(clientes);
-		System.out.println(clientes.get(0));
-		ModelAndView modelAndView = new ModelAndView("clientes/lista");
-		modelAndView.addObject("clientes", clientes);
+		List<ContaDespesa> contas = contaDespesaDAO.listar();
+		ModelAndView modelAndView = new ModelAndView("home");
+		modelAndView.addObject("contas", contas);
 		return modelAndView;
 	}
 

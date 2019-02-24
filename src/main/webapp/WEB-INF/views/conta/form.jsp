@@ -34,11 +34,11 @@
 			</div>
 			<div class="form-group">
 				<label>Data de início: </label>
-				<form:input path="dataInicio" type="date" />
+				<form:input path="dataInicio" />
 			</div>
 			<div class="form-group">
 				<label>Data de fim: </label>
-				<form:input path="dataFim" type="date" />
+				<form:input path="dataFim" />
 			</div>
 			<button type="submit" class="btn btn-primary">Cadastrar</button>
 		</form:form>

@@ -1,5 +1,6 @@
 package br.inf.safetech.cd.dao;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
+import br.inf.safetech.cd.models.Produto;
 
 @Repository
 @Transactional
@@ -28,5 +30,13 @@ public class MovimentacaoContaDAO{
 		System.out.println("gravando movimentacao na conta");
 		manager.persist(movimentacao);
 	}
+
+	public List<MovimentacaoConta> listarPorId(Integer contaId) {
+		System.out.println("listando movimentacoes por id: " + contaId);
+		return manager.createQuery("select m from MovimentacaoConta m where m.conta.id = :pId", MovimentacaoConta.class)
+				.setParameter("pId", contaId)
+				.getResultList();
+	}
+	
 
 }

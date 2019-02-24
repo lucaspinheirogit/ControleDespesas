@@ -39,6 +39,7 @@ public class ProdutosController {
 	public void initBinder(WebDataBinder binder) {
 		binder.addValidators(new ProdutoValidation());
 	}
+	
 
 	@RequestMapping("/form")
 	public ModelAndView form(Produto produto) {

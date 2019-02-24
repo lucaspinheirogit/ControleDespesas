@@ -22,7 +22,7 @@ public class ContaDespesaDAO{
 	public List<ContaDespesa> listar() {
 		System.out.println("listando contas de despesas");
 		return manager.createQuery("select c from ContaDespesa c", ContaDespesa.class).getResultList();
-	}
+	}  
 
 	public void gravar(ContaDespesa conta) {
 		System.out.println("gravando conta de despesa");

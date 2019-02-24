@@ -47,7 +47,6 @@ public class MovimentacaoConta {
 
 	@Override
 	public String toString() {
-		return "a";
-		//return "ID: " + this.id + ", Nome: " + this.nome;
+		return "ID: " + this.id + ", contaId: " + this.conta.getId() + ", desc: " + this.descricao + ", valor: " + this.valor + ", Tipo: " + this.tipo + ", Conc.: " + this.conciliada ;
 	}
 }

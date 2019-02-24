@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 public class ContaDespesa {
 
@@ -18,7 +20,7 @@ public class ContaDespesa {
 
 	}
 
-	public ContaDespesa(Usuario usuario, Cliente cliente, Date dataInicio, Date dataFim,
+	public ContaDespesa(Usuario usuario, Cliente cliente, Calendar dataInicio, Calendar dataFim,
 			Situacao situacao) {
 		this.usuario = usuario;
 		this.cliente = cliente;
@@ -38,8 +40,12 @@ public class ContaDespesa {
 	//@JoinColumn(name = "id")
 	private Cliente cliente;
 	
-	private Date dataInicio;
-	private Date dataFim;
+	@DateTimeFormat
+	private Calendar dataInicio;
+	
+	@DateTimeFormat
+	private Calendar dataFim;
+	
 	private Situacao situacao;
 
 	public Integer getId() {
@@ -66,19 +72,19 @@ public class ContaDespesa {
 		this.cliente = cliente;
 	}
 
-	public Date getDataInicio() {
+	public Calendar getDataInicio() {
 		return dataInicio;
 	}
 
-	public void setDataInicio(Date dataInicio) {
+	public void setDataInicio(Calendar dataInicio) {
 		this.dataInicio = dataInicio;
 	}
 
-	public Date getDataFim() {
+	public Calendar getDataFim() {
 		return dataFim;
 	}
 
-	public void setDataFim(Date dataFim) {
+	public void setDataFim(Calendar dataFim) {
 		this.dataFim = dataFim;
 	}
 

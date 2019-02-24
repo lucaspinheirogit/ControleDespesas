@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="${contextPath}resources/css/header.css" />
 <link rel="stylesheet" href="${contextPath}resources/css/home.css" />
 <link rel="stylesheet" href="${contextPath}resources/css/login.css" />
+<link rel="stylesheet" href="${contextPath}resources/css/responsive-table.css" />
 </head>
 
 <body>
