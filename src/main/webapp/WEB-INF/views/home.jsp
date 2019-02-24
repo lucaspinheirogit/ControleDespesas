@@ -12,9 +12,13 @@
 	<main class="container">
 
 	<h5 style="color: red; text-align: center" class="color-red">${ message }</h5>
+	<h5 style="color: red; text-align: center" class="color-red">${ usuario}</h5>
+	<h5 style="color: red; text-align: center" class="color-red">${ usuario.id }</h5>
 
 	<div class="nova-conta">
-		<button class="btn btn-primary">Criar nova conta +</button>
+		<security:authorize access="hasRole('ROLE_ADMIN')">
+			<button class="btn btn-primary">Criar nova conta +</button>
+		</security:authorize>
 		<form class="form-inline my-2 my-lg-0">
 			<div class="form-group filtrar">
 				<label for="exampleSelect1">Filtrar por:</label> <select
@@ -50,21 +54,18 @@
 					<h5 class="card-title cliente">${ conta.cliente.nome }</h5>
 					<div class="movimentacoes">
 						<h5 class="card-title">Movimentações:</h5>
-						<form action="${s:mvcUrl('MCC#listar').build() }"
-							method="GET">
-							<input type="hidden" name="id" value="${ conta.id }">
-							<button class="btn btn-primary my-2 my-sm-0" type="submit">Ver</button>
-						</form> 
-						<form action="${s:mvcUrl('MCC#listar').build() }"
-							method="POST">
-							<input type="hidden" name="id" value="${ conta.id }">
-							<button class="btn btn-primary my-2 my-sm-0" type="submit">Adicionar</button>
-						</form>
-						<form action="${s:mvcUrl('MCC#listar').build() }"
-							method="POST">
-							<input type="hidden" name="id" value="${ conta.id }">
-							<button class="btn btn-primary my-2 my-sm-0" type="submit">Editar</button>
-						</form>
+						<div class="botoes-conta">
+							<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">
+								<a href="<c:url value="/movimentacoes/${ conta.id }" />">Ver</a>
+							</button>
+							<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">
+								<a
+									href="<c:url value="/movimentacoes/adicionar/${ conta.id }" />">Adicionar</a>
+							</button>
+							<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">
+								<a href="<c:url value="/movimentacoes/editar/${ conta.id }" />">Editar</a>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

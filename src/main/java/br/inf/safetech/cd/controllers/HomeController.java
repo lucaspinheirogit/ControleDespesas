@@ -1,11 +1,12 @@
 package br.inf.safetech.cd.controllers;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,9 +63,13 @@ public class HomeController {
 
 		Cliente cliente1 = new Cliente("KLIN");
 		Cliente cliente2 = new Cliente("BIBI");
+		Cliente cliente3 = new Cliente("Paqueta");
+		Cliente cliente4 = new Cliente("Altero");
 
 		clienteDAO.gravar(cliente1);
 		clienteDAO.gravar(cliente2);
+		clienteDAO.gravar(cliente3);
+		clienteDAO.gravar(cliente4);
 
 		Usuario usuario = new Usuario();
 		usuario.setNome("Admin");
@@ -91,10 +96,24 @@ public class HomeController {
 
 		MovimentacaoConta mc1 = new MovimentacaoConta(conta1, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(300),
 				"Taxi");
-		MovimentacaoConta mc2 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(500), "Uber");
+		MovimentacaoConta mc2 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(500), "Comida");
+		MovimentacaoConta mc3 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(700), "Hotel");
+		MovimentacaoConta mc4 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(100), "Terno");
+		MovimentacaoConta mc5 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(320), "Passeio de barco");
+		MovimentacaoConta mc6 = new MovimentacaoConta(conta2, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1200), "Passagem");
+		MovimentacaoConta mc7 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(50), "Comida");
+		MovimentacaoConta mc8 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(100), "Transporte");
+		MovimentacaoConta mc9 = new MovimentacaoConta(conta3, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1500), "Hotel");
 
 		movimentacaoContaDAO.gravar(mc1);
 		movimentacaoContaDAO.gravar(mc2);
+		movimentacaoContaDAO.gravar(mc3);
+		movimentacaoContaDAO.gravar(mc4);
+		movimentacaoContaDAO.gravar(mc5);
+		movimentacaoContaDAO.gravar(mc6);
+		movimentacaoContaDAO.gravar(mc7);
+		movimentacaoContaDAO.gravar(mc8);
+		movimentacaoContaDAO.gravar(mc9);
 
 		contaDespesaDAO.gravar(conta1);
 		contaDespesaDAO.gravar(conta2);
@@ -102,4 +121,24 @@ public class HomeController {
 
 		return "Url Mágica executada";
 	}
+	
+	
+	@RequestMapping("/teste")
+	public ModelAndView teste(Principal principal, User user) {
+		System.out.println(principal);
+		System.out.println(user);
+		return new ModelAndView("redirect:/contas");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

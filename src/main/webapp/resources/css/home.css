@@ -7,6 +7,12 @@ main {
 	flex-direction: column;
 	align-items: center;
 }
+.botoes-conta a{
+	color: white;	
+}
+.botoes-conta a:hover{
+	text-decoration: none;	
+}
 
 .nova-conta {
 	display: flex;

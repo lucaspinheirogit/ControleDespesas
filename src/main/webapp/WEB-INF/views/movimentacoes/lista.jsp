@@ -10,12 +10,7 @@
 <tags:pageTemplate titulo="Lista de clientes">
 
 	<div class="container">
-		<h2>Lista de movimentações</h2>
-
-
-		<%-- 		<c:forEach items="${ clientes }" var="cliente"> --%>
-		<%-- 			<h5>${ cliente.id } - ${ cliente.nome }</h5> --%>
-		<%-- 		</c:forEach> --%>
+		<h2 style="text-align: center;">Lista de movimentações</h2>
 
 		<table>
 			<thead>
@@ -29,32 +24,20 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>Empresa</td>
-					<td>hospedagem</td>
-					<td>750.00</td>
-					<td>Credito</td>
-					<td>Sim</td>
-					<td>Safetech</td>
-				</tr>
-				<tr>
-					<td>Daniel Rolloff</td>
-					<td>Tênis</td>
-					<td>150.00</td>
-					<td>Debito</td>
-					<td>Nao</td>
-					<td>Daniel rolloff</td>
-				</tr>
-				<tr>
-					<td>Empresa</td>
-					<td>hospedagem</td>
-					<td>750.00</td>
-					<td>Credito</td>
-					<td>Sim</td>
-					<td>Safetech</td>
-				</tr>
+				<c:forEach items="${ movimentacoes }" var="m">
+					<tr>
+						<td>Empresa</td>
+						<td>${ m.descricao }</td>
+						<td>${ m.valor }</td>
+						<td>${ m.tipo }</td>
+						<td>${ m.conciliada }</td>
+						<td>Safetech</td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
+		<br />
+		<button class="btn btn-primary">Gerar PDF</button>
 
 	</div>
 

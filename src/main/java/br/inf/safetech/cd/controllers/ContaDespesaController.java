@@ -1,5 +1,6 @@
 package br.inf.safetech.cd.controllers;
 
+import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -33,18 +34,25 @@ public class ContaDespesaController {
 
 	@Autowired
 	private UsuarioDAO usuarioDAO;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder webDataBinder) {
-	 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-	 dateFormat.setLenient(false);
-	 webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-	 }
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		dateFormat.setLenient(false);
+		webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView listar() {
-		List<ContaDespesa> contas = contaDespesaDAO.listar();
+	public ModelAndView listar(Principal principal) {
 		ModelAndView modelAndView = new ModelAndView("home");
+
+		if (principal != null) {
+			Usuario usuario = usuarioDAO.loadUserByUsername(principal.getName());
+			modelAndView.addObject("usuario", usuario);
+		}
+
+		List<ContaDespesa> contas = contaDespesaDAO.listar();
+
 		modelAndView.addObject("contas", contas);
 		return modelAndView;
 	}
@@ -70,7 +78,7 @@ public class ContaDespesaController {
 		Usuario u = usuarioDAO.find(conta.getUsuario().getId());
 		System.out.println(conta.getDataInicio());
 		System.out.println(conta.getDataFim());
-		
+
 		System.out.println(c);
 		System.out.println(u);
 

@@ -45,6 +45,46 @@ public class MovimentacaoConta {
 	}
 
 
+	public ContaDespesa getConta() {
+		return conta;
+	}
+
+	public void setConta(ContaDespesa conta) {
+		this.conta = conta;
+	}
+
+	public Tipo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
+	}
+
+	public Conciliada getConciliada() {
+		return conciliada;
+	}
+
+	public void setConciliada(Conciliada conciliada) {
+		this.conciliada = conciliada;
+	}
+
+	public BigDecimal getValor() {
+		return valor;
+	}
+
+	public void setValor(BigDecimal valor) {
+		this.valor = valor;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	@Override
 	public String toString() {
 		return "ID: " + this.id + ", contaId: " + this.conta.getId() + ", desc: " + this.descricao + ", valor: " + this.valor + ", Tipo: " + this.tipo + ", Conc.: " + this.conciliada ;
