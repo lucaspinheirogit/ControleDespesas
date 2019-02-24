@@ -8,18 +8,28 @@
 
 <c:url value="/" var="contextPath" />
 
-<tags:pageTemplate titulo="Cadastro de contas de despesa">
+<tags:pageTemplate titulo="Cadastro de movimentacao">
 
 	<div class="container container-login">
-		<h2 class="titulo-login">Cadastro de conta de despesa</h2>
+		<h2 class="titulo-login">Cadastro de movimentação</h2>
 		<h5 class="color-red">${ message }</h5>
 
 		<form:form action="${s:mvcUrl('MCC#gravar').build() }" method="post"
 			commandName="movimentacaoConta">
 			<div class="form-group">
 				<label>Tipo: </label>
-				<form:checkbox path="tipo" value="CREDITO"/>Crédito
-				<form:checkbox path="tipo" value="DEBITO"/>Débito
+				<form:checkbox path="tipo" value="CREDITO" />
+				Crédito
+				<form:checkbox path="tipo" value="DEBITO" />
+				Débito
+			</div>
+			<div class="form-group">
+				<label>Descrição: </label>
+				<form:input path="descricao" />
+			</div>
+			<div class="form-group">
+				<label>Valor: </label>
+				<form:input type="number" path="valor" />
 			</div>
 			<button type="submit" class="btn btn-primary">Cadastrar</button>
 		</form:form>

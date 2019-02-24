@@ -44,6 +44,8 @@ public class MovimentacaoContaController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(MovimentacaoConta movimentacaoConta, RedirectAttributes redirectAttributes) {
 
+		System.out.println(movimentacaoConta.getDescricao());
+		System.out.println(movimentacaoConta.getValor());
 		System.out.println(movimentacaoConta.getTipo());
 
 		// contaDespesaDao.gravar(conta);
