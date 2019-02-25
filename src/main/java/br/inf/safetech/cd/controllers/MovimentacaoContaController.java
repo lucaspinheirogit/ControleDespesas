@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -25,8 +26,9 @@ public class MovimentacaoContaController {
 	@Autowired
 	private MovimentacaoContaDAO movimentacaoContaDAO;
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ModelAndView listar(@PathVariable("id") Integer id) {
+	@RequestMapping(value = "/ver", method = RequestMethod.POST)
+	public ModelAndView listar(@RequestParam("id") Integer id) {
+		System.out.println(id);
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		System.out.println(movimentacoes);
 

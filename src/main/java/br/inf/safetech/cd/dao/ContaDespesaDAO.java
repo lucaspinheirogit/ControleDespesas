@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.inf.safetech.cd.models.Cliente;
 import br.inf.safetech.cd.models.ContaDespesa;
+import br.inf.safetech.cd.models.Usuario;
 
 @Repository
 @Transactional
@@ -32,6 +33,15 @@ public class ContaDespesaDAO{
 	public void gravar(ContaDespesa conta) {
 		System.out.println("gravando conta de despesa");
 		manager.persist(conta);
+	}
+
+	public List<ContaDespesa> listarPorColaborador(Usuario usuario) {
+		System.out.println("listando contas do colaborador: " + usuario.getLogin());
+		return manager.
+				createQuery("select c from ContaDespesa c where c.usuario.id = :id", ContaDespesa.class)
+				.setParameter("id", usuario.getId())
+				.getResultList();
+
 	}
 
 }

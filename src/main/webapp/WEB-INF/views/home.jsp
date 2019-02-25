@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/security/tags"
 	prefix="security"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
@@ -55,13 +56,15 @@
 						<h4 class="card-title">${ conta.usuario.nome }</h4>
 						<small>${ conta.situacao }</small>
 					</div>
-					<h5 class="card-title cliente">${ conta.cliente.nome }</h5>
+					<h5 class="card-title cliente">${ conta.cliente.nome } -- ${conta.id }</h5>
 					<div class="movimentacoes">
 						<h5 class="card-title">Movimentações:</h5>
 						<div class="botoes-conta">
-							<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">
-								<a href="<c:url value="/movimentacoes/${ conta.id }" />">Ver</a>
-							</button>
+							<form action="${s:mvcUrl('MCC#listar').build() }"
+								method="post">
+								<input type="hidden" name="id" value=${ conta.id } />
+								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">VER</button>
+							</form>
 							<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">
 								<a href="<c:url value="/movimentacoes/form/${ conta.id }" />">Adicionar</a>
 							</button>

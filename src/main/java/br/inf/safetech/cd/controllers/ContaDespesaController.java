@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -43,15 +44,22 @@ public class ContaDespesaController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView listar(Principal principal) {
+	public ModelAndView listar(Principal principal, Authentication auth) {
 		ModelAndView modelAndView = new ModelAndView("home");
 
-		if (principal != null) {
+		List<ContaDespesa> contas;
+		boolean hasUserRole = auth.getAuthorities().stream()
+		          .anyMatch(r -> r.getAuthority().equals("ROLE_USER"));
+		
+		if(hasUserRole) {
 			Usuario usuario = usuarioDAO.loadUserByUsername(principal.getName());
-			modelAndView.addObject("usuario", usuario);
+			contas = contaDespesaDAO.listarPorColaborador(usuario);
+			if(contas.size() == 0) 
+				modelAndView.addObject("message", "Não existe nenhuma conta no seu nome");
+		}else {
+			System.out.println("ADMIN");
+			contas = contaDespesaDAO.listar();
 		}
-
-		List<ContaDespesa> contas = contaDespesaDAO.listar();
 
 		modelAndView.addObject("contas", contas);
 		return modelAndView;
