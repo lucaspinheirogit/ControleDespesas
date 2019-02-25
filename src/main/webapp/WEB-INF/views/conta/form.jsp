@@ -11,14 +11,14 @@
 <tags:pageTemplate titulo="Cadastro de contas de despesa">
 
 	<div class="container container-login">
-		<h2 class="titulo-login">Cadastro de conta de despesa</h2>
+		<h3 class="titulo-login mb-5">Cadastro de conta de despesa</h3>
 		<h5 class="color-red">${ message }</h5>
 
-		<form:form action="${s:mvcUrl('CDC#gravar').build() }" method="post"
+		<form:form cssClass="p-2" action="${s:mvcUrl('CDC#gravar').build() }" method="post"
 			commandName="contaDespesa">
 			<div class="form-group">
 				<label>Cliente: </label>
-				<form:select path="cliente.id">
+				<form:select cssClass="form-control m-0" path="cliente.id">
 					<c:forEach items="${clientes }" var="cliente">
 						<form:option value="${ cliente.id }" label="${ cliente.nome }" />
 					</c:forEach>
@@ -26,7 +26,7 @@
 			</div>
 			<div class="form-group">
 				<label>Colaborador: </label>
-				<form:select path="usuario.id">
+				<form:select cssClass="form-control m-0" path="usuario.id">
 					<c:forEach items="${usuarios }" var="usuario">
 						<form:option value="${ usuario.id }" label="${ usuario.nome }" />
 					</c:forEach>
@@ -34,11 +34,11 @@
 			</div>
 			<div class="form-group">
 				<label>Data de início: </label>
-				<form:input path="dataInicio" placeholder="dd/MM/yyyy" />
+				<form:input cssClass="form-control" path="dataInicio" placeholder="dd/MM/yyyy" />
 			</div>
 			<div class="form-group">
 				<label>Data de fim: </label>
-				<form:input path="dataFim" placeholder="dd/MM/yyyy" />
+				<form:input cssClass="form-control" path="dataFim" placeholder="dd/MM/yyyy" />
 			</div>
 			<button type="submit" class="btn btn-primary">Cadastrar</button>
 		</form:form>

@@ -27,7 +27,7 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 
 	@PersistenceContext
 	private EntityManager manager;
-	
+
 	public Usuario find(Integer id) {
 		System.out.println("finding Usuario");
 		return manager.find(Usuario.class, id);
@@ -73,9 +73,14 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 
 	public boolean usuarioJaExiste(Usuario usuario) {
 		System.out.println("usuariodao.usuarioJaExiste");
-		if (manager.find(Usuario.class, usuario.getLogin()) != null) {
+		
+
+		if (!manager.createQuery("select u from Usuario u where login = :pLogin", Usuario.class)
+				.setParameter("pLogin", usuario.getLogin()).getResultList().isEmpty()) {
+			System.out.println("true");
 			return true;
 		}
+		System.out.println("false");
 		return false;
 	}
 }

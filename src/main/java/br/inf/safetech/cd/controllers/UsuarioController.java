@@ -42,20 +42,16 @@ public class UsuarioController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(@Valid Usuario usuario, BindingResult result, RedirectAttributes redirectAttributes) {
 
-		System.out.println(usuario);
-		
+		if (usuarioDao.usuarioJaExiste(usuario)) {
+			System.out.println("Ja existe");
+			redirectAttributes.addFlashAttribute("message", "Erro! Colaborador já existe!");
+			return new ModelAndView("redirect:/usuarios/form");
+		}
+
+		System.out.println("gravando novo colaborador");
 		usuarioDao.gravar(usuario);
 		redirectAttributes.addFlashAttribute("message", "Usuário cadastrado com sucesso!");
-
-		/*if (usuarioDao.usuarioJaExiste(usuario)) {
-			redirectAttributes.addFlashAttribute("message", "Erro! Usuario já existe!");
-			return new ModelAndView("redirect:/usuarios/form");
-		} else {
-			usuarioDao.gravar(usuario);
-			redirectAttributes.addFlashAttribute("message", "usuario cadastrado com sucesso!");
-		}*/
-
-		return new ModelAndView("redirect:/");
+		return new ModelAndView("redirect:/contas");
 	}
 
 }

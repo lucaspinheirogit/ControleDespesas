@@ -35,9 +35,13 @@ public class MovimentacaoContaController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/form", method = RequestMethod.GET)
-	public ModelAndView form(MovimentacaoConta movimentacaoConta) {
+	@RequestMapping(value = "/form/{id}", method = RequestMethod.GET)
+	public ModelAndView form(MovimentacaoConta movimentacaoConta, @PathVariable("id") Integer id) {
+		
+		ContaDespesa conta = contaDespesaDAO.find(id);
+		
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/form");
+		modelAndView.addObject("conta", conta);
 		return modelAndView;
 	}
 

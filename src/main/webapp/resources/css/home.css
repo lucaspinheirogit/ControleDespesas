@@ -7,11 +7,13 @@ main {
 	flex-direction: column;
 	align-items: center;
 }
-.botoes-conta a{
-	color: white;	
+
+.botoes-conta a {
+	color: white;
 }
-.botoes-conta a:hover{
-	text-decoration: none;	
+
+.botoes-conta a:hover {
+	text-decoration: none;
 }
 
 .nova-conta {
@@ -121,7 +123,7 @@ small {
 	.nav-link {
 		padding: 0.5rem 1rem;
 	}
-	.form-control{
+	.form-control {
 		flex-grow: 1;
 	}
 }
@@ -131,7 +133,7 @@ small {
 		align-items: inherit;
 	}
 	.nova-conta {
-		flex-direction: row;
+		/*flex-direction: row;*/
 		margin-bottom: 2em;
 	}
 	.nova-conta button {
@@ -168,6 +170,13 @@ small {
 	}
 	.nav-link {
 		padding: 0.5rem 1rem;
+	}
+}
+
+@media ( min-width : 992px) {
+	.nova-conta {
+		flex-direction: row;
+		margin-bottom: 2em;
 	}
 }
 

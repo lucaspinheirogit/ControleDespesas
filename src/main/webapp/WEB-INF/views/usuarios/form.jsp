@@ -11,23 +11,23 @@
 
 	<div class="container container-login">
 		<h2 class="titulo-login">Cadastro de colaborador</h2>
-		<h5 class="color-red">${ message }</h5>
+		<h5 style="color:red">${ message }</h5>
 
 		<form:form action="${s:mvcUrl('UC#gravar').build() }" method="post"
 			commandName="usuario" enctype="multipart/form-data">
 			<div class="form-group">
 				<label>Nome: </label>
-				<form:input path="nome" cssClass="form-control" />
+				<form:input path="nome" cssClass="form-control" required="required" />
 				<form:errors path="nome" />
 			</div>
 			<div class="form-group">
 				<label>Login: </label>
-				<form:input path="login" cssClass="form-control" />
+				<form:input path="login" cssClass="form-control" required="required" />
 				<form:errors path="login" />
 			</div>
 			<div class="form-group">
 				<label>Senha: </label>
-				<form:password path="senha" cssClass="form-control" />
+				<form:password path="senha" cssClass="form-control" required="required" />
 				<form:errors path="senha" />
 			</div>
 			<form:hidden path="roles" value="ROLE_USER" />

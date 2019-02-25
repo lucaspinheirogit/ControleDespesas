@@ -18,6 +18,11 @@ public class ContaDespesaDAO{
 
 	@PersistenceContext
 	private EntityManager manager;
+	
+	public ContaDespesa find(Integer id) {
+		System.out.println("Finding conta de despesa");
+		return manager.find(ContaDespesa.class, id);
+	}
 
 	public List<ContaDespesa> listar() {
 		System.out.println("listando contas de despesas");

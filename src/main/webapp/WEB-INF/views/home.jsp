@@ -3,6 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="security"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
 
 <c:url value="/" var="contextPath" />
@@ -12,12 +14,14 @@
 	<main class="container">
 
 	<h5 style="color: red; text-align: center" class="color-red">${ message }</h5>
-	<h5 style="color: red; text-align: center" class="color-red">${ usuario}</h5>
-	<h5 style="color: red; text-align: center" class="color-red">${ usuario.id }</h5>
 
 	<div class="nova-conta">
 		<security:authorize access="hasRole('ROLE_ADMIN')">
-			<button class="btn btn-primary">Criar nova conta +</button>
+			<div>
+				<a href="${s:mvcUrl('CDC#form').build() }" class="btn btn-primary">Criar
+					nova conta +</a> <a href="${s:mvcUrl('UC#form').build() }"
+					class="btn btn-primary">Cadastrar colaborador +</a>
+			</div>
 		</security:authorize>
 		<form class="form-inline my-2 my-lg-0">
 			<div class="form-group filtrar">
@@ -59,8 +63,7 @@
 								<a href="<c:url value="/movimentacoes/${ conta.id }" />">Ver</a>
 							</button>
 							<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">
-								<a
-									href="<c:url value="/movimentacoes/adicionar/${ conta.id }" />">Adicionar</a>
+								<a href="<c:url value="/movimentacoes/form/${ conta.id }" />">Adicionar</a>
 							</button>
 							<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">
 								<a href="<c:url value="/movimentacoes/editar/${ conta.id }" />">Editar</a>

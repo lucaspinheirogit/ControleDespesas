@@ -9,7 +9,7 @@
 	<div class="container container-login">
 		<h2 class="titulo-login">Login</h2>
 		<h5 class="color-red">${ error }</h5>
-		<form:form servletRelativeAction="/login" method="post">
+		<form:form cssClass="p-2" servletRelativeAction="/login" method="post">
 			<div class="form-group">
 				<label>Login</label> <input type="text" name="username"
 					class="form-control" />
