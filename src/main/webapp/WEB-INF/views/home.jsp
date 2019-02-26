@@ -56,24 +56,34 @@
 						<h4 class="card-title">${ conta.usuario.nome }</h4>
 						<small>${ conta.situacao }</small>
 					</div>
-					<h5 class="card-title cliente">${ conta.cliente.nome } -- ${conta.id }</h5>
+					<h5 class="card-title cliente">${ conta.cliente.nome }-
+						${conta.id }</h5>
 					<div class="movimentacoes">
 						<h5 class="card-title">Movimentações:</h5>
-						<div class="botoes-conta">
-							<form action="${s:mvcUrl('MCC#listar').build() }"
-								method="post">
-								<input type="hidden" name="id" value=${ conta.id } />
-								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">VER</button>
+						<div style="display: flex" class="botoes-conta">
+							<form action="${s:mvcUrl('MCC#listar').build() }" method="post">
+								<input name="id" type="hidden" value="${ conta.id }" />
+								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Ver</button>
 							</form>
-							<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">
-								<a href="<c:url value="/movimentacoes/form/${ conta.id }" />">Adicionar</a>
-							</button>
-							<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">
-								<a href="<c:url value="/movimentacoes/editar/${ conta.id }" />">Editar</a>
-							</button>
+							<form action="${s:mvcUrl('MCC#form').build() }" method="post">
+								<input name="id" type="hidden" value="${ conta.id }" />
+								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Adicionar</button>
+							</form>
+							<form action="${s:mvcUrl('MCC#listar').build() }" method="post">
+								<input name="id" type="hidden" value="${ conta.id }" />
+								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Editar</button>
+							</form>
 						</div>
 					</div>
 				</div>
+				<security:authorize access="hasRole('ROLE_ADMIN')">
+					<form style="text-align: center"
+						action="${s:mvcUrl('MCC#listar').build() }" method="post">
+						<input name="id" type="hidden" value="${ conta.id }" />
+						<button class="btn btn-danger mb-2" type="submit">Excluir
+							conta</button>
+					</form>
+				</security:authorize>
 			</div>
 
 		</c:forEach>

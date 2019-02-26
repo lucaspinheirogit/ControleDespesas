@@ -27,9 +27,9 @@ public class MovimentacaoContaController {
 	private MovimentacaoContaDAO movimentacaoContaDAO;
 
 	@RequestMapping(value = "/ver", method = RequestMethod.POST)
-	public ModelAndView listar(@RequestParam("id") Integer id) {
-		System.out.println(id);
-		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
+	public ModelAndView listar(@RequestParam("id") String id) {
+		id = id.substring(1);
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
 		System.out.println(movimentacoes);
 
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/lista");
@@ -37,10 +37,10 @@ public class MovimentacaoContaController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/form/{id}", method = RequestMethod.GET)
-	public ModelAndView form(MovimentacaoConta movimentacaoConta, @PathVariable("id") Integer id) {
-		
-		ContaDespesa conta = contaDespesaDAO.find(id);
+	@RequestMapping(value = "/form", method = RequestMethod.POST)
+	public ModelAndView form(MovimentacaoConta movimentacaoConta, @RequestParam("id") String id) {
+		id = id.substring(1);
+		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
 		
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/form");
 		modelAndView.addObject("conta", conta);
@@ -53,6 +53,8 @@ public class MovimentacaoContaController {
 		System.out.println(movimentacaoConta.getDescricao());
 		System.out.println(movimentacaoConta.getValor());
 		System.out.println(movimentacaoConta.getTipo());
+		System.out.println(movimentacaoConta.getConta());
+		System.out.println(":(");
 
 		// contaDespesaDao.gravar(conta);
 		redirectAttributes.addFlashAttribute("message", "Conta cadastrada com sucesso!");
