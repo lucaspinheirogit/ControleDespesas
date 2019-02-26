@@ -58,7 +58,7 @@ select {
 /* CONTAS */
 .contas {
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	flex-wrap: wrap;
 }
 
@@ -100,7 +100,7 @@ select {
 }
 
 .data-fim {
-	color: red;
+	color: #ff7070;
 }
 
 .cliente {

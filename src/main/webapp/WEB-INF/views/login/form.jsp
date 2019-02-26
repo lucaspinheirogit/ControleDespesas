@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
 
@@ -8,7 +9,16 @@
 
 	<div class="container container-login">
 		<h2 class="titulo-login">Login</h2>
-		<h5 class="color-red">${ error }</h5>
+
+		<c:if test="${not empty param.error}">
+			<div>
+				<h5 style="color: red">
+					<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}" />
+				</h5>
+			</div>
+		</c:if>
+
+
 		<form:form cssClass="p-2" servletRelativeAction="/login" method="post">
 			<div class="form-group">
 				<label>Login</label> <input type="text" name="username"

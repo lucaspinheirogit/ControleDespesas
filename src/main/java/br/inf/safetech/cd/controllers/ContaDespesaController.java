@@ -13,6 +13,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -41,6 +42,16 @@ public class ContaDespesaController {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		dateFormat.setLenient(false);
 		webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
+	
+	@RequestMapping(value = "/todas", method = RequestMethod.GET)
+	public ModelAndView listarTodas() {
+		ModelAndView modelAndView = new ModelAndView("home");
+
+		List<ContaDespesa> contas = contaDespesaDAO.listarTodas();
+
+		modelAndView.addObject("contas", contas);
+		return modelAndView;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -92,6 +103,17 @@ public class ContaDespesaController {
 
 		// contaDespesaDao.gravar(conta);
 		redirectAttributes.addFlashAttribute("message", "Conta cadastrada com sucesso!");
+
+		return new ModelAndView("redirect:/");
+	}
+	
+	@RequestMapping(value = "/excluir", method = RequestMethod.POST)
+	public ModelAndView excluir(@RequestParam("id") String id, RedirectAttributes redirectAttributes) {
+		id = id.substring(1);
+		
+		contaDespesaDAO.excluir(Integer.parseInt(id));
+
+		redirectAttributes.addFlashAttribute("message", "Conta excluida com sucesso!");
 
 		return new ModelAndView("redirect:/");
 	}

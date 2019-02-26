@@ -20,8 +20,10 @@
 		<security:authorize access="hasRole('ROLE_ADMIN')">
 			<div>
 				<a href="${s:mvcUrl('CDC#form').build() }" class="btn btn-primary">Criar
-					nova conta +</a> <a href="${s:mvcUrl('UC#form').build() }"
-					class="btn btn-primary">Cadastrar colaborador +</a>
+					conta</a> <a href="${s:mvcUrl('UC#form').build() }"
+					class="btn btn-primary">Cadastrar colaborador</a>
+					<a href="${s:mvcUrl('CDC#listarTodas').build() }"
+					class="btn btn-primary">Ver todas as contas</a>
 			</div>
 		</security:authorize>
 		<form class="form-inline my-2 my-lg-0">
@@ -78,7 +80,7 @@
 				</div>
 				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<form style="text-align: center"
-						action="${s:mvcUrl('MCC#listar').build() }" method="post">
+						action="${s:mvcUrl('CDC#excluir').build() }" method="post">
 						<input name="id" type="hidden" value="${ conta.id }" />
 						<button class="btn btn-danger mb-2" type="submit">Excluir
 							conta</button>

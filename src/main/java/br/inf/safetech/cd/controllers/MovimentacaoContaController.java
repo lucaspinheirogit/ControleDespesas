@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.inf.safetech.cd.dao.ContaDespesaDAO;
 import br.inf.safetech.cd.dao.MovimentacaoContaDAO;
+import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
 
@@ -30,10 +31,11 @@ public class MovimentacaoContaController {
 	public ModelAndView listar(@RequestParam("id") String id) {
 		id = id.substring(1);
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
-		System.out.println(movimentacoes);
+		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
 
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/lista");
 		modelAndView.addObject("movimentacoes", movimentacoes);
+		modelAndView.addObject("conta", conta);
 		return modelAndView;
 	}
 
@@ -41,6 +43,7 @@ public class MovimentacaoContaController {
 	public ModelAndView form(MovimentacaoConta movimentacaoConta, @RequestParam("id") String id) {
 		id = id.substring(1);
 		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
+		movimentacaoConta.setConta(conta);
 		
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/form");
 		modelAndView.addObject("conta", conta);
@@ -50,16 +53,15 @@ public class MovimentacaoContaController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(MovimentacaoConta movimentacaoConta, RedirectAttributes redirectAttributes) {
 
-		System.out.println(movimentacaoConta.getDescricao());
-		System.out.println(movimentacaoConta.getValor());
-		System.out.println(movimentacaoConta.getTipo());
-		System.out.println(movimentacaoConta.getConta());
-		System.out.println(":(");
+		ContaDespesa c = contaDespesaDAO.find(movimentacaoConta.getConta().getId());
+		movimentacaoConta.setConta(c);
+		movimentacaoConta.setConciliada(Conciliada.NAO);
 
-		// contaDespesaDao.gravar(conta);
+		movimentacaoContaDAO.gravar(movimentacaoConta);
+		
 		redirectAttributes.addFlashAttribute("message", "Conta cadastrada com sucesso!");
 
-		return new ModelAndView("redirect:/");
+		return new ModelAndView("redirect:/contas");
 	}
 
 }

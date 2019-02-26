@@ -13,6 +13,7 @@
 	<div class="container container-login">
 		<h2 class="titulo-login">Cadastro de movimentação</h2>
 		<h5 class="color-red">${ message }</h5>
+		<h5 class="color-red">${ movimentacaoConta.conta.id }</h5>
 
 		<form:form action="${s:mvcUrl('MCC#gravar').build() }" method="post"
 			commandName="movimentacaoConta">
@@ -36,6 +37,7 @@
 				<label>Valor: </label>
 				<form:input cssClass="form-control" type="number" path="valor" required="required" />
 			</div>
+			<form:hidden path="conta.id"  />
 			<button type="submit" class="btn btn-primary">Cadastrar</button>
 		</form:form>
 	</div>

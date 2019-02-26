@@ -6,6 +6,15 @@ table {
 tr:nth-of-type(odd) {
 	background: #eee;
 }
+.td-concilia{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.td-concilia img{
+	height: 20px;
+	margin: 0 .3em;
+}
 
 th {
 	background: #333;

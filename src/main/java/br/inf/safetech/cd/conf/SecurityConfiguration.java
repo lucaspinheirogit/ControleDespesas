@@ -30,6 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/magia").permitAll()
 				.anyRequest().authenticated().and().formLogin().loginPage("/login")
 				.defaultSuccessUrl("/")
+				.failureUrl("/login?error=true")
 				.permitAll().and().logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
 				.logoutSuccessUrl("/login");
