@@ -11,6 +11,9 @@ tr:nth-of-type(odd) {
 	align-items: center;
 	justify-content: center;
 }
+.td-concilia button {
+  all: initial;
+}
 .td-concilia img{
 	height: 20px;
 	margin: 0 .3em;

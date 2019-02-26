@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
 import br.inf.safetech.cd.models.Produto;
@@ -36,6 +37,19 @@ public class MovimentacaoContaDAO{
 		return manager.createQuery("select m from MovimentacaoConta m where m.conta.id = :pId", MovimentacaoConta.class)
 				.setParameter("pId", contaId)
 				.getResultList();
+	}
+
+	public void conciliar(int id) {
+		MovimentacaoConta conta = find(id);
+		conta.setConciliada(Conciliada.SIM);
+	}
+	public void desconciliar(int id) {
+		MovimentacaoConta conta = find(id);
+		conta.setConciliada(Conciliada.NAO);
+	}
+
+	private MovimentacaoConta find(int id) {
+		return manager.find(MovimentacaoConta.class, id);
 	}
 	
 

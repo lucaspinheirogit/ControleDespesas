@@ -31,11 +31,9 @@ public class MovimentacaoContaController {
 	public ModelAndView listar(@RequestParam("id") String id) {
 		id = id.substring(1);
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
-		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
-
+	
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/lista");
 		modelAndView.addObject("movimentacoes", movimentacoes);
-		modelAndView.addObject("conta", conta);
 		return modelAndView;
 	}
 
@@ -62,6 +60,26 @@ public class MovimentacaoContaController {
 		redirectAttributes.addFlashAttribute("message", "Conta cadastrada com sucesso!");
 
 		return new ModelAndView("redirect:/contas");
+	}
+	
+	@RequestMapping(value = "/teste", method = RequestMethod.POST)
+	public ModelAndView teste(@RequestParam("id") String id, @RequestParam("conta") String contaId, @RequestParam("tipo") String tipo) {
+		id = id.substring(1);
+		tipo = tipo.substring(1);
+		contaId = contaId.substring(1);
+		
+		if(tipo.equals("SIM")) {
+			movimentacaoContaDAO.conciliar(Integer.parseInt(id));
+		}else {
+			movimentacaoContaDAO.desconciliar(Integer.parseInt(id));
+		}
+		
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
+		
+		ModelAndView modelAndView = new ModelAndView("movimentacoes/lista");
+		modelAndView.addObject("movimentacoes", movimentacoes);
+		modelAndView.addObject("message", "Movimentação atualizada com sucesso!");
+		return modelAndView;
 	}
 
 }
