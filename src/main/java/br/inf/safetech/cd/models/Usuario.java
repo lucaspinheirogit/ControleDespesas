@@ -39,7 +39,7 @@ public class Usuario implements UserDetails {
 	private String login;
 	private String senha;
 	@Column(name = "situacao")
-	private Situacao situacao = Situacao.ATIVO;
+	private Situacao situacao = Situacao.ATIVA;
 
 	@ManyToMany
 	private List<Role> roles = new ArrayList<>();

@@ -58,8 +58,7 @@
 						<h4 class="card-title">${ conta.usuario.nome }</h4>
 						<small>${ conta.situacao }</small>
 					</div>
-					<h5 class="card-title cliente">${ conta.cliente.nome }-
-						${conta.id }</h5>
+					<h5 class="card-title cliente">${ conta.cliente.nome }</h5>
 					<div class="movimentacoes">
 						<h5 class="card-title">Movimentações:</h5>
 						<div style="display: flex" class="botoes-conta">
@@ -80,9 +79,9 @@
 				</div>
 				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<form style="text-align: center"
-						action="${s:mvcUrl('CDC#excluir').build() }" method="post">
+						action="${s:mvcUrl('CDC#desativar').build() }" method="post">
 						<input name="id" type="hidden" value="${ conta.id }" />
-						<button class="btn btn-danger mb-2" type="submit">Excluir
+						<button class="btn btn-danger mb-2" type="submit">Encerrar
 							conta</button>
 					</form>
 				</security:authorize>

@@ -75,24 +75,24 @@ public class HomeController {
 		usuario.setNome("Admin");
 		usuario.setLogin("admin@123");
 		usuario.setSenha("123456");
-		usuario.setSituacao(Situacao.ATIVO);
+		usuario.setSituacao(Situacao.ATIVA);
 		usuario.setRoles(Arrays.asList(admin));
 		Usuario usuario2 = new Usuario();
 		usuario2.setNome("user");
 		usuario2.setLogin("user@123");
 		usuario2.setSenha("123456");
-		usuario2.setSituacao(Situacao.ATIVO);
+		usuario2.setSituacao(Situacao.ATIVA);
 		usuario2.setRoles(Arrays.asList(user));
 
 		usuarioDAO.gravar(usuario);
 		usuarioDAO.gravar(usuario2);
 
 		ContaDespesa conta1 = new ContaDespesa(usuario2, cliente1, new GregorianCalendar(2004, 2, 3),
-				new GregorianCalendar(2004, 2, 16), Situacao.ATIVO);
+				new GregorianCalendar(2004, 2, 16), Situacao.ATIVA);
 		ContaDespesa conta2 = new ContaDespesa(usuario2, cliente2, new GregorianCalendar(2004, 3, 25),
-				new GregorianCalendar(2004, 4, 5), Situacao.ATIVO);
+				new GregorianCalendar(2004, 4, 5), Situacao.ATIVA);
 		ContaDespesa conta3 = new ContaDespesa(usuario, cliente2, new GregorianCalendar(2004, 7, 16),
-				new GregorianCalendar(2004, 8, 1), Situacao.ATIVO);
+				new GregorianCalendar(2004, 8, 1), Situacao.ATIVA);
 
 		MovimentacaoConta mc1 = new MovimentacaoConta(conta1, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(300),
 				"Taxi");

@@ -1,7 +1,10 @@
 package br.inf.safetech.cd.controllers;
 
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +25,7 @@ import br.inf.safetech.cd.dao.ContaDespesaDAO;
 import br.inf.safetech.cd.dao.UsuarioDAO;
 import br.inf.safetech.cd.models.Cliente;
 import br.inf.safetech.cd.models.ContaDespesa;
+import br.inf.safetech.cd.models.Situacao;
 import br.inf.safetech.cd.models.Usuario;
 
 @RequestMapping("/contas")
@@ -43,12 +47,12 @@ public class ContaDespesaController {
 		dateFormat.setLenient(false);
 		webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}
-	
+
 	@RequestMapping(value = "/todas", method = RequestMethod.GET)
 	public ModelAndView listarTodas() {
 		ModelAndView modelAndView = new ModelAndView("home");
 
-		List<ContaDespesa> contas = contaDespesaDAO.listarTodas();
+		List<ContaDespesa> contas = contaDespesaDAO.listar();
 
 		modelAndView.addObject("contas", contas);
 		return modelAndView;
@@ -59,15 +63,14 @@ public class ContaDespesaController {
 		ModelAndView modelAndView = new ModelAndView("home");
 
 		List<ContaDespesa> contas;
-		boolean hasUserRole = auth.getAuthorities().stream()
-		          .anyMatch(r -> r.getAuthority().equals("ROLE_USER"));
-		
-		if(hasUserRole) {
+		boolean hasUserRole = auth.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_USER"));
+
+		if (hasUserRole) {
 			Usuario usuario = usuarioDAO.loadUserByUsername(principal.getName());
 			contas = contaDespesaDAO.listarPorColaborador(usuario);
-			if(contas.size() == 0) 
+			if (contas.size() == 0)
 				modelAndView.addObject("message", "Não existe nenhuma conta no seu nome");
-		}else {
+		} else {
 			System.out.println("ADMIN");
 			contas = contaDespesaDAO.listar();
 		}
@@ -91,31 +94,42 @@ public class ContaDespesaController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView gravar(ContaDespesa conta, RedirectAttributes redirectAttributes) {
+	public ModelAndView gravar(ContaDespesa conta, RedirectAttributes redirectAttributes) throws ParseException {
 
+		Date date = new Date();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		Date dt = sf.parse(sf.format(new Date()));
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		
 		Cliente c = clienteDAO.find(conta.getCliente().getId());
 		Usuario u = usuarioDAO.find(conta.getUsuario().getId());
-		System.out.println(conta.getDataInicio());
-		System.out.println(conta.getDataFim());
 
-		System.out.println(c);
-		System.out.println(u);
+		conta.setCliente(c);
+		conta.setUsuario(u);
+		conta.setDataInicio(cal);
+		conta.setSituacao(Situacao.ATIVA);
 
-		// contaDespesaDao.gravar(conta);
+		contaDespesaDAO.gravar(conta);
+		
 		redirectAttributes.addFlashAttribute("message", "Conta cadastrada com sucesso!");
 
-		return new ModelAndView("redirect:/");
+		return new ModelAndView("redirect:/contas");
 	}
-	
+
 	@RequestMapping(value = "/excluir", method = RequestMethod.POST)
-	public ModelAndView excluir(@RequestParam("id") String id, RedirectAttributes redirectAttributes) {
+	public ModelAndView desativar(@RequestParam("id") String id, RedirectAttributes redirectAttributes) {
 		id = id.substring(1);
-		
-		contaDespesaDAO.excluir(Integer.parseInt(id));
 
-		redirectAttributes.addFlashAttribute("message", "Conta excluida com sucesso!");
+		if (contaDespesaDAO.estaLiquidada(Integer.parseInt(id))) {
+			contaDespesaDAO.excluir(Integer.parseInt(id));
+			redirectAttributes.addFlashAttribute("message", "Conta encerrada com sucesso!");
+		} else {
+			redirectAttributes.addFlashAttribute("message",
+					"Não é possível encerrar uma conta que não está liquidada!");
+		}
 
-		return new ModelAndView("redirect:/");
+		return new ModelAndView("redirect:/contas");
 	}
 
 }

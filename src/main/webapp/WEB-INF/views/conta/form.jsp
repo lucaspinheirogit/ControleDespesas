@@ -32,14 +32,14 @@
 					</c:forEach>
 				</form:select>
 			</div>
-			<div class="form-group">
-				<label>Data de início: </label>
-				<form:input cssClass="form-control" path="dataInicio" placeholder="dd/MM/yyyy" />
-			</div>
-			<div class="form-group">
-				<label>Data de fim: </label>
-				<form:input cssClass="form-control" path="dataFim" placeholder="dd/MM/yyyy" />
-			</div>
+<!-- 			<div class="form-group"> -->
+<!-- 				<label>Data de início: </label> -->
+<%-- 				<form:input cssClass="form-control" path="dataInicio" placeholder="dd/MM/yyyy" /> --%>
+<!-- 			</div> -->
+<!-- 			<div class="form-group"> -->
+<!-- 				<label>Data de fim: </label> -->
+<%-- 				<form:input cssClass="form-control" path="dataFim" placeholder="dd/MM/yyyy" /> --%>
+<!-- 			</div> -->
 			<button type="submit" class="btn btn-primary">Cadastrar</button>
 		</form:form>
 	</div>

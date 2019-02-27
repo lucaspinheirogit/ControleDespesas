@@ -98,6 +98,9 @@ public class ContaDespesa {
 
 	@Override
 	public String toString() {
-		return "ID: " + this.id + ", cliente: " + this.cliente;
+		return "ID: " + this.id + ", cliente: " + this.cliente
+				+ ", Colaborador: " + this.usuario
+				+ ", Data inicio: " + this.dataInicio
+				+ ", Data fim: " + this.dataFim;
 	}
 }
