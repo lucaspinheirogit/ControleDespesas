@@ -6,16 +6,20 @@ table {
 tr:nth-of-type(odd) {
 	background: #eee;
 }
-.td-concilia{
+
+.td-concilia {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	padding: 11px 0;
 }
+
 .td-concilia button {
-  all: initial;
+	all: initial;
 }
-.td-concilia img{
-	height: 20px;
+
+.td-concilia img {
+	height: 25px;
 	margin: 0 .3em;
 }
 
@@ -25,14 +29,14 @@ th {
 	font-weight: bold;
 }
 
-tr th{ 
+tr th {
 	border-right: 1px solid #516274;
 	border-left: 1px solid #516274;
 }
 
 td, th {
 	padding: 6px;
-/* 	border: 1px solid #ccc; */
+	/* 	border: 1px solid #ccc; */
 	text-align: left;
 }
 
@@ -44,6 +48,17 @@ and also iPads specifically.
 @media only screen and (max-width: 760px) , ( min-device-width : 768px)
 	and (max-device-width: 1024px) {
 	/* Force table to not be like tables anymore */
+	.td-concilia {
+		justify-content: flex-start;
+		padding-left: 50%;
+	}
+	.td-concilia img:first-child {
+		margin: 0 .3em 0 0;
+	}
+	.td-remover {
+		display: flex;
+		justify-content: flex-start;
+	}
 	table, thead, tbody, th, td, tr {
 		display: block;
 	}
@@ -94,18 +109,9 @@ and also iPads specifically.
 		content: "Conciliada";
 	}
 	td:nth-of-type(6):before {
-		content: "Criada por";
+		content: "Conciliar?";
 	}
 	td:nth-of-type(7):before {
-		content: "Date of Birth";
-	}
-	td:nth-of-type(8):before {
-		content: "Dream Vacation City";
-	}
-	td:nth-of-type(9):before {
-		content: "GPA";
-	}
-	td:nth-of-type(10):before {
-		content: "Arbitrary Data";
+		content: "Remover?";
 	}
 }

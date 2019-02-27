@@ -3,6 +3,7 @@ encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
 encoding//src/main/webapp/WEB-INF/messages_en_US.properties=UTF-8
 encoding//src/main/webapp/WEB-INF/messages_pt.properties=UTF-8
+encoding//src/main/webapp/WEB-INF/views/movimentacoes/editar.jsp=UTF-8
 encoding//src/main/webapp/resources/css/responsive-table.css=UTF-8
 encoding//src/test/java=UTF-8
 encoding//src/test/resources=UTF-8

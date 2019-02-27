@@ -18,7 +18,7 @@
 
 	<div class="nova-conta">
 		<security:authorize access="hasRole('ROLE_ADMIN')">
-			<div>
+			<div class="links-criacao">
 				<a href="${s:mvcUrl('CDC#form').build() }" class="btn btn-primary">Criar
 					conta</a> <a href="${s:mvcUrl('UC#form').build() }"
 					class="btn btn-primary">Cadastrar colaborador</a>
@@ -71,7 +71,7 @@
 								<input name="id" type="hidden" value="${ conta.id }" />
 								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Adicionar</button>
 							</form>
-							<form action="${s:mvcUrl('MCC#listar').build() }" method="post">
+							<form action="${s:mvcUrl('MCC#editar').build() }" method="post">
 								<input name="id" type="hidden" value="${ conta.id }" />
 								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Editar</button>
 							</form>

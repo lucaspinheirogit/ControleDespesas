@@ -3,8 +3,8 @@ package br.inf.safetech.cd.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,8 +31,18 @@ public class MovimentacaoContaController {
 	public ModelAndView listar(@RequestParam("id") String id) {
 		id = id.substring(1);
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
-	
+
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/lista");
+		modelAndView.addObject("movimentacoes", movimentacoes);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/editar", method = RequestMethod.POST)
+	public ModelAndView editar(@RequestParam("id") String id) {
+		id = id.substring(1);
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
+
+		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
 		modelAndView.addObject("movimentacoes", movimentacoes);
 		return modelAndView;
 	}
@@ -42,7 +52,7 @@ public class MovimentacaoContaController {
 		id = id.substring(1);
 		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
 		movimentacaoConta.setConta(conta);
-		
+
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/form");
 		modelAndView.addObject("conta", conta);
 		return modelAndView;
@@ -56,30 +66,60 @@ public class MovimentacaoContaController {
 		movimentacaoConta.setConciliada(Conciliada.NAO);
 
 		movimentacaoContaDAO.gravar(movimentacaoConta);
-		
-		redirectAttributes.addFlashAttribute("message", "Conta cadastrada com sucesso!");
+
+		redirectAttributes.addFlashAttribute("message", "Movimentação cadastrada com sucesso!");
 
 		return new ModelAndView("redirect:/contas");
 	}
-	
-	@RequestMapping(value = "/teste", method = RequestMethod.POST)
-	public ModelAndView teste(@RequestParam("id") String id, @RequestParam("conta") String contaId, @RequestParam("tipo") String tipo) {
+
+	@RequestMapping(value = "/admin/conciliar", method = RequestMethod.POST)
+	public ModelAndView conciliar(Authentication auth, RedirectAttributes redirectAttributes,
+			@RequestParam("id") String id, @RequestParam("conta") String contaId, @RequestParam("tipo") String tipo) {
 		id = id.substring(1);
 		tipo = tipo.substring(1);
 		contaId = contaId.substring(1);
-		
-		if(tipo.equals("SIM")) {
-			movimentacaoContaDAO.conciliar(Integer.parseInt(id));
-		}else {
-			movimentacaoContaDAO.desconciliar(Integer.parseInt(id));
+
+		if (hasRole(auth, "ROLE_ADMIN")) {
+			if (tipo.equals("SIM")) {
+				movimentacaoContaDAO.conciliar(Integer.parseInt(id));
+			} else {
+				movimentacaoContaDAO.desconciliar(Integer.parseInt(id));
+			}
+			List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
+
+			ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
+			modelAndView.addObject("movimentacoes", movimentacoes);
+			modelAndView.addObject("message", "Movimentação atualizada com sucesso!");
+			return modelAndView;
+		} else {
+			redirectAttributes.addFlashAttribute("message", "Erro! Operação restrita à administradores do sistema");
+			return new ModelAndView("redirect:/contas");
 		}
-		
+
+	}
+
+	@RequestMapping(value = "/remover", method = RequestMethod.POST)
+	public ModelAndView remover(@RequestParam("id") String id, @RequestParam("conta") String contaId) {
+		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
+		id = id.substring(1);
+		contaId = contaId.substring(1);
+
+		if(movimentacaoContaDAO.estaConciliada(Integer.parseInt(id))) {
+			System.out.println("Conciliada");
+			modelAndView.addObject("message", "Não é possível remover uma movimentação conciliada!");
+		}else {
+			System.out.println("Nao Conciliada");
+			movimentacaoContaDAO.remover(Integer.parseInt(id));
+			modelAndView.addObject("message", "Movimentação removida com sucesso!");
+		}
+
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
-		
-		ModelAndView modelAndView = new ModelAndView("movimentacoes/lista");
 		modelAndView.addObject("movimentacoes", movimentacoes);
-		modelAndView.addObject("message", "Movimentação atualizada com sucesso!");
 		return modelAndView;
+	}	
+
+	private boolean hasRole(Authentication auth, String role) {
+		return auth.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals(role));
 	}
 
 }

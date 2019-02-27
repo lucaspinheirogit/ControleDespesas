@@ -2,14 +2,30 @@
 	padding: 1em 0;
 }
 
+form {
+	padding: 1em;
+}
+
 main {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 
+.links-criacao {
+	display: flex;
+	flex-direction: column;
+}
+
+.links-criacao a {
+	margin-bottom: .5em;
+}
+
 .botoes-conta a {
 	color: white;
+}
+.botoes-conta form {
+	padding: 0;
 }
 
 .botoes-conta a:hover {
@@ -129,8 +145,17 @@ small {
 }
 
 @media ( min-width : 768px) {
+	form {
+		padding: 0;
+	}
 	main {
 		align-items: inherit;
+	}
+	.links-criacao {
+		flex-direction: row;
+	}
+	.links-criacao a {
+		margin: 0 .3em;
 	}
 	.nova-conta {
 		/*flex-direction: row;*/

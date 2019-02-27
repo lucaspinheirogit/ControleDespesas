@@ -5,3 +5,9 @@
 #navbarColor01 {
 	justify-content: flex-end
 }
+@media (max-width: 576px){
+	h6{
+	text-align: initial;
+	padding: 1em 0;
+	}
+}

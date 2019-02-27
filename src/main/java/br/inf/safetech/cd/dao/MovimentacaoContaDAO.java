@@ -51,6 +51,17 @@ public class MovimentacaoContaDAO{
 	private MovimentacaoConta find(int id) {
 		return manager.find(MovimentacaoConta.class, id);
 	}
+
+	public void remover(int id) {
+		MovimentacaoConta conta = find(id);
+		manager.remove(conta);
+	}
+
+	public boolean estaConciliada(int id) {
+		MovimentacaoConta conta = find(id);
+		if(conta.getConciliada() == Conciliada.SIM) return true;
+		return false;
+	}
 	
 
 }
