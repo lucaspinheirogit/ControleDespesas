@@ -1,7 +1,7 @@
 package br.inf.safetech.cd.models;
 
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import br.inf.safetech.cd.dao.MovimentacaoContaDAO;
 
 @Entity
 public class ContaDespesa {

@@ -1,5 +1,6 @@
 package br.inf.safetech.cd.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
 import br.inf.safetech.cd.models.Situacao;
+import br.inf.safetech.cd.models.Tipo;
 import br.inf.safetech.cd.models.Usuario;
 
 @Repository
@@ -50,9 +52,9 @@ public class ContaDespesaDAO{
 
 	}
 
-	public void excluir(int id) {
+	public void encerrar(int id) {
 		ContaDespesa conta = this.find(id);
-		conta.setSituacao(Situacao.INATIVA);
+		conta.setSituacao(Situacao.ENCERRADA);
 	}
 
 	public boolean estaLiquidada(int id) {
@@ -65,6 +67,24 @@ public class ContaDespesaDAO{
 			}
 		}
 		return true;
+	}
+
+	public BigDecimal calculaSaldo(int id) {
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
+		BigDecimal credito = new BigDecimal(0);
+		BigDecimal debito = new BigDecimal(0);
+		BigDecimal saldo = new BigDecimal(0);
+		
+		for (MovimentacaoConta m : movimentacoes) {
+			if(m.getTipo() == Tipo.CREDITO) {
+				credito = credito.add(m.getValor());
+			}else {
+				debito = debito.add(m.getValor());
+			}
+		}
+		
+		saldo = saldo.add(credito.subtract(debito));
+		return saldo;
 	}
 
 }

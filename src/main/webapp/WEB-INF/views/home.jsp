@@ -21,8 +21,8 @@
 			<div class="links-criacao">
 				<a href="${s:mvcUrl('CDC#form').build() }" class="btn btn-primary">Criar
 					conta</a> <a href="${s:mvcUrl('UC#form').build() }"
-					class="btn btn-primary">Cadastrar colaborador</a>
-					<a href="${s:mvcUrl('CDC#listarTodas').build() }"
+					class="btn btn-primary">Cadastrar colaborador</a> <a
+					href="${s:mvcUrl('CDC#listarTodas').build() }"
 					class="btn btn-primary">Ver todas as contas</a>
 			</div>
 		</security:authorize>
@@ -79,7 +79,7 @@
 				</div>
 				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<form style="text-align: center"
-						action="${s:mvcUrl('CDC#desativar').build() }" method="post">
+						action="${s:mvcUrl('CDC#encerrarForm').build() }" method="post">
 						<input name="id" type="hidden" value="${ conta.id }" />
 						<button class="btn btn-danger mb-2" type="submit">Encerrar
 							conta</button>

@@ -1,5 +1,6 @@
 package br.inf.safetech.cd.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.inf.safetech.cd.dao.ContaDespesaDAO;
 import br.inf.safetech.cd.dao.MovimentacaoContaDAO;
+import br.inf.safetech.cd.dao.UsuarioDAO;
 import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
+import br.inf.safetech.cd.models.Usuario;
 
 @RequestMapping("/movimentacoes")
 @Controller
@@ -23,6 +26,9 @@ public class MovimentacaoContaController {
 
 	@Autowired
 	private ContaDespesaDAO contaDespesaDAO;
+	
+	@Autowired
+	private UsuarioDAO usuarioDAO;
 
 	@Autowired
 	private MovimentacaoContaDAO movimentacaoContaDAO;
@@ -59,11 +65,13 @@ public class MovimentacaoContaController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView gravar(MovimentacaoConta movimentacaoConta, RedirectAttributes redirectAttributes) {
+	public ModelAndView gravar(Principal principal, MovimentacaoConta movimentacaoConta, RedirectAttributes redirectAttributes) {
 
 		ContaDespesa c = contaDespesaDAO.find(movimentacaoConta.getConta().getId());
+		Usuario u = usuarioDAO.loadUserByUsername(principal.getName());
 		movimentacaoConta.setConta(c);
 		movimentacaoConta.setConciliada(Conciliada.NAO);
+		movimentacaoConta.setCriadoPor(u);
 
 		movimentacaoContaDAO.gravar(movimentacaoConta);
 

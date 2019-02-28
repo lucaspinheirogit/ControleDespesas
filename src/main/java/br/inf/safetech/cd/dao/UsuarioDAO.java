@@ -33,11 +33,6 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 		return manager.find(Usuario.class, id);
 	}
 
-	public Usuario find(String login) {
-		System.out.println("usuariodao.find");
-		return manager.find(Usuario.class, login);
-	}
-
 	public List<Usuario> listar() {
 		System.out.println("usuariodao.listar");
 		return manager.createQuery("select u from Usuario u", Usuario.class).getResultList();

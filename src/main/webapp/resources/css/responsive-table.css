@@ -109,9 +109,12 @@ and also iPads specifically.
 		content: "Conciliada";
 	}
 	td:nth-of-type(6):before {
-		content: "Conciliar?";
+		content: "Criada por";
 	}
 	td:nth-of-type(7):before {
+		content: "Conciliar?";
+	}
+	td:nth-of-type(8):before {
 		content: "Remover?";
 	}
 }

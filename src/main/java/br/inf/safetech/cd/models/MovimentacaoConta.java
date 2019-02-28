@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class MovimentacaoConta {
@@ -18,12 +19,14 @@ public class MovimentacaoConta {
 	}
 
 	public MovimentacaoConta(ContaDespesa conta, Tipo tipo, Conciliada conciliada, BigDecimal valor,
-			String descricao) {
+			String descricao, Responsavel responsavel, Usuario criadoPor) {
 		this.conta = conta;
 		this.tipo = tipo;
 		this.conciliada = conciliada;
 		this.valor = valor;
 		this.descricao = descricao;
+		this.responsavel = responsavel;
+		this.criadoPor = criadoPor;
 	}
 
 	@Id
@@ -32,9 +35,13 @@ public class MovimentacaoConta {
 	@ManyToOne
 	private ContaDespesa conta;
 	private Tipo tipo;
+	private Responsavel responsavel;
 	private Conciliada conciliada;
 	private BigDecimal valor;
 	private String descricao;
+	
+	@ManyToOne
+	private Usuario criadoPor;
 
 	public Integer getId() {
 		return id;
@@ -83,6 +90,22 @@ public class MovimentacaoConta {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public Responsavel getResponsavel() {
+		return responsavel;
+	}
+
+	public void setResponsavel(Responsavel responsavel) {
+		this.responsavel = responsavel;
+	}
+
+	public Usuario getCriadoPor() {
+		return criadoPor;
+	}
+
+	public void setCriadoPor(Usuario criadoPor) {
+		this.criadoPor = criadoPor;
 	}
 
 	@Override

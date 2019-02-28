@@ -25,6 +25,7 @@
 					<th>Valor</th>
 					<th>Tipo</th>
 					<th>Conciliada</th>
+					<th>Criada por</th>
 					<security:authorize access="hasRole('ROLE_ADMIN')">
 						<th>Conciliar?</th>
 					</security:authorize>
@@ -39,6 +40,7 @@
 						<td>${ m.valor }</td>
 						<td>${ m.tipo }</td>
 						<td>${ m.conciliada }</td>
+						<td>${ m.criadoPor.nome }</td>
 						<security:authorize access="hasRole('ROLE_ADMIN')">
 							<td class="td-concilia">
 								<form class="p-0" style="text-align: center"

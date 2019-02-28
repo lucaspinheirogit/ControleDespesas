@@ -22,6 +22,7 @@ import br.inf.safetech.cd.models.Cliente;
 import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
+import br.inf.safetech.cd.models.Responsavel;
 import br.inf.safetech.cd.models.Role;
 import br.inf.safetech.cd.models.Situacao;
 import br.inf.safetech.cd.models.Tipo;
@@ -95,15 +96,15 @@ public class HomeController {
 				new GregorianCalendar(2004, 8, 1), Situacao.ATIVA);
 
 		MovimentacaoConta mc1 = new MovimentacaoConta(conta1, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(300),
-				"Taxi");
-		MovimentacaoConta mc2 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(500), "Comida");
-		MovimentacaoConta mc3 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(700), "Hotel");
-		MovimentacaoConta mc4 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(100), "Terno");
-		MovimentacaoConta mc5 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(320), "Passeio de barco");
-		MovimentacaoConta mc6 = new MovimentacaoConta(conta2, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1200), "Passagem");
-		MovimentacaoConta mc7 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(50), "Comida");
-		MovimentacaoConta mc8 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(100), "Transporte");
-		MovimentacaoConta mc9 = new MovimentacaoConta(conta3, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1500), "Hotel");
+				"Taxi", Responsavel.CLIENTE, usuario);
+		MovimentacaoConta mc2 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(500), "Comida", Responsavel.EMPRESA, usuario);
+		MovimentacaoConta mc3 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(700), "Hotel", Responsavel.CLIENTE, usuario2);
+		MovimentacaoConta mc4 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(100), "Terno", Responsavel.COLABORADOR, usuario2);
+		MovimentacaoConta mc5 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(320), "Passeio de barco", Responsavel.EMPRESA, usuario);
+		MovimentacaoConta mc6 = new MovimentacaoConta(conta2, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1200), "Passagem", Responsavel.COLABORADOR, usuario2);
+		MovimentacaoConta mc7 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(50), "Comida", Responsavel.COLABORADOR, usuario);
+		MovimentacaoConta mc8 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(100), "Transporte", Responsavel.CLIENTE, usuario2);
+		MovimentacaoConta mc9 = new MovimentacaoConta(conta3, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1500), "Hotel", Responsavel.COLABORADOR, usuario2);
 
 		movimentacaoContaDAO.gravar(mc1);
 		movimentacaoContaDAO.gravar(mc2);

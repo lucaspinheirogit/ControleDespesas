@@ -25,16 +25,18 @@
 					<th>Valor</th>
 					<th>Tipo</th>
 					<th>Conciliada</th>
+					<th>Criada por</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach items="${ movimentacoes }" var="m">
 					<tr>
-						<td>Empresa</td>
+						<td>${ m.responsavel }</td>
 						<td>${ m.descricao }</td>
 						<td>${ m.valor }</td>
 						<td>${ m.tipo }</td>
 						<td>${ m.conciliada }</td>
+						<td>${ m.criadoPor.nome }</td>
 					</tr>
 				</c:forEach>
 			</tbody>
