@@ -126,8 +126,10 @@ public class ContaDespesaController {
 	}
 
 	@RequestMapping(value = "/encerrar", method = RequestMethod.POST)
-	public ModelAndView encerrar(Principal principal, @RequestParam("id") String id, RedirectAttributes redirectAttributes) {
+	public ModelAndView encerrar(Principal principal, @RequestParam("id") String id, @RequestParam("opcao") String opcao, @RequestParam("saldo") String saldo, RedirectAttributes redirectAttributes) throws NumberFormatException, ParseException {
 		id = id.substring(1);
+		opcao = opcao.substring(1);
+		saldo = saldo.substring(1);
 
 		MovimentacaoConta m = new MovimentacaoConta();
 		ContaDespesa c = contaDespesaDAO.find(Integer.parseInt(id));
@@ -136,8 +138,8 @@ public class ContaDespesaController {
 		m.setTipo(Tipo.DEBITO);
 		m.setConciliada(Conciliada.SIM);
 		m.setCriadoPor(u);
-		m.setDescricao("desc que vai vir do form");
-		m.setValor(new BigDecimal("0")); //Valor que vem do form
+		m.setDescricao(opcao);
+		m.setValor(new BigDecimal(saldo)); //Valor que vem do form
 		m.setResponsavel(Responsavel.EMPRESA);
 
 		movimentacaoContaDAO.gravar(m);
@@ -149,7 +151,7 @@ public class ContaDespesaController {
 	}
 
 	@RequestMapping(value = "/encerrar/form", method = RequestMethod.POST)
-	public ModelAndView encerrarForm(@RequestParam("id") String id, RedirectAttributes redirectAttributes) {
+	public ModelAndView encerrarForm(@RequestParam("id") String id, RedirectAttributes redirectAttributes) throws NumberFormatException, ParseException {
 		ModelAndView modelAndView = new ModelAndView("conta/encerrar");
 		id = id.substring(1);
 		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));

@@ -66,24 +66,31 @@
 								<input name="id" type="hidden" value="${ conta.id }" />
 								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Ver</button>
 							</form>
-							<form action="${s:mvcUrl('MCC#form').build() }" method="post">
-								<input name="id" type="hidden" value="${ conta.id }" />
-								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Adicionar</button>
-							</form>
-							<form action="${s:mvcUrl('MCC#editar').build() }" method="post">
-								<input name="id" type="hidden" value="${ conta.id }" />
-								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Editar</button>
-							</form>
+
+							<c:if test="${ conta.situacao != 'ENCERRADA' }">
+								<form action="${s:mvcUrl('MCC#form').build() }" method="post">
+									<input name="id" type="hidden" value="${ conta.id }" />
+									<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Adicionar</button>
+								</form>
+								<form action="${s:mvcUrl('MCC#editar').build() }" method="post">
+									<input name="id" type="hidden" value="${ conta.id }" />
+									<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Editar</button>
+								</form>
+							</c:if>
+
+
 						</div>
 					</div>
 				</div>
 				<security:authorize access="hasRole('ROLE_ADMIN')">
-					<form style="text-align: center"
-						action="${s:mvcUrl('CDC#encerrarForm').build() }" method="post">
-						<input name="id" type="hidden" value="${ conta.id }" />
-						<button class="btn btn-danger mb-2" type="submit">Encerrar
-							conta</button>
-					</form>
+					<c:if test="${ conta.situacao != 'ENCERRADA' }">
+						<form style="text-align: center"
+							action="${s:mvcUrl('CDC#encerrarForm').build() }" method="post">
+							<input name="id" type="hidden" value="${ conta.id }" />
+							<button class="btn btn-danger mb-2" type="submit">Encerrar
+								conta</button>
+						</form>
+					</c:if>
 				</security:authorize>
 			</div>
 

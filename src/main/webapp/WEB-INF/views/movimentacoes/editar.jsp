@@ -65,15 +65,27 @@
 								</form>
 							</td>
 						</security:authorize>
-						<td class="td-remover">
-							<form class="p-0" style="text-align: center"
-								action="${s:mvcUrl('MCC#remover').build() }" method="post">
-								<input name="id" type="hidden" value="${ m.id }" /> <input
-									name="conta" type="hidden"
-									value="${ movimentacoes[0].conta.id }" />
-								<button class="btn btn-danger" type="submit">Remover</button>
-							</form>
-						</td>
+
+						<c:choose>
+							<c:when
+								test="${ movimentacoes[0].conta.usuario.nome == m.criadoPor.nome && m.conciliada != 'SIM' }">
+								<td class="td-remover">
+									<form class="p-0" style="text-align: center"
+										action="${s:mvcUrl('MCC#remover').build() }" method="post">
+										<input name="id" type="hidden" value="${ m.id }" /> <input
+											name="conta" type="hidden"
+											value="${ movimentacoes[0].conta.id }" />
+										<button class="btn btn-danger" type="submit">Remover</button>
+									</form>
+								</td>
+							</c:when>
+							<c:otherwise>
+								<td></td>
+							</c:otherwise>
+						</c:choose>
+
+
+
 					</tr>
 				</c:forEach>
 			</tbody>

@@ -26,12 +26,13 @@
 							class="custom-control-label" for="customRadio1">Vale</label>
 					</div>
 					<div class="custom-control custom-radio">
-						<input type="radio" id="customRadio1" name="opcao"
+						<input type="radio" id="customRadio2" name="opcao"
 							value="Devolução" Class="custom-control-input" required /> <label
-							class="custom-control-label" for="customRadio1">Devolução</label>
+							class="custom-control-label" for="customRadio2">Devolução</label>
 					</div>
 				</div>
 				<input type="hidden" name="id" value="${ conta.id }" />
+				<input type="hidden" name="saldo" value="${ saldo }" />
 				<button type="submit" class="btn btn-danger">Encerrar</button>
 			</form>
 		</div>

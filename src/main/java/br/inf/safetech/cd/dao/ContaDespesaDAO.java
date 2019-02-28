@@ -1,6 +1,10 @@
 package br.inf.safetech.cd.dao;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -52,8 +56,16 @@ public class ContaDespesaDAO{
 
 	}
 
-	public void encerrar(int id) {
+	public void encerrar(int id) throws ParseException {
 		ContaDespesa conta = this.find(id);
+		
+		Date date = new Date();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+		Date dt = sf.parse(sf.format(new Date()));
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		
+		conta.setDataFim(cal);
 		conta.setSituacao(Situacao.ENCERRADA);
 	}
 
