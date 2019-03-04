@@ -24,18 +24,46 @@
 					class="btn btn-primary">Cadastrar colaborador</a>
 			</div>
 		</security:authorize>
+		<h5 class="filtrar-por">Filtrar por:</h5>
 		<form class="form-inline my-2 my-lg-0">
-			<div class="form-group filtrar">
-				<label for="exampleSelect1">Filtrar por:</label> <select
-					class="form-control" id="exampleSelect1">
-					<option>Colaborador</option>
-					<option>Cliente</option>
-				</select>
-			</div>
 			<div class="form-group search">
-				<input class="form-control mr-sm-2" type="text"
-					placeholder="Informe o nome...">
-				<button class="btn btn-primary" type="submit">Procurar</button>
+
+				<div class="div-form-group" >
+					<div class="form-group">
+						<label for="exampleSelect1">Cliente:</label> <input
+							class="form-control mr-sm-2" list="clientes"
+							placeholder="Informe o cliente...">
+						<datalist id="clientes">
+							<c:forEach items="${clientes }" var="cliente">
+								<option value="${ cliente.nome }" />
+							</c:forEach>
+						</datalist>
+					</div>
+
+					<div class="form-group">
+						<label>Colaborador: </label> <input class="form-control mr-sm-2"
+							list="usuarios" placeholder="Informe o colaborador...">
+						<datalist id="usuarios">
+							<c:forEach items="${usuarios }" var="usuario">
+								<option value="${ usuario.nome }" />
+							</c:forEach>
+						</datalist>
+					</div>
+				</div>
+
+				<div class="div-form-group" >
+					<div class="form-group">
+						<label>Data de início: </label> <input class="form-control"
+							placeholder="dd/MM/yyyy" />
+					</div>
+
+					<div class="form-group">
+						<label>Data de encerramento: </label> <input class="form-control"
+							placeholder="dd/MM/yyyy" />
+					</div>
+				</div>
+
+				<button style="margin: .2em" class="btn btn-primary" type="submit">Procurar</button>
 			</div>
 		</form>
 	</div>
@@ -82,7 +110,8 @@
 				</div>
 				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<c:if test="${ conta.situacao != 'ENCERRADA' }">
-						<form onsubmit="return confirm('Deseja encerrar?');" style="text-align: center"
+						<form onsubmit="return confirm('Deseja encerrar?');"
+							style="text-align: center"
 							action="${s:mvcUrl('CDC#encerrarForm').build() }" method="post">
 							<input name="id" type="hidden" value="${ conta.id }" />
 							<button class="btn btn-danger mb-2" type="submit">Encerrar

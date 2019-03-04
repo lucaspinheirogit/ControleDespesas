@@ -14,11 +14,12 @@
 		<h3 class="titulo-login mb-5">Cadastro de conta de despesa</h3>
 		<h5 class="color-red">${ message }</h5>
 
-		<form:form cssClass="p-2" action="${s:mvcUrl('CDC#gravar').build() }" method="post"
-			commandName="contaDespesa">
+		<form:form cssClass="p-2" action="${s:mvcUrl('CDC#gravar').build() }"
+			method="post" commandName="contaDespesa">
 			<div class="form-group">
 				<label>Cliente: </label>
-				<form:select cssClass="form-control m-0" path="cliente.id" required="required" >
+				<form:select cssClass="form-control m-0" path="cliente.id"
+					required="required">
 					<c:forEach items="${clientes }" var="cliente">
 						<form:option value="${ cliente.id }" label="${ cliente.nome }" />
 					</c:forEach>
@@ -26,20 +27,33 @@
 			</div>
 			<div class="form-group">
 				<label>Colaborador: </label>
-				<form:select cssClass="form-control m-0" path="usuario.id" required="required">
+
+				<!--  
+				<form:select id="usuarios" cssClass="form-control m-0"
+					path="usuario.id" required="required">
 					<c:forEach items="${usuarios }" var="usuario">
 						<form:option value="${ usuario.id }" label="${ usuario.nome }" />
 					</c:forEach>
 				</form:select>
+				-->
+
+				<form:input path="usuario.id" list="usuarios" />
+				<c:if test="${not empty usuarios}">
+					<datalist id="usuarios">
+						<c:forEach items="${usuarios }" var="usuario">
+							<option value="${ usuario.nome }" />
+						</c:forEach>
+					</datalist>
+				</c:if>
 			</div>
-<!-- 			<div class="form-group"> -->
-<!-- 				<label>Data de início: </label> -->
-<%-- 				<form:input cssClass="form-control" path="dataInicio" placeholder="dd/MM/yyyy" /> --%>
-<!-- 			</div> -->
-<!-- 			<div class="form-group"> -->
-<!-- 				<label>Data de fim: </label> -->
-<%-- 				<form:input cssClass="form-control" path="dataFim" placeholder="dd/MM/yyyy" /> --%>
-<!-- 			</div> -->
+			<!-- 			<div class="form-group"> -->
+			<!-- 				<label>Data de início: </label> -->
+			<%-- 				<form:input cssClass="form-control" path="dataInicio" placeholder="dd/MM/yyyy" /> --%>
+			<!-- 			</div> -->
+			<!-- 			<div class="form-group"> -->
+			<!-- 				<label>Data de fim: </label> -->
+			<%-- 				<form:input cssClass="form-control" path="dataFim" placeholder="dd/MM/yyyy" /> --%>
+			<!-- 			</div> -->
 			<button type="submit" class="btn btn-primary">Cadastrar</button>
 		</form:form>
 	</div>

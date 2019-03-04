@@ -56,16 +56,6 @@ public class ContaDespesaController {
 		webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
 	}
 
-	@RequestMapping(value = "/todas", method = RequestMethod.GET)
-	public ModelAndView listarTodas() {
-		ModelAndView modelAndView = new ModelAndView("home");
-
-		List<ContaDespesa> contas = contaDespesaDAO.listar();
-
-		modelAndView.addObject("contas", contas);
-		return modelAndView;
-	}
-
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView listar(Principal principal, Authentication auth) {
 		ModelAndView modelAndView = new ModelAndView("home");
@@ -82,7 +72,12 @@ public class ContaDespesaController {
 			System.out.println("ADMIN");
 			contas = contaDespesaDAO.listar();
 		}
+		
+		List<Usuario> usuarios = usuarioDAO.listar();
+		List<Cliente> clientes = clienteDAO.listar();
 
+		modelAndView.addObject("usuarios", usuarios);
+		modelAndView.addObject("clientes", clientes);
 		modelAndView.addObject("contas", contas);
 		return modelAndView;
 	}
