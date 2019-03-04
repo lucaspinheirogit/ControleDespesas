@@ -1,5 +1,6 @@
 package br.inf.safetech.cd.controllers;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 
@@ -37,9 +38,11 @@ public class MovimentacaoContaController {
 	public ModelAndView listar(@RequestParam("id") String id) {
 		id = id.substring(1);
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
-
+		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+		
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/lista");
 		modelAndView.addObject("movimentacoes", movimentacoes);
+		modelAndView.addObject("saldo", saldo);
 		return modelAndView;
 	}
 	
@@ -47,9 +50,11 @@ public class MovimentacaoContaController {
 	public ModelAndView editar(@RequestParam("id") String id) {
 		id = id.substring(1);
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
-
+		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+		
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
 		modelAndView.addObject("movimentacoes", movimentacoes);
+		modelAndView.addObject("saldo", saldo);
 		return modelAndView;
 	}
 
@@ -94,9 +99,11 @@ public class MovimentacaoContaController {
 				movimentacaoContaDAO.desconciliar(Integer.parseInt(id));
 			}
 			List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
-
+			BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+			
 			ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
 			modelAndView.addObject("movimentacoes", movimentacoes);
+			modelAndView.addObject("saldo", saldo);
 			modelAndView.addObject("message", "Movimentação atualizada com sucesso!");
 			return modelAndView;
 		} else {
@@ -122,7 +129,10 @@ public class MovimentacaoContaController {
 		}
 
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
+		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+		
 		modelAndView.addObject("movimentacoes", movimentacoes);
+		modelAndView.addObject("saldo", saldo);
 		return modelAndView;
 	}	
 

@@ -42,6 +42,8 @@
 			</tbody>
 		</table>
 		<br />
+		<h5>Saldo: ${ saldo } </h5>
+		<br />
 		<button class="btn btn-primary">Gerar PDF</button>
 
 	</div>

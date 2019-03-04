@@ -29,15 +29,15 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label>Descrição: </label>
+				<label>Descriçãoo: </label>
 				<form:input cssClass="form-control" path="descricao" required="required" />
 			</div>
 			<div class="form-group">
 				<label>Valor: </label>
-				<form:input cssClass="form-control" type="number" path="valor" required="required" />
+				<form:input cssClass="form-control" type="number" step="0.01" path="valor" required="required" />
 			</div>
 			<form:hidden path="conta.id"  />
-			<button type="submit" class="btn btn-primary">Cadastrar</button>
+			<button type="submit" class="btn btn-primary" >Cadastrar</button>
 		</form:form>
 	</div>
 

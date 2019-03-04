@@ -126,6 +126,15 @@ public class Usuario implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+	
+	public boolean temRoleAdmin() {
+		Role admin = new Role("ROLE_ADMIN");
+		for (Role r : roles) {
+			System.out.println(r);
+			if(r.equals(admin)) return true;
+		}
+		return false;
+	}
 
 	@Override
 	public String toString() {

@@ -21,9 +21,7 @@
 			<div class="links-criacao">
 				<a href="${s:mvcUrl('CDC#form').build() }" class="btn btn-primary">Criar
 					conta</a> <a href="${s:mvcUrl('UC#form').build() }"
-					class="btn btn-primary">Cadastrar colaborador</a> <a
-					href="${s:mvcUrl('CDC#listarTodas').build() }"
-					class="btn btn-primary">Ver todas as contas</a>
+					class="btn btn-primary">Cadastrar colaborador</a>
 			</div>
 		</security:authorize>
 		<form class="form-inline my-2 my-lg-0">
@@ -84,7 +82,7 @@
 				</div>
 				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<c:if test="${ conta.situacao != 'ENCERRADA' }">
-						<form style="text-align: center"
+						<form onsubmit="return confirm('Deseja encerrar?');" style="text-align: center"
 							action="${s:mvcUrl('CDC#encerrarForm').build() }" method="post">
 							<input name="id" type="hidden" value="${ conta.id }" />
 							<button class="btn btn-danger mb-2" type="submit">Encerrar

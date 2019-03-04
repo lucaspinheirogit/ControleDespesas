@@ -9,10 +9,36 @@
 
 <c:url value="/" var="contextPath" />
 
+<style>
+@media only screen and (max-width: 760px) , ( min-device-width : 768px)
+	and (max-device-width: 1024px) {
+	td:nth-of-type(7):before {
+		content: "Remover?" !important;
+	}
+	td form {
+		margin: 0;
+	}
+	.td-concilia {
+		padding: 6px
+	}
+}
+</style>
+
+<security:authorize access="hasRole('ROLE_ADMIN')">
+	<style>
+@media only screen and (max-width: 760px) , ( min-device-width : 768px)
+	and (max-device-width: 1024px) {
+	td:nth-of-type(7):before {
+		content: "Conciliar?" !important;
+	}
+}
+</style>
+</security:authorize>
+
 <tags:pageTemplate titulo="Lista de clientes">
 
-	<div class="container">
-		<h2 style="text-align: center;">Lista de movimentações</h2>
+	<div class="container p-2">
+		<h2 style="text-align: center;">Editar movimentações</h2>
 		<h5>Colaborador: ${ movimentacoes[0].conta.usuario.nome }</h5>
 		<h5>Cliente: ${ movimentacoes[0].conta.cliente.nome }</h5>
 		<h5 style="color: red">${ message }</h5>
@@ -30,12 +56,13 @@
 						<th>Conciliar?</th>
 					</security:authorize>
 					<th>Remover?</th>
+					<th>Responsável?</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach items="${ movimentacoes }" var="m">
 					<tr>
-						<td>Empresa</td>
+						<td>${ m.responsavel }</td>
 						<td>${ m.descricao }</td>
 						<td>${ m.valor }</td>
 						<td>${ m.tipo }</td>
@@ -71,6 +98,7 @@
 								test="${ movimentacoes[0].conta.usuario.nome == m.criadoPor.nome && m.conciliada != 'SIM' }">
 								<td class="td-remover">
 									<form class="p-0" style="text-align: center"
+										onsubmit="return confirm('Deseja remover?');"
 										action="${s:mvcUrl('MCC#remover').build() }" method="post">
 										<input name="id" type="hidden" value="${ m.id }" /> <input
 											name="conta" type="hidden"
@@ -80,16 +108,36 @@
 								</td>
 							</c:when>
 							<c:otherwise>
-								<td></td>
+								<td>-</td>
 							</c:otherwise>
 						</c:choose>
 
-
+						<security:authorize access="hasRole('ROLE_ADMIN')">
+							<td >
+								<form class="p-0" style="text-align: center"
+									action="${s:mvcUrl('MCC#alterarResponsavel').build() }" method="post">
+									<input name="id" type="hidden" value="${ m.id }" /> 
+									
+									<select name="responsavel">
+									  <option value="Colaborador">Colaborador</option>
+									  <option value="Cliente">Cliente</option>
+									  <option value="Empresa">Empresa</option>
+									</select>
+									
+									<input name="conta" type="hidden" value="${ movimentacoes[0].conta.id }" />
+									<button class="btn btn-primary" type="submit">
+											Alterar
+									</button>
+								</form>
+							</td>
+						</security:authorize>
 
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
+		<br />
+		<h5>Saldo: ${ saldo }</h5>
 	</div>
 
 </tags:pageTemplate>

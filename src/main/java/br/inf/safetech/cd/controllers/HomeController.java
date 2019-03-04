@@ -55,7 +55,7 @@ public class HomeController {
 	@ResponseBody
 	@RequestMapping("/magia")
 	public String urlMagicaMaluca() {
-
+		
 		Role admin = new Role("ROLE_ADMIN");
 		Role user = new Role("ROLE_USER");
 

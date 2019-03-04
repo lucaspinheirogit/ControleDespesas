@@ -18,7 +18,7 @@
 			<p class="lead">O saldo da conta é: ${ saldo } ,
 				informe como gostaria de encerrar a conta: </p>
 			<hr class="my-4">
-			<form action="${s:mvcUrl('CDC#encerrar').build() }" method="post">
+			<form action="${s:mvcUrl('CDC#encerrar').build() }" method="post" onsubmit="return confirm('Deseja encerrar?');">
 				<div class="form-group">
 					<div class="custom-control custom-radio">
 						<input type="radio" id="customRadio1" name="opcao" value="Vale"
