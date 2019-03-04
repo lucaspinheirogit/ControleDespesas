@@ -18,7 +18,7 @@
 			commandName="contaDespesa">
 			<div class="form-group">
 				<label>Cliente: </label>
-				<form:select cssClass="form-control m-0" path="cliente.id">
+				<form:select cssClass="form-control m-0" path="cliente.id" required="required" >
 					<c:forEach items="${clientes }" var="cliente">
 						<form:option value="${ cliente.id }" label="${ cliente.nome }" />
 					</c:forEach>
@@ -26,7 +26,7 @@
 			</div>
 			<div class="form-group">
 				<label>Colaborador: </label>
-				<form:select cssClass="form-control m-0" path="usuario.id">
+				<form:select cssClass="form-control m-0" path="usuario.id" required="required">
 					<c:forEach items="${usuarios }" var="usuario">
 						<form:option value="${ usuario.id }" label="${ usuario.nome }" />
 					</c:forEach>
@@ -43,8 +43,4 @@
 			<button type="submit" class="btn btn-primary">Cadastrar</button>
 		</form:form>
 	</div>
-
-	<!-- 	dataInicio; -->
-	<!-- 	dataFim; -->
-
 </tags:pageTemplate>

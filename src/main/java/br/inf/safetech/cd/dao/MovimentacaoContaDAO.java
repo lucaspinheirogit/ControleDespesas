@@ -1,6 +1,5 @@
 package br.inf.safetech.cd.dao;
 
-import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -10,9 +9,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.inf.safetech.cd.models.Conciliada;
-import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
-import br.inf.safetech.cd.models.Produto;
+import br.inf.safetech.cd.models.Responsavel;
 
 @Repository
 @Transactional
@@ -55,6 +53,11 @@ public class MovimentacaoContaDAO{
 	public void remover(int id) {
 		MovimentacaoConta conta = find(id);
 		manager.remove(conta);
+	}
+	
+	public void alterarResponsavel(int id, Responsavel responsavel) {
+		MovimentacaoConta conta = find(id);
+		conta.setResponsavel(responsavel);
 	}
 
 	public boolean estaConciliada(int id) {

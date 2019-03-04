@@ -55,6 +55,12 @@ and also iPads specifically.
 	.td-concilia img:first-child {
 		margin: 0 .3em 0 0;
 	}
+	.td-responsavel select{
+		margin: .5em 0;
+	}
+	.td-responsavel form{
+		text-align: left !important;
+	}
 	.td-remover {
 		display: flex;
 		justify-content: flex-start;
@@ -116,5 +122,8 @@ and also iPads specifically.
 	}
 	td:nth-of-type(8):before {
 		content: "Remover?";
+	}
+	td:nth-of-type(9):before {
+		content: "Responsável?";
 	}
 }

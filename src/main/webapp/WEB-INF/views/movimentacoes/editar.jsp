@@ -113,15 +113,15 @@
 						</c:choose>
 
 						<security:authorize access="hasRole('ROLE_ADMIN')">
-							<td >
+							<td class='td-responsavel'>
 								<form class="p-0" style="text-align: center"
 									action="${s:mvcUrl('MCC#alterarResponsavel').build() }" method="post">
 									<input name="id" type="hidden" value="${ m.id }" /> 
 									
 									<select name="responsavel">
-									  <option value="Colaborador">Colaborador</option>
-									  <option value="Cliente">Cliente</option>
-									  <option value="Empresa">Empresa</option>
+									  <option value="COLABORADOR">Colaborador</option>
+									  <option value="CLIENTE">Cliente</option>
+									  <option value="EMPRESA">Empresa</option>
 									</select>
 									
 									<input name="conta" type="hidden" value="${ movimentacoes[0].conta.id }" />

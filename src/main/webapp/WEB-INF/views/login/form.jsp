@@ -22,11 +22,11 @@
 		<form:form cssClass="p-2" servletRelativeAction="/login" method="post">
 			<div class="form-group">
 				<label>Login</label> <input type="text" name="username"
-					class="form-control" />
+					class="form-control" required="required" />
 			</div>
 			<div class="form-group">
 				<label>Senha</label> <input type="password" name="password"
-					class="form-control" />
+					class="form-control" required="required" />
 			</div>
 			<button type="submit" class="btn btn-primary">Logar</button>
 		</form:form>

@@ -19,6 +19,7 @@ import br.inf.safetech.cd.dao.UsuarioDAO;
 import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
+import br.inf.safetech.cd.models.Responsavel;
 import br.inf.safetech.cd.models.Usuario;
 
 @RequestMapping("/movimentacoes")
@@ -127,6 +128,26 @@ public class MovimentacaoContaController {
 			movimentacaoContaDAO.remover(Integer.parseInt(id));
 			modelAndView.addObject("message", "Movimentação removida com sucesso!");
 		}
+
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
+		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+		
+		modelAndView.addObject("movimentacoes", movimentacoes);
+		modelAndView.addObject("saldo", saldo);
+		return modelAndView;
+	}	
+	
+	@RequestMapping(value = "/alterarResponsavel", method = RequestMethod.POST)
+	public ModelAndView alterarResponsavel(@RequestParam("id") String id, @RequestParam("conta") String contaId, @RequestParam("responsavel") String responsavel) {
+		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
+		id = id.substring(1);
+		contaId = contaId.substring(1);
+		responsavel = responsavel.substring(1);
+		
+		Responsavel res = Responsavel.valueOf(responsavel);
+
+		movimentacaoContaDAO.alterarResponsavel(Integer.parseInt(id), res);
+		modelAndView.addObject("message", "Responsável alterado com sucesso!");
 
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
 		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
