@@ -56,7 +56,9 @@
 						<th>Conciliar?</th>
 					</security:authorize>
 					<th>Remover?</th>
-					<th>Responsável?</th>
+					<security:authorize access="hasRole('ROLE_ADMIN')">
+						<th>Responsável?</th>
+					</security:authorize>
 				</tr>
 			</thead>
 			<tbody>

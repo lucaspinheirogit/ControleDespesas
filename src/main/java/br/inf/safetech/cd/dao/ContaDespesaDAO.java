@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
+import br.inf.safetech.cd.models.Responsavel;
 import br.inf.safetech.cd.models.Situacao;
 import br.inf.safetech.cd.models.Tipo;
 import br.inf.safetech.cd.models.Usuario;
@@ -90,7 +91,7 @@ public class ContaDespesaDAO{
 		for (MovimentacaoConta m : movimentacoes) {
 			if(m.getTipo() == Tipo.CREDITO) {
 				credito = credito.add(m.getValor());
-			}else {
+			}else if(m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
 				debito = debito.add(m.getValor());
 			}
 		}
