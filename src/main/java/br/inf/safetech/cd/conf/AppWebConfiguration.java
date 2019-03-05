@@ -18,7 +18,6 @@ import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -40,14 +39,12 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import com.google.common.cache.CacheBuilder;
 
 import br.inf.safetech.cd.controllers.HomeController;
-import br.inf.safetech.cd.dao.ProdutoDAO;
 import br.inf.safetech.cd.dao.UsuarioDAO;
-import br.inf.safetech.cd.infra.FileSaver;
-import br.inf.safetech.cd.models.CarrinhoCompras;
+import br.inf.safetech.cd.models.Usuario;
 
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class, UsuarioDAO.class, FileSaver.class,
-		CarrinhoCompras.class })
+@ComponentScan(basePackageClasses = { HomeController.class, UsuarioDAO.class,
+		Usuario.class })
 @EnableCaching
 @EnableTransactionManagement(proxyTargetClass = true)
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {
@@ -84,16 +81,6 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
-	public MultipartResolver multipartResolver() {
-		return new StandardServletMultipartResolver();
-	}
-
-	@Bean
-	public RestTemplate restTemplate() {
-		return new RestTemplate();
-	}
-
-	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
@@ -124,29 +111,4 @@ public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 		configurer.enable();
 	}
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new LocaleChangeInterceptor());
-	}
-
-	@Bean
-	public LocaleResolver localeResolver() {
-		return new CookieLocaleResolver();
-	}
-
-	@Bean
-	public MailSender mailSender() {
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("seu servidor smtp");// por exemplo smtp.gmail.com
-		mailSender.setUsername("seu email");
-		mailSender.setPassword("sua senha");
-		mailSender.setPort(587);
-
-		Properties mailProperties = new Properties();
-		mailProperties.setProperty("mail.smtp.auth", "true");
-		mailProperties.setProperty("mail.smtp.starttls.enable", "true");
-		mailSender.setJavaMailProperties(mailProperties);
-
-		return mailSender;
-	}
 }

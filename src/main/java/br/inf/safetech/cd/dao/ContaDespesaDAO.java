@@ -100,4 +100,25 @@ public class ContaDespesaDAO{
 		return saldo;
 	}
 
+	public List<ContaDespesa> listarPorColaboradorComFiltro(Usuario user, String cliente, Calendar dataInicio,
+			Calendar dataFinal) {
+		System.out.println("listando contas filtradas do colaborador: " + user.getLogin());
+		
+		System.out.println("user:" + user);
+		System.out.println("cliente:" + cliente);
+		System.out.println("data de inicio:" + dataInicio);
+		System.out.println("data final:" + dataFinal);
+		
+		return manager.
+				createQuery("select c from ContaDespesa c where c.usuario.id = :id"
+						+ " and c.cliente.nome = :cliente"
+						+ " and c.dataInicio >= :dataInicio"
+						+ " and c.dataFim <= :dataFinal", ContaDespesa.class)
+				.setParameter("id", user.getId())
+				.setParameter("cliente", cliente)
+				.setParameter("dataInicio", dataInicio)
+				.setParameter("dataFinal", dataFinal)
+				.getResultList();
+	}
+
 }

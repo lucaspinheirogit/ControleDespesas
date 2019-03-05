@@ -25,14 +25,15 @@
 			</div>
 		</security:authorize>
 		<h5 class="filtrar-por">Filtrar por:</h5>
-		<form class="form-inline my-2 my-lg-0">
+		<form class="form-inline my-2 my-lg-0" action="${s:mvcUrl('CDC#buscar').build() }" method="post">
 			<div class="form-group search">
 
 				<div class="div-form-group" >
 					<div class="form-group">
 						<label for="exampleSelect1">Cliente:</label> <input
 							class="form-control mr-sm-2" list="clientes"
-							placeholder="Informe o cliente...">
+							placeholder="Informe o cliente..."
+							name="cliente" required>
 						<datalist id="clientes">
 							<c:forEach items="${clientes }" var="cliente">
 								<option value="${ cliente.nome }" />
@@ -42,7 +43,8 @@
 
 					<div class="form-group">
 						<label>Colaborador: </label> <input class="form-control mr-sm-2"
-							list="usuarios" placeholder="Informe o colaborador...">
+							list="usuarios" placeholder="Informe o colaborador..."
+							name="usuario" required>
 						<datalist id="usuarios">
 							<c:forEach items="${usuarios }" var="usuario">
 								<option value="${ usuario.nome }" />
@@ -54,16 +56,16 @@
 				<div class="div-form-group" >
 					<div class="form-group">
 						<label>Data de início: </label> <input class="form-control"
-							placeholder="dd/MM/yyyy" />
+							placeholder="dd/MM/yyyy" name="dataInicio" required />
 					</div>
 
 					<div class="form-group">
 						<label>Data de encerramento: </label> <input class="form-control"
-							placeholder="dd/MM/yyyy" />
+							placeholder="dd/MM/yyyy" name="dataFinal" required />
 					</div>
 				</div>
 
-				<button style="margin: .2em" class="btn btn-primary" type="submit">Procurar</button>
+				<button style="margin: .2em" class="btn btn-primary" type="submit">Buscar</button>
 			</div>
 		</form>
 	</div>

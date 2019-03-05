@@ -42,7 +42,7 @@ public class ContaDespesaController {
 
 	@Autowired
 	private ContaDespesaDAO contaDespesaDAO;
-	
+
 	@Autowired
 	private MovimentacaoContaDAO movimentacaoContaDAO;
 
@@ -72,7 +72,7 @@ public class ContaDespesaController {
 			System.out.println("ADMIN");
 			contas = contaDespesaDAO.listar();
 		}
-		
+
 		List<Usuario> usuarios = usuarioDAO.listar();
 		List<Cliente> clientes = clienteDAO.listar();
 
@@ -121,7 +121,9 @@ public class ContaDespesaController {
 	}
 
 	@RequestMapping(value = "/encerrar", method = RequestMethod.POST)
-	public ModelAndView encerrar(Principal principal, @RequestParam("id") String id, @RequestParam("opcao") String opcao, @RequestParam("saldo") String saldo, RedirectAttributes redirectAttributes) throws NumberFormatException, ParseException {
+	public ModelAndView encerrar(Principal principal, @RequestParam("id") String id,
+			@RequestParam("opcao") String opcao, @RequestParam("saldo") String saldo,
+			RedirectAttributes redirectAttributes) throws NumberFormatException, ParseException {
 		id = id.substring(1);
 		opcao = opcao.substring(1);
 		saldo = saldo.substring(1);
@@ -134,11 +136,11 @@ public class ContaDespesaController {
 		m.setConciliada(Conciliada.SIM);
 		m.setCriadoPor(u);
 		m.setDescricao(opcao);
-		m.setValor(new BigDecimal(saldo)); //Valor que vem do form
+		m.setValor(new BigDecimal(saldo)); // Valor que vem do form
 		m.setResponsavel(Responsavel.EMPRESA);
 
 		movimentacaoContaDAO.gravar(m);
-		
+
 		contaDespesaDAO.encerrar(Integer.parseInt(id));
 		redirectAttributes.addFlashAttribute("message", "Conta encerrada com sucesso!");
 
@@ -146,7 +148,8 @@ public class ContaDespesaController {
 	}
 
 	@RequestMapping(value = "/encerrar/form", method = RequestMethod.POST)
-	public ModelAndView encerrarForm(@RequestParam("id") String id, RedirectAttributes redirectAttributes) throws NumberFormatException, ParseException {
+	public ModelAndView encerrarForm(@RequestParam("id") String id, RedirectAttributes redirectAttributes)
+			throws NumberFormatException, ParseException {
 		ModelAndView modelAndView = new ModelAndView("conta/encerrar");
 		id = id.substring(1);
 		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
@@ -174,6 +177,62 @@ public class ContaDespesaController {
 			return new ModelAndView("redirect:/contas");
 		}
 
+	}
+
+	@RequestMapping(value = "/buscar", method = RequestMethod.POST)
+	public ModelAndView buscar(Principal principal, Authentication auth, @RequestParam("usuario") String usuario,
+			@RequestParam("cliente") String cliente, @RequestParam("dataInicio") String dataInicio,
+			@RequestParam("dataFinal") String dataFinal) throws ParseException {
+		usuario = usuario.substring(1);
+		cliente = cliente.substring(1);
+		dataFinal = dataFinal.substring(1);
+		dataInicio = dataInicio.substring(1);
+		
+		String[] datasFinal = dataFinal.split("/");
+		dataFinal = datasFinal[2] + "-" + datasFinal[1] + "-" + datasFinal[0];
+		String[] datasInicio = dataInicio.split("/");
+		dataInicio = datasInicio[2] + "-" + datasInicio[1] + "-" + datasInicio[0];
+		
+		System.out.println(dataFinal);
+		System.out.println(dataInicio);
+	          
+	     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	     
+	     Date dateInicio = sdf.parse(dataInicio);
+	     Calendar cal_dataInicio = Calendar.getInstance();
+	     cal_dataInicio.setTime(dateInicio);
+	     
+	     Date dateFinal = sdf.parse(dataFinal);
+	     Calendar cal_dataFinal = Calendar.getInstance();
+	     cal_dataFinal.setTime(dateFinal);
+	     
+	     System.out.println(dateInicio);
+	     System.out.println(dateFinal);
+	     System.out.println(cal_dataInicio);
+	     System.out.println(cal_dataFinal);
+
+		ModelAndView modelAndView = new ModelAndView("home");
+
+		List<ContaDespesa> contas;
+		boolean hasUserRole = auth.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_USER"));
+
+		if (hasUserRole) {
+			Usuario user = usuarioDAO.loadUserByUsername(principal.getName());
+			contas = contaDespesaDAO.listarPorColaboradorComFiltro(user, cliente, cal_dataInicio, cal_dataFinal);
+			if (contas.size() == 0)
+				modelAndView.addObject("message", "Nenhuma conta encontrada");
+		} else {
+			System.out.println("ADMIN");
+			contas = contaDespesaDAO.listar();
+		}
+
+		List<Usuario> usuarios = usuarioDAO.listar();
+		List<Cliente> clientes = clienteDAO.listar();
+
+		modelAndView.addObject("usuarios", usuarios);
+		modelAndView.addObject("clientes", clientes);
+		modelAndView.addObject("contas", contas);
+		return modelAndView;
 	}
 
 }
