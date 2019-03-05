@@ -29,7 +29,7 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label>Descriçãoo: </label>
+				<label>Descrição: </label>
 				<form:input cssClass="form-control" path="descricao" required="required" />
 			</div>
 			<div class="form-group">

@@ -88,7 +88,7 @@
 					<div class="movimentacoes">
 						<h5 class="card-title">Movimentações:</h5>
 						<div style="display: flex" class="botoes-conta">
-							<form action="${s:mvcUrl('MCC#listar').build() }" method="post">
+							<form action="${s:mvcUrl('MCC#listar').build() }" method="get">
 								<input name="id" type="hidden" value="${ conta.id }" />
 								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Ver</button>
 							</form>
@@ -98,7 +98,7 @@
 									<input name="id" type="hidden" value="${ conta.id }" />
 									<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Adicionar</button>
 								</form>
-								<form action="${s:mvcUrl('MCC#editar').build() }" method="post">
+								<form action="${s:mvcUrl('MCC#editar').build() }" method="get">
 									<input name="id" type="hidden" value="${ conta.id }" />
 									<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Editar</button>
 								</form>

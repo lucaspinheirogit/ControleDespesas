@@ -27,25 +27,15 @@
 			</div>
 			<div class="form-group">
 				<label>Colaborador: </label>
-
-				<!--  
 				<form:select id="usuarios" cssClass="form-control m-0"
 					path="usuario.id" required="required">
 					<c:forEach items="${usuarios }" var="usuario">
 						<form:option value="${ usuario.id }" label="${ usuario.nome }" />
 					</c:forEach>
 				</form:select>
-				-->
-
-				<form:input path="usuario.id" list="usuarios" />
-				<c:if test="${not empty usuarios}">
-					<datalist id="usuarios">
-						<c:forEach items="${usuarios }" var="usuario">
-							<option value="${ usuario.nome }" />
-						</c:forEach>
-					</datalist>
-				</c:if>
 			</div>
+
+
 			<!-- 			<div class="form-group"> -->
 			<!-- 				<label>Data de início: </label> -->
 			<%-- 				<form:input cssClass="form-control" path="dataInicio" placeholder="dd/MM/yyyy" /> --%>

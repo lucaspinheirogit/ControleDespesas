@@ -20,6 +20,8 @@ import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
 import br.inf.safetech.cd.models.Responsavel;
+import br.inf.safetech.cd.models.Role;
+import br.inf.safetech.cd.models.Situacao;
 import br.inf.safetech.cd.models.Usuario;
 
 @RequestMapping("/movimentacoes")
@@ -28,31 +30,64 @@ public class MovimentacaoContaController {
 
 	@Autowired
 	private ContaDespesaDAO contaDespesaDAO;
-	
+
 	@Autowired
 	private UsuarioDAO usuarioDAO;
 
 	@Autowired
 	private MovimentacaoContaDAO movimentacaoContaDAO;
 
-	@RequestMapping(value = "/ver", method = RequestMethod.POST)
-	public ModelAndView listar(@RequestParam("id") String id) {
-		id = id.substring(1);
+	@RequestMapping(value = "/ver", method = RequestMethod.GET)
+	public ModelAndView listar(Authentication auth, Principal principal, @RequestParam("id") String id,
+			RedirectAttributes redirectAttributes) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
 		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
-		
+
+		String colaborador = movimentacoes.get(0).getConta().getUsuario().getLogin();
+		String usuarioLogado = principal.getName();
+
+		if (!hasRole(auth, "ROLE_ADMIN")) {
+			System.out.println("O usuario nao é admin, portanto verificar se ele é o colaborador da conta");
+			if (!colaborador.equals(usuarioLogado)) {
+				redirectAttributes.addFlashAttribute("message", "ERRO! Você só pode ver as contas que lhe pertencem!");
+				return new ModelAndView("redirect:/contas");
+			}
+		}
+
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/lista");
 		modelAndView.addObject("movimentacoes", movimentacoes);
 		modelAndView.addObject("saldo", saldo);
 		return modelAndView;
 	}
-	
-	@RequestMapping(value = "/editar", method = RequestMethod.POST)
-	public ModelAndView editar(@RequestParam("id") String id) {
-		id = id.substring(1);
+
+	@RequestMapping(value = "/editar", method = RequestMethod.GET)
+	public ModelAndView editar(Authentication auth, Principal principal, RedirectAttributes redirectAttributes,
+			@RequestParam("id") String id) {
+		//id = id.substring(1);
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
 		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
-		
+
+		String colaborador = movimentacoes.get(0).getConta().getUsuario().getLogin();
+		String usuarioLogado = principal.getName();
+		Situacao situacao = movimentacoes.get(0).getConta().getSituacao();
+
+		if (!hasRole(auth, "ROLE_ADMIN")) {
+			System.out.println("O usuario nao é admin, portanto verificar se ele é o colaborador da conta");
+			if (!colaborador.equals(usuarioLogado)) {
+				redirectAttributes.addFlashAttribute("message", "ERRO! Você só pode editar as contas que lhe pertencem!");
+				return new ModelAndView("redirect:/contas");
+			} else if (situacao.equals(Situacao.ENCERRADA)) {
+				redirectAttributes.addFlashAttribute("message", "ERRO! A conta está encerrada !");
+				return new ModelAndView("redirect:/contas");
+			}
+		} else {
+			System.out.println("O user é admin, verificar se a conta nao ta encerrada");
+			if (situacao.equals(Situacao.ENCERRADA)) {
+				redirectAttributes.addFlashAttribute("message", "ERRO! A conta está encerrada !");
+				return new ModelAndView("redirect:/contas");
+			}
+		}
+
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
 		modelAndView.addObject("movimentacoes", movimentacoes);
 		modelAndView.addObject("saldo", saldo);
@@ -71,7 +106,8 @@ public class MovimentacaoContaController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView gravar(Principal principal, MovimentacaoConta movimentacaoConta, RedirectAttributes redirectAttributes) {
+	public ModelAndView gravar(Principal principal, MovimentacaoConta movimentacaoConta,
+			RedirectAttributes redirectAttributes) {
 
 		ContaDespesa c = contaDespesaDAO.find(movimentacaoConta.getConta().getId());
 		Usuario u = usuarioDAO.loadUserByUsername(principal.getName());
@@ -99,14 +135,9 @@ public class MovimentacaoContaController {
 			} else {
 				movimentacaoContaDAO.desconciliar(Integer.parseInt(id));
 			}
-			List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
-			BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
-			
-			ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
-			modelAndView.addObject("movimentacoes", movimentacoes);
-			modelAndView.addObject("saldo", saldo);
-			modelAndView.addObject("message", "Movimentação atualizada com sucesso!");
-			return modelAndView;
+
+			redirectAttributes.addFlashAttribute("message", "Movimentação atualizada com sucesso");
+			return new ModelAndView("redirect:/movimentacoes/editar?id="+contaId);
 		} else {
 			redirectAttributes.addFlashAttribute("message", "Erro! Operação restrita à administradores do sistema");
 			return new ModelAndView("redirect:/contas");
@@ -115,47 +146,38 @@ public class MovimentacaoContaController {
 	}
 
 	@RequestMapping(value = "/remover", method = RequestMethod.POST)
-	public ModelAndView remover(@RequestParam("id") String id, @RequestParam("conta") String contaId) {
+	public ModelAndView remover(RedirectAttributes redirectAttributes, @RequestParam("id") String id, @RequestParam("conta") String contaId) {
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
 		id = id.substring(1);
 		contaId = contaId.substring(1);
 
-		if(movimentacaoContaDAO.estaConciliada(Integer.parseInt(id))) {
+		if (movimentacaoContaDAO.estaConciliada(Integer.parseInt(id))) {
 			System.out.println("Conciliada");
-			modelAndView.addObject("message", "Não é possível remover uma movimentação conciliada!");
-		}else {
+			redirectAttributes.addFlashAttribute("message", "Não é possível remover uma movimentação conciliada!");
+		} else {
 			System.out.println("Nao Conciliada");
 			movimentacaoContaDAO.remover(Integer.parseInt(id));
-			modelAndView.addObject("message", "Movimentação removida com sucesso!");
+			redirectAttributes.addFlashAttribute("message", "Movimentação removida com sucesso");
 		}
 
-		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
-		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
-		
-		modelAndView.addObject("movimentacoes", movimentacoes);
-		modelAndView.addObject("saldo", saldo);
-		return modelAndView;
-	}	
-	
+		return new ModelAndView("redirect:/movimentacoes/editar?id="+contaId);
+	}
+
 	@RequestMapping(value = "/alterarResponsavel", method = RequestMethod.POST)
-	public ModelAndView alterarResponsavel(@RequestParam("id") String id, @RequestParam("conta") String contaId, @RequestParam("responsavel") String responsavel) {
+	public ModelAndView alterarResponsavel(RedirectAttributes redirectAttributes, @RequestParam("id") String id, @RequestParam("conta") String contaId,
+			@RequestParam("responsavel") String responsavel) {
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
 		id = id.substring(1);
 		contaId = contaId.substring(1);
 		responsavel = responsavel.substring(1);
-		
+
 		Responsavel res = Responsavel.valueOf(responsavel);
 
 		movimentacaoContaDAO.alterarResponsavel(Integer.parseInt(id), res);
-		modelAndView.addObject("message", "Responsável alterado com sucesso!");
-
-		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(contaId));
-		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
 		
-		modelAndView.addObject("movimentacoes", movimentacoes);
-		modelAndView.addObject("saldo", saldo);
-		return modelAndView;
-	}	
+		redirectAttributes.addFlashAttribute("message", "Responsável alterado com sucesso!");
+		return new ModelAndView("redirect:/movimentacoes/editar?id="+contaId);
+	}
 
 	private boolean hasRole(Authentication auth, String role) {
 		return auth.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals(role));

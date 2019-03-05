@@ -11,7 +11,7 @@
 
 <tags:pageTemplate titulo="Lista de clientes">
 
-	<div class="container">
+	<div class="container p-2">
 		<h2 style="text-align: center;">Lista de movimentações</h2>
 		<h5>Colaborador: ${ movimentacoes[0].conta.usuario.nome }</h5>
 		<h5>Cliente: ${ movimentacoes[0].conta.cliente.nome }</h5>
@@ -31,7 +31,14 @@
 			<tbody>
 				<c:forEach items="${ movimentacoes }" var="m">
 					<tr>
-						<td>${ m.responsavel }</td>
+						<td><c:choose>
+								<c:when test="${ m.responsavel == null }">
+									--------
+							</c:when>
+								<c:otherwise>
+								${ m.responsavel }
+							</c:otherwise>
+							</c:choose></td>
 						<td>${ m.descricao }</td>
 						<td>${ m.valor }</td>
 						<td>${ m.tipo }</td>
@@ -42,7 +49,7 @@
 			</tbody>
 		</table>
 		<br />
-		<h5>Saldo: ${ saldo } </h5>
+		<h5>Saldo: ${ saldo }</h5>
 		<br />
 		<button class="btn btn-primary">Gerar PDF</button>
 
