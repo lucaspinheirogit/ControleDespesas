@@ -97,22 +97,39 @@ public class ContaDespesaDAO {
 		return saldo;
 	}
 
-	public List<ContaDespesa> listarPorColaboradorComFiltro(Usuario user, String cliente, Calendar dataInicio,
+	public List<ContaDespesa> listarComFiltro(String user, String cliente, Calendar dataInicio,
 			Calendar dataFinal) {
-		System.out.println("listando contas filtradas do colaborador: " + user.getLogin());
+		System.out.println("listando contas filtradas do colaborador: " + user);
 
 		dataInicio.setTimeInMillis(dataInicio.getTimeInMillis() - 86400000);
 		dataFinal.setTimeInMillis(dataFinal.getTimeInMillis() + 86400000);
-
-		return manager
-				.createQuery("select c from ContaDespesa c where c.usuario.id = :id" 
+		
+		List<ContaDespesa> resultado;
+		
+		if(cliente.length() == 0) {
+			System.out.println("cliente nao foi informado");
+			resultado = manager
+					.createQuery("select c from ContaDespesa c where c.usuario.nome = :usuario" 
+							+ " and (c.dataInicio = :dataInicio or c.dataInicio > :dataInicio)" 
+							+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
+							ContaDespesa.class)
+					.setParameter("usuario", user)
+					.setParameter("dataInicio", dataInicio)
+					.setParameter("dataFinal", dataFinal).getResultList();
+		}else {
+		resultado = manager
+				.createQuery("select c from ContaDespesa c where c.usuario.nome = :usuario" 
 						+ " and c.cliente.nome = :cliente"
 						+ " and (c.dataInicio = :dataInicio or c.dataInicio > :dataInicio)" 
 						+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
 						ContaDespesa.class)
-				.setParameter("id", user.getId()).setParameter("cliente", cliente)
-				.setParameter("dataInicio", dataInicio).setParameter("dataFinal", dataFinal).getResultList();
+				.setParameter("usuario", user)
+				.setParameter("cliente", cliente)
+				.setParameter("dataInicio", dataInicio)
+				.setParameter("dataFinal", dataFinal).getResultList();
+		}
 
+		return resultado;
 	}
 
 }

@@ -33,7 +33,7 @@
 						<label for="exampleSelect1">Cliente:</label> <input
 							class="form-control mr-sm-2" list="clientes"
 							placeholder="Informe o cliente..."
-							name="cliente" required>
+							name="cliente">
 						<datalist id="clientes">
 							<c:forEach items="${clientes }" var="cliente">
 								<option value="${ cliente.nome }" />
@@ -44,7 +44,7 @@
 					<div class="form-group">
 						<label>Colaborador: </label> <input class="form-control mr-sm-2"
 							list="usuarios" placeholder="Informe o colaborador..."
-							name="usuario" required>
+							name="usuario">
 						<datalist id="usuarios">
 							<c:forEach items="${usuarios }" var="usuario">
 								<option value="${ usuario.nome }" />

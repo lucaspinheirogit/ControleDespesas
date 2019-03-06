@@ -183,49 +183,51 @@ public class ContaDespesaController {
 	@RequestMapping(value = "/buscar", method = RequestMethod.POST)
 	public ModelAndView buscar(Principal principal, Authentication auth, @RequestParam("usuario") String usuario,
 			@RequestParam("cliente") String cliente, @RequestParam("dataInicio") String dataInicio,
-			@RequestParam("dataFinal") String dataFinal) throws ParseException {
+			@RequestParam("dataFinal") String dataFinal, RedirectAttributes redirectAttributes) throws ParseException {
+		ModelAndView modelAndView = new ModelAndView("home");
 		usuario = usuario.substring(1);
 		cliente = cliente.substring(1);
 		dataFinal = dataFinal.substring(1);
 		dataInicio = dataInicio.substring(1);
-		
+
 		Calendar cal_dataInicio = null;
 		cal_dataInicio = StringToDate("20/01/2000");
-		
+
 		Calendar cal_dataFinal = null;
 		cal_dataFinal = StringToDate("20/01/2200");
-		
-		if(dataInicio.length() > 0) {
-			if (!dataInicio.matches("\\d{2}-\\d{2}-\\d{4}")) {
-			    System.out.println("data inicio inválida, retornar erro");
-			}else {
+
+		if (dataInicio.length() > 0) {
+			if (!dataInicio.matches("\\d{2}/\\d{2}/\\d{4}")) {
+				redirectAttributes.addFlashAttribute("message",
+						"Erro! Data de início deve estar no formato dd/MM/yyyy!");
+				return new ModelAndView("redirect:/contas");
+			} else {
 				System.out.println("data final valida");
 				cal_dataInicio = StringToDate(dataInicio);
 			}
 		}
-		
-		if(dataFinal.length() > 0) {
-			if (!dataFinal.matches("\\d{2}-\\d{2}-\\d{4}")) {
-			    System.out.println("data final inválida, retornar erro");
-			}else {
+
+		if (dataFinal.length() > 0) {
+			if (!dataFinal.matches("\\d{2}/\\d{2}/\\d{4}")) {
+				redirectAttributes.addFlashAttribute("message",
+						"Erro! Data de encerramento deve estar no formato dd/MM/yyyy!");
+				return new ModelAndView("redirect:/contas");
+			} else {
 				System.out.println("data final valida");
 				cal_dataFinal = StringToDate(dataFinal);
 			}
 		}
-		
-		 System.out.println("Printando calendars");
-		 System.out.println(cal_dataInicio);
-		 System.out.println(cal_dataFinal);
-		 
 
-		ModelAndView modelAndView = new ModelAndView("home");
+		System.out.println("Printando calendars");
+		System.out.println(cal_dataInicio);
+		System.out.println(cal_dataFinal);
 
 		List<ContaDespesa> contas;
 		boolean hasUserRole = auth.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_USER"));
 
 		if (hasUserRole) {
 			Usuario user = usuarioDAO.loadUserByUsername(principal.getName());
-			contas = contaDespesaDAO.listarPorColaboradorComFiltro(user, cliente, cal_dataInicio, cal_dataFinal);
+			contas = contaDespesaDAO.listarComFiltro(user.getNome(), cliente, cal_dataInicio, cal_dataFinal);
 			if (contas.size() == 0)
 				modelAndView.addObject("message", "Nenhuma conta encontrada");
 		} else {
@@ -236,23 +238,24 @@ public class ContaDespesaController {
 		List<Usuario> usuarios = usuarioDAO.listar();
 		List<Cliente> clientes = clienteDAO.listar();
 
+		modelAndView.addObject("message", "Resultados da busca: ");
 		modelAndView.addObject("usuarios", usuarios);
 		modelAndView.addObject("clientes", clientes);
 		modelAndView.addObject("contas", contas);
 		return modelAndView;
 	}
-	
+
 	private Calendar StringToDate(String data) throws ParseException {
 		String[] datas = data.split("/");
 		data = datas[2] + "-" + datas[1] + "-" + datas[0];
-	          
-	     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	     
-	     Date date = sdf.parse(data);
-	     Calendar cal_data = Calendar.getInstance();
-	     cal_data.setTime(date);
-	     
-	     return cal_data;
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date date = sdf.parse(data);
+		Calendar cal_data = Calendar.getInstance();
+		cal_data.setTime(date);
+
+		return cal_data;
 	}
 
 }
