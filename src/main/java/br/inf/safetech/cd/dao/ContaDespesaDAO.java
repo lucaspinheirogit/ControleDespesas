@@ -113,7 +113,8 @@ public class ContaDespesaDAO{
 				createQuery("select c from ContaDespesa c where c.usuario.id = :id"
 						+ " and c.cliente.nome = :cliente"
 						+ " and c.dataInicio >= :dataInicio"
-						+ " and c.dataFim <= :dataFinal", ContaDespesa.class)
+						+ " and c.dataFim <= :dataFinal"
+						+ " or c.dataFim = 'NULL' ", ContaDespesa.class)
 				.setParameter("id", user.getId())
 				.setParameter("cliente", cliente)
 				.setParameter("dataInicio", dataInicio)

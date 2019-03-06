@@ -188,28 +188,11 @@ public class ContaDespesaController {
 		dataFinal = dataFinal.substring(1);
 		dataInicio = dataInicio.substring(1);
 		
-		String[] datasFinal = dataFinal.split("/");
-		dataFinal = datasFinal[2] + "-" + datasFinal[1] + "-" + datasFinal[0];
-		String[] datasInicio = dataInicio.split("/");
-		dataInicio = datasInicio[2] + "-" + datasInicio[1] + "-" + datasInicio[0];
+		Calendar cal_dataInicio = StringToDate(dataInicio);
+		Calendar cal_dataFinal = StringToDate(dataFinal);
 		
-		System.out.println(dataFinal);
-		System.out.println(dataInicio);
-	          
-	     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	     
-	     Date dateInicio = sdf.parse(dataInicio);
-	     Calendar cal_dataInicio = Calendar.getInstance();
-	     cal_dataInicio.setTime(dateInicio);
-	     
-	     Date dateFinal = sdf.parse(dataFinal);
-	     Calendar cal_dataFinal = Calendar.getInstance();
-	     cal_dataFinal.setTime(dateFinal);
-	     
-	     System.out.println(dateInicio);
-	     System.out.println(dateFinal);
-	     System.out.println(cal_dataInicio);
-	     System.out.println(cal_dataFinal);
+		System.out.println(cal_dataInicio);
+		System.out.println(cal_dataFinal);
 
 		ModelAndView modelAndView = new ModelAndView("home");
 
@@ -233,6 +216,19 @@ public class ContaDespesaController {
 		modelAndView.addObject("clientes", clientes);
 		modelAndView.addObject("contas", contas);
 		return modelAndView;
+	}
+	
+	private Calendar StringToDate(String data) throws ParseException {
+		String[] datas = data.split("/");
+		data = datas[2] + "-" + datas[1] + "-" + datas[0];
+	          
+	     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	     
+	     Date date = sdf.parse(data);
+	     Calendar cal_data = Calendar.getInstance();
+	     cal_data.setTime(date);
+	     
+	     return cal_data;
 	}
 
 }
