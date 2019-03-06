@@ -189,6 +189,9 @@ public class ContaDespesaController {
 		cliente = cliente.substring(1);
 		dataFinal = dataFinal.substring(1);
 		dataInicio = dataInicio.substring(1);
+		
+		Usuario teste = (Usuario) principal;
+		System.out.println(teste);
 
 		Calendar cal_dataInicio = null;
 		cal_dataInicio = StringToDate("20/01/2000");
@@ -232,7 +235,7 @@ public class ContaDespesaController {
 				modelAndView.addObject("message", "Nenhuma conta encontrada");
 		} else {
 			System.out.println("ADMIN");
-			contas = contaDespesaDAO.listar();
+			contas = contaDespesaDAO.listarComFiltro(usuario, cliente, cal_dataInicio, cal_dataFinal);
 		}
 
 		List<Usuario> usuarios = usuarioDAO.listar();

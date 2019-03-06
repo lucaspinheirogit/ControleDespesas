@@ -106,7 +106,16 @@ public class ContaDespesaDAO {
 		
 		List<ContaDespesa> resultado;
 		
-		if(cliente.length() == 0) {
+		if(cliente.length() == 0 && user.length() == 0) {
+			System.out.println("cliente e usuario nao foram informados");
+			resultado = manager
+					.createQuery("select c from ContaDespesa c where" 
+							+ " (c.dataInicio = :dataInicio or c.dataInicio > :dataInicio)" 
+							+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
+							ContaDespesa.class)
+					.setParameter("dataInicio", dataInicio)
+					.setParameter("dataFinal", dataFinal).getResultList();
+		}else if(cliente.length() == 0) {
 			System.out.println("cliente nao foi informado");
 			resultado = manager
 					.createQuery("select c from ContaDespesa c where c.usuario.nome = :usuario" 
@@ -114,6 +123,17 @@ public class ContaDespesaDAO {
 							+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
 							ContaDespesa.class)
 					.setParameter("usuario", user)
+					.setParameter("dataInicio", dataInicio)
+					.setParameter("dataFinal", dataFinal).getResultList();
+		}
+		else if(user.length() == 0) {
+			System.out.println("usuario nao foi informado");
+			resultado = manager
+					.createQuery("select c from ContaDespesa c where c.cliente.nome = :cliente" 
+							+ " and (c.dataInicio = :dataInicio or c.dataInicio > :dataInicio)" 
+							+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
+							ContaDespesa.class)
+					.setParameter("cliente", cliente)
 					.setParameter("dataInicio", dataInicio)
 					.setParameter("dataFinal", dataFinal).getResultList();
 		}else {
