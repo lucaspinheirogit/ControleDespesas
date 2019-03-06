@@ -56,12 +56,12 @@
 				<div class="div-form-group" >
 					<div class="form-group">
 						<label>Data de início: </label> <input class="form-control"
-							placeholder="dd/MM/yyyy" name="dataInicio" required />
+							placeholder="dd/MM/yyyy" name="dataInicio" />
 					</div>
 
 					<div class="form-group">
 						<label>Data de encerramento: </label> <input class="form-control"
-							placeholder="dd/MM/yyyy" name="dataFinal" required />
+							placeholder="dd/MM/yyyy" name="dataFinal" />
 					</div>
 				</div>
 

@@ -24,14 +24,14 @@ import br.inf.safetech.cd.models.Usuario;
 
 @Repository
 @Transactional
-public class ContaDespesaDAO{
+public class ContaDespesaDAO {
 
 	@Autowired
 	private MovimentacaoContaDAO movimentacaoContaDAO;
 
 	@PersistenceContext
 	private EntityManager manager;
-	
+
 	public ContaDespesa find(Integer id) {
 		System.out.println("Finding conta de despesa");
 		return manager.find(ContaDespesa.class, id);
@@ -39,9 +39,8 @@ public class ContaDespesaDAO{
 
 	public List<ContaDespesa> listar() {
 		System.out.println("listando contas de despesas");
-		return manager.createQuery("select c from ContaDespesa c", ContaDespesa.class)
-				.getResultList();
-	}  
+		return manager.createQuery("select c from ContaDespesa c", ContaDespesa.class).getResultList();
+	}
 
 	public void gravar(ContaDespesa conta) {
 		System.out.println("gravando conta de despesa");
@@ -50,22 +49,20 @@ public class ContaDespesaDAO{
 
 	public List<ContaDespesa> listarPorColaborador(Usuario usuario) {
 		System.out.println("listando contas do colaborador: " + usuario.getLogin());
-		return manager.
-				createQuery("select c from ContaDespesa c where c.usuario.id = :id", ContaDespesa.class)
-				.setParameter("id", usuario.getId())
-				.getResultList();
+		return manager.createQuery("select c from ContaDespesa c where c.usuario.id = :id", ContaDespesa.class)
+				.setParameter("id", usuario.getId()).getResultList();
 
 	}
 
 	public void encerrar(int id) throws ParseException {
 		ContaDespesa conta = this.find(id);
-		
+
 		Date date = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		Date dt = sf.parse(sf.format(new Date()));
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		
+
 		conta.setDataFim(cal);
 		conta.setSituacao(Situacao.ENCERRADA);
 	}
@@ -74,7 +71,7 @@ public class ContaDespesaDAO{
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		System.out.println(movimentacoes);
 		for (MovimentacaoConta movimentacao : movimentacoes) {
-			if(movimentacao.getConciliada() == Conciliada.NAO) {
+			if (movimentacao.getConciliada() == Conciliada.NAO) {
 				System.out.println("mov. nao conciliada");
 				return false;
 			}
@@ -87,15 +84,15 @@ public class ContaDespesaDAO{
 		BigDecimal credito = new BigDecimal(0);
 		BigDecimal debito = new BigDecimal(0);
 		BigDecimal saldo = new BigDecimal(0);
-		
+
 		for (MovimentacaoConta m : movimentacoes) {
-			if(m.getTipo() == Tipo.CREDITO) {
+			if (m.getTipo() == Tipo.CREDITO) {
 				credito = credito.add(m.getValor());
-			}else if(m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
+			} else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
 				debito = debito.add(m.getValor());
 			}
 		}
-		
+
 		saldo = saldo.add(credito.subtract(debito));
 		return saldo;
 	}
@@ -103,23 +100,19 @@ public class ContaDespesaDAO{
 	public List<ContaDespesa> listarPorColaboradorComFiltro(Usuario user, String cliente, Calendar dataInicio,
 			Calendar dataFinal) {
 		System.out.println("listando contas filtradas do colaborador: " + user.getLogin());
-		
-		System.out.println("user:" + user);
-		System.out.println("cliente:" + cliente);
-		System.out.println("data de inicio:" + dataInicio);
-		System.out.println("data final:" + dataFinal);
-		
-		return manager.
-				createQuery("select c from ContaDespesa c where c.usuario.id = :id"
+
+		dataInicio.setTimeInMillis(dataInicio.getTimeInMillis() - 86400000);
+		dataFinal.setTimeInMillis(dataFinal.getTimeInMillis() + 86400000);
+
+		return manager
+				.createQuery("select c from ContaDespesa c where c.usuario.id = :id" 
 						+ " and c.cliente.nome = :cliente"
-						+ " and c.dataInicio >= :dataInicio"
-						+ " and c.dataFim <= :dataFinal"
-						+ " or c.dataFim = 'NULL' ", ContaDespesa.class)
-				.setParameter("id", user.getId())
-				.setParameter("cliente", cliente)
-				.setParameter("dataInicio", dataInicio)
-				.setParameter("dataFinal", dataFinal)
-				.getResultList();
+						+ " and (c.dataInicio = :dataInicio or c.dataInicio > :dataInicio)" 
+						+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
+						ContaDespesa.class)
+				.setParameter("id", user.getId()).setParameter("cliente", cliente)
+				.setParameter("dataInicio", dataInicio).setParameter("dataFinal", dataFinal).getResultList();
+
 	}
 
 }

@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,11 +189,34 @@ public class ContaDespesaController {
 		dataFinal = dataFinal.substring(1);
 		dataInicio = dataInicio.substring(1);
 		
-		Calendar cal_dataInicio = StringToDate(dataInicio);
-		Calendar cal_dataFinal = StringToDate(dataFinal);
+		Calendar cal_dataInicio = null;
+		cal_dataInicio = StringToDate("20/01/2000");
 		
-		System.out.println(cal_dataInicio);
-		System.out.println(cal_dataFinal);
+		Calendar cal_dataFinal = null;
+		cal_dataFinal = StringToDate("20/01/2200");
+		
+		if(dataInicio.length() > 0) {
+			if (!dataInicio.matches("\\d{2}-\\d{2}-\\d{4}")) {
+			    System.out.println("data inicio inválida, retornar erro");
+			}else {
+				System.out.println("data final valida");
+				cal_dataInicio = StringToDate(dataInicio);
+			}
+		}
+		
+		if(dataFinal.length() > 0) {
+			if (!dataFinal.matches("\\d{2}-\\d{2}-\\d{4}")) {
+			    System.out.println("data final inválida, retornar erro");
+			}else {
+				System.out.println("data final valida");
+				cal_dataFinal = StringToDate(dataFinal);
+			}
+		}
+		
+		 System.out.println("Printando calendars");
+		 System.out.println(cal_dataInicio);
+		 System.out.println(cal_dataFinal);
+		 
 
 		ModelAndView modelAndView = new ModelAndView("home");
 
