@@ -25,31 +25,39 @@
 			</div>
 		</security:authorize>
 		<h5 class="filtrar-por">Filtrar por:</h5>
-		<form class="form-inline my-2 my-lg-0"
+		<form id="formBusca" class="form-inline my-2 my-lg-0"
 			action="${s:mvcUrl('CDC#buscar').build() }" method="post">
 			<div class="form-group search">
 
 				<div class="div-form-group">
 					<div class="form-group">
-						<label for="exampleSelect1">Cliente:</label> <input
-							class="form-control mr-sm-2" list="clientes"
-							placeholder="Informe o cliente..." name="cliente">
-						<datalist id="clientes">
-							<c:forEach items="${clientes }" var="cliente">
-								<option value="${ cliente.nome }" />
-							</c:forEach>
-						</datalist>
+						<label for="exampleSelect1">Cliente:</label> 
+							<select name="cliente" class="form-control mr-sm-2" >
+								<option value="" disabled selected hidden>Informe o cliente...</option>
+								<c:forEach items="${clientes }" var="cliente">
+									<option value="${ cliente.nome }" >${ cliente.nome }</option>
+								</c:forEach>
+							</select>
 					</div>
 
 					<div class="form-group">
-						<label>Colaborador: </label> <input class="form-control mr-sm-2"
-							list="usuarios" placeholder="Informe o colaborador..."
-							name="usuario">
-						<datalist id="usuarios">
-							<c:forEach items="${usuarios }" var="usuario">
-								<option value="${ usuario.nome }" />
-							</c:forEach>
-						</datalist>
+						<label>Colaborador:</label> 
+							<select name="usuario" class="form-control mr-sm-2" >
+								<option value="" disabled selected hidden>Informe o usuario...</option>
+								<c:forEach items="${usuarios }" var="usuario">
+									<option value="${ usuario.nome }" >${ usuario.nome }</option>
+								</c:forEach>
+							</select>
+					</div>
+
+					<div class="form-group">
+						<label class="mr-2">Situação: </label> <select
+							class="form-control mr-sm-2 ml-0" name="situacao"
+							form="formBusca">
+							<option value="ATIVA">ATIVA</option>
+							<option value="INATIVA">INATIVA</option>
+							<option value="ENCERRADA">ENCERRADA</option>
+						</select>
 					</div>
 				</div>
 

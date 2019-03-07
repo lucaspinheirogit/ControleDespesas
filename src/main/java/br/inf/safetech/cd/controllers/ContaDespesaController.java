@@ -183,12 +183,20 @@ public class ContaDespesaController {
 	@RequestMapping(value = "/buscar", method = RequestMethod.POST)
 	public ModelAndView buscar(Principal principal, Authentication auth, @RequestParam("usuario") String usuario,
 			@RequestParam("cliente") String cliente, @RequestParam("dataInicio") String dataInicio,
-			@RequestParam("dataFinal") String dataFinal, RedirectAttributes redirectAttributes) throws ParseException {
+			@RequestParam("dataFinal") String dataFinal, @RequestParam("situacao") String situacao, RedirectAttributes redirectAttributes) throws ParseException {
 		ModelAndView modelAndView = new ModelAndView("home");
-		usuario = usuario.substring(1);
-		cliente = cliente.substring(1);
+		
+		if(!usuario.isEmpty()) {
+			usuario = usuario.substring(1);
+		}
+		if(!cliente.isEmpty()) {
+			cliente = cliente.substring(1);
+		}
+		situacao = situacao.substring(1);
 		dataFinal = dataFinal.substring(1);
 		dataInicio = dataInicio.substring(1);
+		
+		Situacao sit = Situacao.valueOf(situacao);
 
 		Calendar cal_dataInicio = null;
 		//cal_dataInicio = StringToDate("20/01/2000");
@@ -227,12 +235,12 @@ public class ContaDespesaController {
 
 		if (hasUserRole) {
 			Usuario user = usuarioDAO.loadUserByUsername(principal.getName());
-			contas = contaDespesaDAO.listarComFiltro(user.getNome(), cliente, cal_dataInicio, cal_dataFinal);
+			contas = contaDespesaDAO.listarComFiltro(user.getNome(), cliente, cal_dataInicio, cal_dataFinal, sit);
 			if (contas.size() == 0)
 				modelAndView.addObject("message", "Nenhuma conta encontrada");
 		} else {
 			System.out.println("ADMIN");
-			contas = contaDespesaDAO.listarComFiltro(usuario, cliente, cal_dataInicio, cal_dataFinal);
+			contas = contaDespesaDAO.listarComFiltro(usuario, cliente, cal_dataInicio, cal_dataFinal, sit);
 		}
 
 		List<Usuario> usuarios = usuarioDAO.listar();

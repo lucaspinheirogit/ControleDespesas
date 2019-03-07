@@ -107,7 +107,7 @@ public class ContaDespesaDAO {
 	}
 
 	public List<ContaDespesa> listarComFiltro(String user, String cliente, Calendar dataInicio,
-			Calendar dataFinal) {
+			Calendar dataFinal, Situacao situacao) {
 		System.out.println("listando contas filtradas do colaborador: " + user);
 
 		//dataInicio.setTimeInMillis(dataInicio.getTimeInMillis() - 86400000);
@@ -124,6 +124,7 @@ public class ContaDespesaDAO {
 		Path<String> clientePath = root.<Cliente> get("cliente").<String> get("nome");
 		Path<Calendar> dataInicioPath = root.<Calendar> get("dataInicio");
 		Path<Calendar> dataFimPath = root.<Calendar> get("dataFim");
+		Path<Situacao> situacaoPath = root.<Situacao> get("situacao");
 		
 		if (!user.isEmpty()) {
 			System.out.println("User foi informado");
@@ -135,6 +136,12 @@ public class ContaDespesaDAO {
 			System.out.println("cliente foi informado");
 	        Predicate clienteIgual = criteriaBuilder.equal(clientePath , cliente);
 	        predicates.add(clienteIgual);
+	    }
+		
+		if (situacao != null) {
+			System.out.println("situacao foi informada");
+	        Predicate situacaoIgual = criteriaBuilder.equal(situacaoPath , situacao);
+	        predicates.add(situacaoIgual);
 	    }
 		
 		if (dataInicio != null) {
