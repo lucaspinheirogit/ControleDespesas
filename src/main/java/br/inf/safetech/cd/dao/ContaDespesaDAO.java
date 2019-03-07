@@ -3,17 +3,25 @@ package br.inf.safetech.cd.dao;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.inf.safetech.cd.models.Cliente;
 import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
@@ -106,49 +114,34 @@ public class ContaDespesaDAO {
 		
 		List<ContaDespesa> resultado;
 		
-		if(cliente.length() == 0 && user.length() == 0) {
-			System.out.println("cliente e usuario nao foram informados");
-			resultado = manager
-					.createQuery("select c from ContaDespesa c where" 
-							+ " (c.dataInicio = :dataInicio or c.dataInicio > :dataInicio)" 
-							+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
-							ContaDespesa.class)
-					.setParameter("dataInicio", dataInicio)
-					.setParameter("dataFinal", dataFinal).getResultList();
-		}else if(cliente.length() == 0) {
-			System.out.println("cliente nao foi informado");
-			resultado = manager
-					.createQuery("select c from ContaDespesa c where c.usuario.nome = :usuario" 
-							+ " and (c.dataInicio = :dataInicio or c.dataInicio > :dataInicio)" 
-							+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
-							ContaDespesa.class)
-					.setParameter("usuario", user)
-					.setParameter("dataInicio", dataInicio)
-					.setParameter("dataFinal", dataFinal).getResultList();
-		}
-		else if(user.length() == 0) {
-			System.out.println("usuario nao foi informado");
-			resultado = manager
-					.createQuery("select c from ContaDespesa c where c.cliente.nome = :cliente" 
-							+ " and (c.dataInicio = :dataInicio or c.dataInicio > :dataInicio)" 
-							+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
-							ContaDespesa.class)
-					.setParameter("cliente", cliente)
-					.setParameter("dataInicio", dataInicio)
-					.setParameter("dataFinal", dataFinal).getResultList();
-		}else {
-		resultado = manager
-				.createQuery("select c from ContaDespesa c where c.usuario.nome = :usuario" 
-						+ " and c.cliente.nome = :cliente"
-						+ " and (c.dataInicio = :dataInicio or c.dataInicio > :dataInicio)" 
-						+ " and (c.dataFim = NULL or c.dataFim = :dataFinal or c.dataFim < :dataFinal)",
-						ContaDespesa.class)
-				.setParameter("usuario", user)
-				.setParameter("cliente", cliente)
-				.setParameter("dataInicio", dataInicio)
-				.setParameter("dataFinal", dataFinal).getResultList();
-		}
-
+		CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
+		CriteriaQuery<ContaDespesa> query = criteriaBuilder.createQuery(ContaDespesa.class);
+		Root<ContaDespesa> root = query.from(ContaDespesa.class);
+		List<Predicate> predicates = new ArrayList<Predicate>();
+		
+		Path<String> usuarioPath = root.<Usuario> get("usuario").<String> get("nome");
+		Path<String> clientePath = root.<Cliente> get("cliente").<String> get("nome");
+		//Path<String> dataInicioPath = root.<String> get("dataInicio");
+		
+		
+		if (!user.isEmpty()) {
+			System.out.println("User foi informado");
+	        Predicate usuarioIgual = criteriaBuilder.equal(usuarioPath , user);
+	        predicates.add(usuarioIgual);
+	    }
+		
+		if (!cliente.isEmpty()) {
+			System.out.println("cliente foi informado");
+	        Predicate clienteIgual = criteriaBuilder.equal(clientePath , cliente);
+	        predicates.add(clienteIgual);
+	    }
+	    
+		query.where((Predicate[]) predicates.toArray(new Predicate[0]));
+	    TypedQuery<ContaDespesa> typedQuery = manager.createQuery(query);
+		resultado = typedQuery.getResultList();
+		System.out.println("Resultado: " + resultado.size());
+		System.out.println(resultado);
+		
 		return resultado;
 	}
 

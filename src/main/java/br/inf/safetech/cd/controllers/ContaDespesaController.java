@@ -189,9 +189,6 @@ public class ContaDespesaController {
 		cliente = cliente.substring(1);
 		dataFinal = dataFinal.substring(1);
 		dataInicio = dataInicio.substring(1);
-		
-		Usuario teste = (Usuario) principal;
-		System.out.println(teste);
 
 		Calendar cal_dataInicio = null;
 		cal_dataInicio = StringToDate("20/01/2000");
