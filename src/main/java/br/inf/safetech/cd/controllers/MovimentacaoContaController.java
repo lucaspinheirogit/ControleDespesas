@@ -42,6 +42,11 @@ public class MovimentacaoContaController {
 			RedirectAttributes redirectAttributes) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
 		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+		
+		if(movimentacoes.size() == 0) {
+			redirectAttributes.addFlashAttribute("message", "Essa conta não possui movimentações!");
+			return new ModelAndView("redirect:/contas");
+		}
 
 		String colaborador = movimentacoes.get(0).getConta().getUsuario().getLogin();
 		String usuarioLogado = principal.getName();
@@ -66,6 +71,11 @@ public class MovimentacaoContaController {
 		//id = id.substring(1);
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
 		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+
+		if(movimentacoes.size() == 0) {
+			redirectAttributes.addFlashAttribute("message", "Essa conta não possui movimentações!");
+			return new ModelAndView("redirect:/contas");
+		}
 
 		String colaborador = movimentacoes.get(0).getConta().getUsuario().getLogin();
 		String usuarioLogado = principal.getName();

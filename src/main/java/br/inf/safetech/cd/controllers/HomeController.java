@@ -48,6 +48,7 @@ public class HomeController {
 
 	@RequestMapping("/")
 	public ModelAndView index() {
+		System.out.println("Home");
 		return new ModelAndView("redirect:/contas");
 	}
 
@@ -55,6 +56,7 @@ public class HomeController {
 	@ResponseBody
 	@RequestMapping("/magia")
 	public String urlMagicaMaluca() {
+		System.out.println("Home controller");
 		
 		Role admin = new Role("ROLE_ADMIN");
 		Role user = new Role("ROLE_USER");

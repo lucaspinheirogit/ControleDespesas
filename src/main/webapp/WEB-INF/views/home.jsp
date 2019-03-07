@@ -25,15 +25,15 @@
 			</div>
 		</security:authorize>
 		<h5 class="filtrar-por">Filtrar por:</h5>
-		<form class="form-inline my-2 my-lg-0" action="${s:mvcUrl('CDC#buscar').build() }" method="post">
+		<form class="form-inline my-2 my-lg-0"
+			action="${s:mvcUrl('CDC#buscar').build() }" method="post">
 			<div class="form-group search">
 
-				<div class="div-form-group" >
+				<div class="div-form-group">
 					<div class="form-group">
 						<label for="exampleSelect1">Cliente:</label> <input
 							class="form-control mr-sm-2" list="clientes"
-							placeholder="Informe o cliente..."
-							name="cliente">
+							placeholder="Informe o cliente..." name="cliente">
 						<datalist id="clientes">
 							<c:forEach items="${clientes }" var="cliente">
 								<option value="${ cliente.nome }" />
@@ -53,7 +53,7 @@
 					</div>
 				</div>
 
-				<div class="div-form-group" >
+				<div class="div-form-group">
 					<div class="form-group">
 						<label>Data de início: </label> <input class="form-control"
 							placeholder="dd/MM/yyyy" name="dataInicio" />

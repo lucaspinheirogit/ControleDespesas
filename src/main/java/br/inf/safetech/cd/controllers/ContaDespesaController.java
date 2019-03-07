@@ -99,12 +99,12 @@ public class ContaDespesaController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(ContaDespesa conta, RedirectAttributes redirectAttributes) throws ParseException {
-
+	
 		Date date = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		Date dt = sf.parse(sf.format(new Date()));
+		Date dt = sf.parse(sf.format(date));
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
+		cal.setTime(dt);
 
 		Cliente c = clienteDAO.find(conta.getCliente().getId());
 		Usuario u = usuarioDAO.find(conta.getUsuario().getId());
@@ -191,10 +191,10 @@ public class ContaDespesaController {
 		dataInicio = dataInicio.substring(1);
 
 		Calendar cal_dataInicio = null;
-		cal_dataInicio = StringToDate("20/01/2000");
+		//cal_dataInicio = StringToDate("20/01/2000");
 
 		Calendar cal_dataFinal = null;
-		cal_dataFinal = StringToDate("20/01/2200");
+		//cal_dataFinal = StringToDate("20/01/2200");
 
 		if (dataInicio.length() > 0) {
 			if (!dataInicio.matches("\\d{2}/\\d{2}/\\d{4}")) {

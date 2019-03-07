@@ -67,9 +67,10 @@ public class ContaDespesaDAO {
 
 		Date date = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		Date dt = sf.parse(sf.format(new Date()));
+		Date dt = sf.parse(sf.format(date));
+		
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(date);
+		cal.setTime(dt);
 
 		conta.setDataFim(cal);
 		conta.setSituacao(Situacao.ENCERRADA);
@@ -109,8 +110,8 @@ public class ContaDespesaDAO {
 			Calendar dataFinal) {
 		System.out.println("listando contas filtradas do colaborador: " + user);
 
-		dataInicio.setTimeInMillis(dataInicio.getTimeInMillis() - 86400000);
-		dataFinal.setTimeInMillis(dataFinal.getTimeInMillis() + 86400000);
+		//dataInicio.setTimeInMillis(dataInicio.getTimeInMillis() - 86400000);
+		//dataFinal.setTimeInMillis(dataFinal.getTimeInMillis() + 86400000);
 		
 		List<ContaDespesa> resultado;
 		
@@ -121,8 +122,8 @@ public class ContaDespesaDAO {
 		
 		Path<String> usuarioPath = root.<Usuario> get("usuario").<String> get("nome");
 		Path<String> clientePath = root.<Cliente> get("cliente").<String> get("nome");
-		//Path<String> dataInicioPath = root.<String> get("dataInicio");
-		
+		Path<Calendar> dataInicioPath = root.<Calendar> get("dataInicio");
+		Path<Calendar> dataFimPath = root.<Calendar> get("dataFim");
 		
 		if (!user.isEmpty()) {
 			System.out.println("User foi informado");
@@ -134,6 +135,18 @@ public class ContaDespesaDAO {
 			System.out.println("cliente foi informado");
 	        Predicate clienteIgual = criteriaBuilder.equal(clientePath , cliente);
 	        predicates.add(clienteIgual);
+	    }
+		
+		if (dataInicio != null) {
+			System.out.println("data de inicio foi informada");
+	        Predicate dataInicioIgual = criteriaBuilder.equal(dataInicioPath , dataInicio);
+	        predicates.add(dataInicioIgual);
+	    }
+		
+		if (dataFinal != null) {
+			System.out.println("data final foi informada");
+	        Predicate dataFinalIgual = criteriaBuilder.equal(dataFimPath, dataFinal);
+	        predicates.add(dataFinalIgual);
 	    }
 	    
 		query.where((Predicate[]) predicates.toArray(new Predicate[0]));
