@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -20,7 +22,6 @@ import br.inf.safetech.cd.models.Conciliada;
 import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
 import br.inf.safetech.cd.models.Responsavel;
-import br.inf.safetech.cd.models.Role;
 import br.inf.safetech.cd.models.Situacao;
 import br.inf.safetech.cd.models.Usuario;
 
@@ -117,7 +118,7 @@ public class MovimentacaoContaController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(Principal principal, MovimentacaoConta movimentacaoConta,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
 		ContaDespesa c = contaDespesaDAO.find(movimentacaoConta.getConta().getId());
 		Usuario u = usuarioDAO.loadUserByUsername(principal.getName());
@@ -129,7 +130,8 @@ public class MovimentacaoContaController {
 
 		redirectAttributes.addFlashAttribute("message", "Movimentação cadastrada com sucesso!");
 
-		return new ModelAndView("redirect:/contas");
+		String referer = request.getHeader("Referer");
+		return new ModelAndView("redirect:"+ referer);
 	}
 
 	@RequestMapping(value = "/admin/conciliar", method = RequestMethod.POST)
