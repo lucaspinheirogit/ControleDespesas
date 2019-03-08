@@ -129,9 +129,7 @@ public class MovimentacaoContaController {
 		movimentacaoContaDAO.gravar(movimentacaoConta);
 
 		redirectAttributes.addFlashAttribute("message", "Movimentação cadastrada com sucesso!");
-
-		String referer = request.getHeader("Referer");
-		return new ModelAndView("redirect:"+ referer);
+		return new ModelAndView("redirect:/contas");
 	}
 
 	@RequestMapping(value = "/admin/conciliar", method = RequestMethod.POST)
