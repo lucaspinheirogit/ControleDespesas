@@ -32,7 +32,7 @@
 				<div class="div-form-group">
 					<div class="form-group">
 						<label for="exampleSelect1">Cliente:</label> 
-							<select name="cliente" class="form-control mr-sm-2" >
+							<select id="select-cliente" name="cliente" class="mx-sm-2" >
 								<option value="" disabled selected hidden>Informe o cliente...</option>
 								<c:forEach items="${clientes }" var="cliente">
 									<option value="${ cliente.nome }" >${ cliente.nome }</option>
@@ -42,7 +42,7 @@
 
 					<div class="form-group">
 						<label>Colaborador:</label> 
-							<select name="usuario" class="form-control mr-sm-2" >
+							<select id="select-usuario" name="usuario" class="mx-sm-2" >
 								<option value="" disabled selected hidden>Informe o usuario...</option>
 								<c:forEach items="${usuarios }" var="usuario">
 									<option value="${ usuario.nome }" >${ usuario.nome }</option>

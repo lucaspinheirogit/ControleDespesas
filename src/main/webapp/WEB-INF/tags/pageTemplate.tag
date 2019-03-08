@@ -17,12 +17,20 @@
 <title>${titulo } - Controle de despesas</title>
 <link rel="stylesheet" type="text/css" media="screen"
 	href="https://bootswatch.com/4/flatly/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.css">
 <link rel="stylesheet" href="${contextPath}resources/css/main.css" />
 <link rel="stylesheet" href="${contextPath}resources/css/footer.css" />
 <link rel="stylesheet" href="${contextPath}resources/css/header.css" />
 <link rel="stylesheet" href="${contextPath}resources/css/home.css" />
 <link rel="stylesheet" href="${contextPath}resources/css/login.css" />
 <link rel="stylesheet" href="${contextPath}resources/css/responsive-table.css" />
+
+<style>
+	.selectize-control{
+		min-width: 11em;
+	}
+</style>
 </head>
 
 <body>
@@ -45,6 +53,23 @@
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 		crossorigin="anonymous"></script>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js"></script>
+		
+		<script>
+			$('#select-cliente, #select-criar-cliente').selectize({
+				create : false,
+				sortField : 'text',
+				placeholder: "Informe o cliente..."
+			});
+			
+			$('#select-usuario, #usuarios').selectize({
+				create : false,
+				sortField : 'text',
+				placeholder: "Informe o colaborador..."
+			});
+		</script>
+		
 
 </body>
 </html>

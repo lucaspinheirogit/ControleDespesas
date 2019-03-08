@@ -18,18 +18,20 @@
 			method="post" commandName="contaDespesa">
 			<div class="form-group">
 				<label>Cliente: </label>
-				<form:select cssClass="form-control m-0" path="cliente.id"
+				<form:select id="select-criar-cliente" cssClass="m-0" path="cliente.id"
 					required="required">
-					<c:forEach items="${clientes }" var="cliente">
+					<option value="" disabled selected hidden>Informe o cliente...</option>
+								<c:forEach items="${clientes }" var="cliente">
 						<form:option value="${ cliente.id }" label="${ cliente.nome }" />
 					</c:forEach>
 				</form:select>
 			</div>
 			<div class="form-group">
 				<label>Colaborador: </label>
-				<form:select id="usuarios" cssClass="form-control m-0"
+				<form:select id="usuarios" cssClass="m-0"
 					path="usuario.id" required="required">
-					<c:forEach items="${usuarios }" var="usuario">
+					<option value="" disabled selected hidden>Informe o colaborador...</option>
+								<c:forEach items="${usuarios }" var="usuario">
 						<form:option value="${ usuario.id }" label="${ usuario.nome }" />
 					</c:forEach>
 				</form:select>
