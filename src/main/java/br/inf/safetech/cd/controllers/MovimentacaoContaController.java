@@ -175,7 +175,7 @@ public class MovimentacaoContaController {
 		return new ModelAndView("redirect:/movimentacoes/editar?id="+contaId);
 	}
 
-	@RequestMapping(value = "/alterarResponsavel", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/alterarResponsavel", method = RequestMethod.POST)
 	public ModelAndView alterarResponsavel(RedirectAttributes redirectAttributes, @RequestParam("id") String id, @RequestParam("conta") String contaId,
 			@RequestParam("responsavel") String responsavel) {
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");

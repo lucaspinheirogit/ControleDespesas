@@ -25,9 +25,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 //			.antMatchers("/resources/**").permitAll()
 				.antMatchers("/contas").hasAnyRole("USER,ADMIN")
+				.antMatchers("/contas/buscar").hasAnyRole("USER,ADMIN")
+				.antMatchers("/contas/admin/**").hasRole("ADMIN")
+				
+				.antMatchers("/movimentacoes").hasAnyRole("USER,ADMIN")
+				.antMatchers("/movimentacoes/ver").hasAnyRole("USER,ADMIN")
+				.antMatchers("/movimentacoes/editar").hasAnyRole("USER,ADMIN")
+				.antMatchers("/movimentacoes/form").hasAnyRole("USER,ADMIN")
+				.antMatchers("/movimentacoes/remover").hasAnyRole("USER,ADMIN")
+				.antMatchers("/movimentacoes/admin/**").hasRole("ADMIN")
+				
+				.antMatchers("/clientes").hasRole("ADMIN")
+				.antMatchers("/clientes/**").hasRole("ADMIN")
+				
+				.antMatchers("/usuarios").hasRole("ADMIN")
+				.antMatchers("/usuarios/**").hasRole("ADMIN")
+				
 				.antMatchers("/").permitAll()
 				.antMatchers("/**").permitAll()
-				.antMatchers("/magia").permitAll()
+				.antMatchers("/magia").hasRole("ADMIN")
 				.anyRequest().authenticated().and().formLogin().loginPage("/login")
 				.defaultSuccessUrl("/")
 				.failureUrl("/login?error=true")

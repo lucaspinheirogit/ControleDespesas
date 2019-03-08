@@ -158,7 +158,7 @@ public class ContaDespesaController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/form", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/form", method = RequestMethod.GET)
 	public ModelAndView form(ContaDespesa contaDespesa) {
 		ModelAndView modelAndView = new ModelAndView("conta/form");
 
@@ -172,7 +172,7 @@ public class ContaDespesaController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value="/admin/gravar",method = RequestMethod.POST)
 	public ModelAndView gravar(ContaDespesa conta, RedirectAttributes redirectAttributes) throws ParseException {
 	
 		Date date = new Date();
@@ -196,7 +196,7 @@ public class ContaDespesaController {
 		return new ModelAndView("redirect:/contas");
 	}
 
-	@RequestMapping(value = "/encerrar", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/encerrar", method = RequestMethod.POST)
 	public ModelAndView encerrar(Principal principal, @RequestParam("id") String id,
 			@RequestParam("opcao") String opcao, @RequestParam("saldo") String saldo,
 			RedirectAttributes redirectAttributes) throws NumberFormatException, ParseException {
@@ -223,7 +223,7 @@ public class ContaDespesaController {
 		return new ModelAndView("redirect:/contas");
 	}
 
-	@RequestMapping(value = "/encerrar/form", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/encerrar/form", method = RequestMethod.POST)
 	public ModelAndView encerrarForm(@RequestParam("id") String id, RedirectAttributes redirectAttributes)
 			throws NumberFormatException, ParseException {
 		ModelAndView modelAndView = new ModelAndView("conta/encerrar");
