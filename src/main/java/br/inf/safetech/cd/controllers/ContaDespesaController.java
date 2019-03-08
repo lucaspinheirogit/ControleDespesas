@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -83,46 +84,53 @@ public class ContaDespesaController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/buscar", method = RequestMethod.POST)
-	public ModelAndView buscar(Principal principal, Authentication auth, @RequestParam("usuario") String usuario,
-			@RequestParam("cliente") String cliente, @RequestParam("dataInicio") String dataInicio,
-			@RequestParam("dataFinal") String dataFinal, @RequestParam("situacao") String situacao, RedirectAttributes redirectAttributes) throws ParseException {
+	@RequestMapping(value = "/buscar", method = RequestMethod.GET)
+	public ModelAndView buscar(Principal principal,
+			Authentication auth,
+			@RequestParam("usuario") Optional<String> usuario,
+			@RequestParam("cliente") Optional<String> cliente,
+			@RequestParam("dataInicio") Optional<String> dataInicio,
+			@RequestParam("dataFinal") Optional<String> dataFinal,
+			@RequestParam("situacao") Optional<String> situacao, 
+			RedirectAttributes redirectAttributes) throws ParseException {
 		ModelAndView modelAndView = new ModelAndView("home");
 		
-		if(!usuario.isEmpty()) {
-			usuario = usuario.substring(1);
-		}
-		if(!cliente.isEmpty()) {
-			cliente = cliente.substring(1);
-		}
-		situacao = situacao.substring(1);
-		dataFinal = dataFinal.substring(1);
-		dataInicio = dataInicio.substring(1);
+		String Usuario = (usuario.isPresent()) ? (Usuario = usuario.get()) : (Usuario="");
+		String Cliente = (cliente.isPresent()) ? (Cliente = cliente.get()) : (Cliente="");
+		String DataInicio = (dataInicio.isPresent()) ? (DataInicio = dataInicio.get()) : (DataInicio="");
+		String DataFinal = (dataFinal.isPresent()) ? (DataFinal = dataFinal.get()) : (DataFinal="");
+		String varSituacao = (situacao.isPresent()) ? (varSituacao = situacao.get()) : (varSituacao="");
 		
-		Situacao sit = Situacao.valueOf(situacao);
+		System.out.println("usuario: " + Usuario);
+		System.out.println("cliente: " + Cliente);
+		System.out.println("data inicial: " + DataInicio);
+		System.out.println("data final: " + DataFinal);
+		System.out.println("situacao: " + varSituacao);
+		
+		Situacao sit = Situacao.valueOf(varSituacao);
 
 		Calendar cal_dataInicio = null;
 		Calendar cal_dataFinal = null;
 
-		if (dataInicio.length() > 0) {
-			if (!dataInicio.matches("\\d{2}/\\d{2}/\\d{4}")) {
+		if (DataInicio.length() > 0) {
+			if (!DataInicio.matches("\\d{2}/\\d{2}/\\d{4}")) {
 				redirectAttributes.addFlashAttribute("message",
 						"Erro! Data de início deve estar no formato dd/MM/yyyy!");
 				return new ModelAndView("redirect:/contas");
 			} else {
 				System.out.println("data final valida");
-				cal_dataInicio = StringToDate(dataInicio);
+				cal_dataInicio = StringToDate(DataInicio);
 			}
 		}
 
-		if (dataFinal.length() > 0) {
-			if (!dataFinal.matches("\\d{2}/\\d{2}/\\d{4}")) {
+		if (DataFinal.length() > 0) {
+			if (!DataFinal.matches("\\d{2}/\\d{2}/\\d{4}")) {
 				redirectAttributes.addFlashAttribute("message",
 						"Erro! Data de encerramento deve estar no formato dd/MM/yyyy!");
 				return new ModelAndView("redirect:/contas");
 			} else {
 				System.out.println("data final valida");
-				cal_dataFinal = StringToDate(dataFinal);
+				cal_dataFinal = StringToDate(DataFinal);
 			}
 		}
 		
@@ -131,13 +139,14 @@ public class ContaDespesaController {
 
 		if (hasUserRole) {
 			Usuario user = usuarioDAO.loadUserByUsername(principal.getName());
-			contas = contaDespesaDAO.listarComFiltro(user.getNome(), cliente, cal_dataInicio, cal_dataFinal, sit);
+			contas = contaDespesaDAO.listarComFiltro(user.getNome(), Cliente, cal_dataInicio, cal_dataFinal, sit);
 			if (contas.size() == 0)
 				modelAndView.addObject("message", "Nenhuma conta encontrada");
 		} else {
-			contas = contaDespesaDAO.listarComFiltro(usuario, cliente, cal_dataInicio, cal_dataFinal, sit);
+			contas = contaDespesaDAO.listarComFiltro(Usuario, Cliente, cal_dataInicio, cal_dataFinal, sit);
 		}
-
+		
+		
 		List<Usuario> usuarios = usuarioDAO.listar();
 		List<Cliente> clientes = clienteDAO.listar();
 
@@ -145,6 +154,7 @@ public class ContaDespesaController {
 		modelAndView.addObject("usuarios", usuarios);
 		modelAndView.addObject("clientes", clientes);
 		modelAndView.addObject("contas", contas);
+		
 		return modelAndView;
 	}
 

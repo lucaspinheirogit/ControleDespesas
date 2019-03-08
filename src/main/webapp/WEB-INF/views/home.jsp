@@ -26,7 +26,7 @@
 		</security:authorize>
 		<h5 class="filtrar-por">Filtrar por:</h5>
 		<form id="formBusca" class="form-inline my-2 my-lg-0"
-			action="${s:mvcUrl('CDC#buscar').build() }" method="post">
+			action="${s:mvcUrl('CDC#buscar').build() }" method="get">
 			<div class="form-group search">
 
 				<div class="div-form-group">
