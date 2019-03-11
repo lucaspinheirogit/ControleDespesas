@@ -35,7 +35,9 @@ public class UsuarioController {
 
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	public ModelAndView form(Usuario usuario) {
+		List<Usuario> usuarios = usuarioDao.listar();
 		ModelAndView modelAndView = new ModelAndView("usuarios/form");
+		modelAndView.addObject("usuarios", usuarios);
 		return modelAndView;
 	}
 

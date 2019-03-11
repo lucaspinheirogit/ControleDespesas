@@ -47,7 +47,9 @@ public class ContaDespesaDAO {
 
 	public List<ContaDespesa> listar() {
 		System.out.println("listando contas de despesas");
-		return manager.createQuery("select c from ContaDespesa c", ContaDespesa.class).getResultList();
+		return manager.createQuery("select c from ContaDespesa c where c.situacao = :situacao", ContaDespesa.class)
+				.setParameter("situacao", Situacao.ATIVA)
+				.getResultList();
 	}
 
 	public void gravar(ContaDespesa conta) {

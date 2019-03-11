@@ -12,6 +12,17 @@
 
 <tags:pageTemplate titulo="Home">
 
+<jsp:attribute name="extraScripts">
+<script>
+	$(document).ready(function() {
+		 $('[name=dataInicio], [name=dataFinal] ').mask("99/99/9999",{placeholder:"dd/MM/yyyy"});
+	});
+</script>
+</jsp:attribute>
+
+
+	<jsp:body>
+
 	<main class="container">
 
 	<h5 style="color: red; text-align: center" class="color-red">${ message }</h5>
@@ -21,39 +32,39 @@
 			<div class="links-criacao">
 				<a href="${s:mvcUrl('CDC#form').build() }" class="btn btn-primary">Criar
 					conta</a> <a href="${s:mvcUrl('UC#form').build() }"
-					class="btn btn-primary">Cadastrar colaborador</a>
+						class="btn btn-primary">Cadastrar colaborador</a>
 			</div>
 		</security:authorize>
 		<h5 class="filtrar-por">Filtrar por:</h5>
 		<form id="formBusca" class="form-inline my-2 my-lg-0"
-			action="${s:mvcUrl('CDC#buscar').build() }" method="get">
-			<div class="form-group search" >
+				action="${s:mvcUrl('CDC#buscar').build() }" method="get">
+			<div class="form-group search">
 
 				<div style="width: 100%" class="div-form-group">
 					<div class="form-group">
 						<label for="exampleSelect1">Cliente:</label> 
-							<select id="select-cliente" name="cliente" class="mx-sm-2" >
+							<select id="select-cliente" name="cliente" class="mx-sm-2">
 								<option value="" disabled selected hidden>Informe o cliente...</option>
 								<c:forEach items="${clientes }" var="cliente">
-									<option value="${ cliente.nome }" >${ cliente.nome }</option>
+									<option value="${ cliente.nome }">${ cliente.nome }</option>
 								</c:forEach>
 							</select>
 					</div>
 
 					<div class="form-group">
 						<label>Colaborador:</label> 
-							<select id="select-usuario" name="usuario" class="mx-sm-2" >
+							<select id="select-usuario" name="usuario" class="mx-sm-2">
 								<option value="" disabled selected hidden>Informe o usuario...</option>
 								<c:forEach items="${usuarios }" var="usuario">
-									<option value="${ usuario.nome }" >${ usuario.nome }</option>
+									<option value="${ usuario.nome }">${ usuario.nome }</option>
 								</c:forEach>
 							</select>
 					</div>
 
 					<div class="form-group">
 						<label class="mr-2">Situação: </label> <select
-							class="form-control mr-sm-2 ml-0" name="situacao"
-							form="formBusca">
+								class="form-control mr-sm-2 ml-0" name="situacao"
+								form="formBusca">
 							<option value="ATIVA">ATIVA</option>
 							<option value="INATIVA">INATIVA</option>
 							<option value="ENCERRADA">ENCERRADA</option>
@@ -64,12 +75,13 @@
 				<div class="div-form-group">
 					<div class="form-group">
 						<label>Data de início: </label> <input class="form-control"
-							placeholder="dd/MM/yyyy" name="dataInicio" />
+								placeholder="dd/MM/yyyy" name="dataInicio"
+								data-mask="00/00/0000" data-mask-selectonfocus="true" />
 					</div>
 
 					<div class="form-group">
 						<label>Data de encerramento: </label> <input class="form-control"
-							placeholder="dd/MM/yyyy" name="dataFinal" />
+								placeholder="dd/MM/yyyy" name="dataFinal" />
 					</div>
 				</div>
 
@@ -85,9 +97,9 @@
 			<div class="card border-primary mb-3">
 				<div class="card-header">
 					<small class="data-inicio"> <fmt:formatDate
-							value="${ conta.dataInicio.time }" pattern="dd/MM/yyyy" />
+								value="${ conta.dataInicio.time }" pattern="dd/MM/yyyy" />
 					</small> <small class="data-fim"><fmt:formatDate
-							value="${ conta.dataFim.time }" pattern="dd/MM/yyyy" /></small>
+								value="${ conta.dataFim.time }" pattern="dd/MM/yyyy" /></small>
 				</div>
 				<div class="card-body">
 					<div class="card-body-header">
@@ -121,8 +133,8 @@
 				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<c:if test="${ conta.situacao != 'ENCERRADA' }">
 						<form onsubmit="return confirm('Deseja encerrar?');"
-							style="text-align: center"
-							action="${s:mvcUrl('CDC#encerrarForm').build() }" method="post">
+								style="text-align: center"
+								action="${s:mvcUrl('CDC#encerrarForm').build() }" method="post">
 							<input name="id" type="hidden" value="${ conta.id }" />
 							<button class="btn btn-danger mb-2" type="submit">Encerrar
 								conta</button>
@@ -137,5 +149,6 @@
 
 
 	</main>
+</jsp:body>
 
 </tags:pageTemplate>

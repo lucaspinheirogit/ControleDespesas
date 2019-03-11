@@ -81,7 +81,7 @@ and also iPads specifically.
 	td {
 		/* Behave  like a "row" */
 		border: none;
-		border-bottom: 1px solid #eee;
+		border-bottom: 1px solid #CCC;
 		position: relative;
 		padding-left: 50%;
 	}

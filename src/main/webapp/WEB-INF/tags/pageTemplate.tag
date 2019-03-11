@@ -4,6 +4,7 @@
 	prefix="security"%>
 
 <%@ attribute name="titulo" required="true"%>
+<%@ attribute name="extraScripts" fragment="true"%>
 
 <c:url value="/" var="contextPath" />
 
@@ -42,9 +43,8 @@
 		<h6 style="text-align: center">Desenvolvido por Lucas Pinheiro &copy</h6>
 	</footer>
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+		></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
 		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
@@ -55,6 +55,17 @@
 		crossorigin="anonymous"></script>
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js"></script>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.1.60/inputmask/jquery.inputmask.js"></script>
+		<script src="${contextPath}resources/js/inputmask/inputmask.js"></script>
+		<script src="${contextPath}resources/js/inputmask/inputmask.extensions.js"></script>
+		<script src="${contextPath}resources/js/inputmask/inputmask.numeric.extensions.js"></script>
+		<script src="${contextPath}resources/js/inputmask/inputmask.date.extensions.js"></script>
+		
+		<script src="https://cdn.rawgit.com/plentz/jquery-maskmoney/master/dist/jquery.maskMoney.min.js"></script>
+		
 		
 		<script>
 			$('#select-cliente, #select-criar-cliente').selectize({
@@ -69,6 +80,8 @@
 				placeholder: "Informe o colaborador..."
 			});
 		</script>
+		
+		<jsp:invoke fragment="extraScripts" />
 		
 
 </body>

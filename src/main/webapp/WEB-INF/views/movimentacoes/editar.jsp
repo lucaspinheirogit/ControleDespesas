@@ -73,7 +73,7 @@
 							</c:otherwise>
 							</c:choose></td>
 						<td>${ m.descricao }</td>
-						<td>${ m.valor }</td>
+						<td>R$ ${ m.valor }</td>
 						<td>${ m.tipo }</td>
 						<td>${ m.conciliada }</td>
 						<td>${ m.criadoPor.nome }</td>
@@ -155,7 +155,7 @@
 			</tbody>
 		</table>
 		<br />
-		<h5>Saldo: ${ saldo }</h5>
+		<h5>Saldo: R$ ${ saldo }</h5>
 	</div>
 
 </tags:pageTemplate>
