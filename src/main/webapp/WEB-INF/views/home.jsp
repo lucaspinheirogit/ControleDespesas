@@ -108,7 +108,10 @@
 					</div>
 					<h5 class="card-title cliente">${ conta.cliente.nome }</h5>
 					<div class="movimentacoes">
+					<div style="display:flex; justify-content: space-between;">
 						<h5 class="card-title">Movimentações:</h5>
+						<small>${ saldos.get( conta.id ) }</small>
+						</div>
 						<div style="display: flex" class="botoes-conta">
 							<form action="${s:mvcUrl('MCC#listar').build() }" method="get">
 								<input name="id" type="hidden" value="${ conta.id }" />

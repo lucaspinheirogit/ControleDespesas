@@ -10,13 +10,14 @@
 		<security:authorize access="isAuthenticated()">
 			<security:authentication property="principal" var="usuario" />
 			<h6>Olá, ${usuario.username }</h6>
-		</security:authorize>
-		<security:authorize access="isAuthenticated()">
+			<a style="background-color: #3c546d" href="${s:mvcUrl('UC#teste').build() }" class="btn btn-primary">Alterar
+				senha</a>
 			<a style="color: white" class="nav-link"
 				href="<c:url value="/logout" />">Sair</a>
 		</security:authorize>
 		<security:authorize access="!isAuthenticated()">
-			<a style="color: white" class="nav-link" href="${s:mvcUrl('LC#form').build() }">Login</a>
+			<a style="color: white" class="nav-link"
+				href="${s:mvcUrl('LC#form').build() }">Login</a>
 		</security:authorize>
 	</div>
 </nav>

@@ -6,8 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,14 @@ public class ContaDespesaController {
 			System.out.println("ADMIN");
 			contas = contaDespesaDAO.listar();
 		}
+		
+		Map<Integer,BigDecimal> saldos = new HashMap<Integer,BigDecimal>();
+		for (ContaDespesa conta : contas) {
+			BigDecimal saldo = contaDespesaDAO.calculaSaldo(conta.getId());
+			saldos.put(conta.getId(),saldo);
+		}
+		
+		System.out.println(saldos);
 
 		List<Usuario> usuarios = usuarioDAO.listar();
 		List<Cliente> clientes = clienteDAO.listar();
@@ -81,6 +90,7 @@ public class ContaDespesaController {
 		modelAndView.addObject("usuarios", usuarios);
 		modelAndView.addObject("clientes", clientes);
 		modelAndView.addObject("contas", contas);
+		modelAndView.addObject("saldos", saldos);
 		return modelAndView;
 	}
 	
