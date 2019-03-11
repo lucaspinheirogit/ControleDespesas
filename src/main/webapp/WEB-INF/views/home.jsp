@@ -27,9 +27,9 @@
 		<h5 class="filtrar-por">Filtrar por:</h5>
 		<form id="formBusca" class="form-inline my-2 my-lg-0"
 			action="${s:mvcUrl('CDC#buscar').build() }" method="get">
-			<div class="form-group search">
+			<div class="form-group search" >
 
-				<div class="div-form-group">
+				<div style="width: 100%" class="div-form-group">
 					<div class="form-group">
 						<label for="exampleSelect1">Cliente:</label> 
 							<select id="select-cliente" name="cliente" class="mx-sm-2" >

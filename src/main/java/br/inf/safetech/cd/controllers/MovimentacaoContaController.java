@@ -106,13 +106,16 @@ public class MovimentacaoContaController {
 	}
 
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
-	public ModelAndView form(MovimentacaoConta movimentacaoConta, @RequestParam("id") String id) {
+	public ModelAndView form(MovimentacaoConta movimentacaoConta,HttpServletRequest request, @RequestParam("id") String id) {
 		id = id.substring(1);
 		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
 		movimentacaoConta.setConta(conta);
+		
+		String referer = request.getHeader("Referer");
 
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/form");
 		modelAndView.addObject("conta", conta);
+		modelAndView.addObject("referer", referer);
 		return modelAndView;
 	}
 
@@ -127,6 +130,9 @@ public class MovimentacaoContaController {
 		movimentacaoConta.setCriadoPor(u);
 
 		movimentacaoContaDAO.gravar(movimentacaoConta);
+		
+		String referer = request.getHeader("Referer");
+		System.out.println("Referer: " +referer);
 
 		redirectAttributes.addFlashAttribute("message", "Movimentação cadastrada com sucesso!");
 		return new ModelAndView("redirect:/contas");
