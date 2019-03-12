@@ -10,7 +10,7 @@
 		<security:authorize access="isAuthenticated()">
 			<security:authentication property="principal" var="usuario" />
 			<h6>Olá, ${usuario.username }</h6>
-			<a style="background-color: #3c546d" href="${s:mvcUrl('UC#teste').build() }" class="btn btn-primary">Alterar
+			<a style="background-color: #3c546d" href="${s:mvcUrl('UC#alterarSenhaForm').build() }" class="btn btn-primary">Alterar
 				senha</a>
 			<a style="color: white" class="nav-link"
 				href="<c:url value="/logout" />">Sair</a>

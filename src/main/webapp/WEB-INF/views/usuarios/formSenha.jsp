@@ -13,26 +13,22 @@
 <tags:pageTemplate titulo="Cadastro de movimentacao">
 
 	<div class="container container-login">
-	<form>
-      <input type="text" id="money2" /><br>
-   </form>
-		<h2 class="titulo-login">Alterar senha</h2>
-		<h5 class="color-red">${ message }</h5>
 
-		<form:form action="${s:mvcUrl('UCC#alterarSenha').build() }" method="post"
-				commandName="usuario">
+		<h2 class="titulo-login">Alterar senha</h2>
+		<h5 style="color:red" class="color-red">${ message }</h5>
+
+		<form:form action="${s:mvcUrl('UC#alterarSenha').build() }"
+			method="post" commandName="usuario">
 			<div class="form-group">
-				<label>Senha: </label>
-				<form:input cssClass="form-control" type="text"
-					 path="senha" required="required" />
+				<label>Nova senha: </label>
+				<form:password cssClass="form-control" path="senha" />
 			</div>
 			<div class="form-group">
 				<label>Repita a senha: </label>
-				<form:input cssClass="form-control" type="text"
-					 path="senhaRepetida" required="required" />
+				<form:password cssClass="form-control" path="senhaRepetida" />
 			</div>
-			<form:hidden path="usuario.id" />
-			<button type="submit" class="btn btn-primary">Cadastrar</button>
+			<form:hidden path="id" />
+			<button type="submit" class="btn btn-primary">Alterar</button>
 		</form:form>
 	</div>
 

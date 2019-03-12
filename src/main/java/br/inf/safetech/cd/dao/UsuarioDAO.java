@@ -78,4 +78,12 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 		System.out.println("false");
 		return false;
 	}
+
+	public void alterarSenha(Integer id, String senha) {
+		System.out.println("ID: " +id);
+		System.out.println("Senha: " + senha);
+		Usuario usuario = manager.find(Usuario.class, id);
+		usuario.setSenha(passwordEncoder.encode(senha));
+		System.out.println(usuario);
+	}
 }

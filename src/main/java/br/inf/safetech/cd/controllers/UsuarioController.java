@@ -26,7 +26,7 @@ public class UsuarioController {
 
 	@Autowired
 	private UsuarioDAO usuarioDao;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.addValidators(new UsuarioValidation());
@@ -62,37 +62,31 @@ public class UsuarioController {
 		redirectAttributes.addFlashAttribute("message", "Usuário cadastrado com sucesso!");
 		return new ModelAndView("redirect:/contas");
 	}
-	
-	@RequestMapping(value = "/testar", method = RequestMethod.GET)
-	public ModelAndView teste(Principal principal) {
+
+	@RequestMapping(value = "/alterarSenhaForm", method = RequestMethod.GET)
+	public ModelAndView alterarSenhaForm(Principal principal) {
 
 		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
-		
-		System.out.println("Usuario: ");
-		System.out.println(usuarioLogado);
-		System.out.println(usuarioLogado.getId());
-		
+		usuarioLogado.setSenha("");
+
 		ModelAndView modelAndView = new ModelAndView("usuarios/formSenha");
-		
+		modelAndView.addObject("usuario", usuarioLogado);
 		return modelAndView;
 	}
-	
-	@RequestMapping(value = "/alterarSenha", method = RequestMethod.GET)
-	public ModelAndView alterarSenha(@Valid Usuario usuario, BindingResult result, Principal principal) {
 
-		if (result.hasErrors()) {
-			return form(usuario);
+	@RequestMapping(value = "/alterarSenha", method = RequestMethod.POST)
+	public ModelAndView alterarSenha(Usuario usuario, RedirectAttributes redirectAttributes,
+			BindingResult result, Principal principal) {
+
+		if(!usuario.getSenha().equals(usuario.getSenhaRepetida())) {
+			redirectAttributes.addFlashAttribute("message", "As senhas precisam ser iguais!");
+			return new ModelAndView("redirect:/usuarios/alterarSenhaForm");
 		}
-		
-		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
-		
-		System.out.println("Usuario: ");
-		System.out.println(usuarioLogado);
-		System.out.println(usuarioLogado.getId());
-		
-		ModelAndView modelAndView = new ModelAndView("usuarios/formSenha");
-		
-		return modelAndView;
+
+		usuarioDao.alterarSenha(usuario.getId(), usuario.getSenha());
+
+		redirectAttributes.addFlashAttribute("message", "senha alterada com sucesso!");
+		return new ModelAndView("redirect:/contas");
 	}
 
 }
