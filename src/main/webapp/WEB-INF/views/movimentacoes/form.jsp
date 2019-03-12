@@ -12,26 +12,8 @@
 
 <tags:pageTemplate titulo="Cadastro de movimentacao">
 
-	<jsp:attribute name="extraScripts">
-	
-	
-<script>
-$(document).ready(function()
-		{
-		     $("#money2").maskMoney({
-		         prefix: "R$ ",
-		         decimal: ",",
-		         thousands: "."
-		     });
-		});
-</script>
-</jsp:attribute>
-
 	<jsp:body>
 	<div class="container container-login">
-	<form>
-      <input type="text" id="money2" /><br>
-   </form>
 		<h2 class="titulo-login">Cadastro de movimentação</h2>
 		<h5 class="color-red">${ message }</h5>
 
@@ -60,8 +42,8 @@ $(document).ready(function()
 			</div>
 			<div class="form-group">
 				<label>Valor: </label>
-				<form:input id="money" cssClass="form-control" type="text"
-						step="0.01" min="0" path="valor" required="required" />
+				<form:input cssClass="form-control" type="number"
+						step="0.01" value="0" path="valor" required="required" />
 			</div>
 			<form:hidden path="conta.id" />
 			<button type="submit" class="btn btn-primary">Cadastrar</button>

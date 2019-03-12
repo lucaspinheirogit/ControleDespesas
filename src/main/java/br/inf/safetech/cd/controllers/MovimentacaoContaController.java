@@ -2,6 +2,7 @@ package br.inf.safetech.cd.controllers;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -99,8 +100,14 @@ public class MovimentacaoContaController {
 			}
 		}
 
+		List<Responsavel> responsaveis = new ArrayList<>();
+		responsaveis.add(Responsavel.EMPRESA);
+		responsaveis.add(Responsavel.COLABORADOR);
+		responsaveis.add(Responsavel.CLIENTE);
+		
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
 		modelAndView.addObject("movimentacoes", movimentacoes);
+		modelAndView.addObject("responsaveis", responsaveis);
 		modelAndView.addObject("saldo", saldo);
 		return modelAndView;
 	}
@@ -128,6 +135,7 @@ public class MovimentacaoContaController {
 		movimentacaoConta.setConta(c);
 		movimentacaoConta.setConciliada(Conciliada.NAO);
 		movimentacaoConta.setCriadoPor(u);
+		movimentacaoConta.setResponsavel(Responsavel.EMPRESA);
 
 		movimentacaoContaDAO.gravar(movimentacaoConta);
 		

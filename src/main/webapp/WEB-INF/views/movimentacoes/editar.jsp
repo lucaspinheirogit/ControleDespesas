@@ -56,22 +56,32 @@
 						<th>Conciliar?</th>
 					</security:authorize>
 					<th>Remover?</th>
-					<security:authorize access="hasRole('ROLE_ADMIN')">
-						<th>Responsável?</th>
-					</security:authorize>
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach items="${ movimentacoes }" var="m">
 					<tr>
-						<td><c:choose>
-								<c:when test="${ m.responsavel == null }">
-									--------
-							</c:when>
-								<c:otherwise>
-								${ m.responsavel }
-							</c:otherwise>
-							</c:choose></td>
+						<td>
+							<form class="m-0 p-0" style="text-align: center"
+								action="${s:mvcUrl('MCC#alterarResponsavel').build() }"
+								method="post">
+								<input name="id" type="hidden" value="${ m.id }" /> <select
+									onchange="this.form.submit()" class="m-0 form-control"
+									name="responsavel">
+									<option value="${ m.responsavel }">${ m.responsavel }</option>
+
+									<security:authorize access="hasRole('ROLE_ADMIN')">
+										<c:forEach var="i" begin="0" end="2">
+											<c:if test="${ m.responsavel != responsaveis[i] }">
+												<option value="${ responsaveis[i] }">${ responsaveis[i] }</option>
+											</c:if>
+										</c:forEach>
+									</security:authorize>
+
+								</select> <input name="conta" type="hidden"
+									value="${ movimentacoes[0].conta.id }" />
+							</form>
+						</td>
 						<td>${ m.descricao }</td>
 						<td>R$ ${ m.valor }</td>
 						<td>${ m.tipo }</td>
@@ -117,7 +127,8 @@
 								</td>
 							</c:when>
 							<c:otherwise>
-								<td class="td-remover"><security:authorize access="hasRole('ROLE_ADMIN')">
+								<td class="td-remover"><security:authorize
+										access="hasRole('ROLE_ADMIN')">
 										<form class="p-0" style="text-align: center"
 											onsubmit="return confirm('Deseja remover?');"
 											action="${s:mvcUrl('MCC#remover').build() }" method="post">
@@ -126,29 +137,9 @@
 												value="${ movimentacoes[0].conta.id }" />
 											<button class="btn btn-danger" type="submit">Remover</button>
 										</form>
-									</security:authorize>
-									-
-								</td>
+									</security:authorize> <span style="opacity: 0.01">-</span></td>
 							</c:otherwise>
 						</c:choose>
-
-						<security:authorize access="hasRole('ROLE_ADMIN')">
-							<td class='td-responsavel'>
-								<form class="p-0" style="text-align: center"
-									action="${s:mvcUrl('MCC#alterarResponsavel').build() }"
-									method="post">
-									<input name="id" type="hidden" value="${ m.id }" /> <select
-										name="responsavel">
-										<option value="COLABORADOR">Colaborador</option>
-										<option value="CLIENTE">Cliente</option>
-										<option value="EMPRESA">Empresa</option>
-									</select> <input name="conta" type="hidden"
-										value="${ movimentacoes[0].conta.id }" />
-									<button class="btn btn-primary" type="submit">Alterar
-									</button>
-								</form>
-							</td>
-						</security:authorize>
 
 					</tr>
 				</c:forEach>

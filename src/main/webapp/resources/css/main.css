@@ -11,6 +11,10 @@ body {
 	color:red;
 }
 
+.navbar-toggler{
+	margin-right: .5em;
+}
+
 .container-fluid {
 	padding: 0;
 	flex: 1 0 auto;

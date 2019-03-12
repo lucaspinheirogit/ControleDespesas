@@ -39,7 +39,7 @@
 		<br />
 		<h3>Lista de colaboradores</h3>
 
-		<table>
+		<table class="mb-4">
 			<thead>
 				<tr class="table-primary">
 					<th>Nome</th>
