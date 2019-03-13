@@ -149,7 +149,11 @@
 			</tbody>
 		</table>
 		<br />
-		<h5>Saldo: R$ ${ saldo }</h5>
+		<h5 class="mb-5">
+			Saldo:
+			<fmt:formatNumber value="${ saldo }" minFractionDigits="2"
+				type="currency" />
+		</h5>
 	</div>
 
 </tags:pageTemplate>

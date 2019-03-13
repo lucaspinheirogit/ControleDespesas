@@ -53,9 +53,13 @@
 			</tbody>
 		</table>
 		<br />
-		<h5>Saldo: R$ ${ saldo }</h5>
+		<h5 class="mb-0">
+			Saldo:
+			<fmt:formatNumber value="${ saldo }" minFractionDigits="2"
+				type="currency" />
+		</h5>
 		<br />
-		<button class="btn btn-primary">Gerar PDF</button>
+		<button class="btn btn-primary mb-5">Gerar PDF</button>
 
 	</div>
 

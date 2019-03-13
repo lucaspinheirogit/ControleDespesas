@@ -126,7 +126,18 @@ public class MovimentacaoContaController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(Principal principal, MovimentacaoConta movimentacaoConta,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+			RedirectAttributes redirectAttributes, HttpServletRequest request, @RequestParam("valor") String valor) {
+		valor = valor.substring(1);
+		
+		System.out.println(movimentacaoConta);
+		System.out.println(valor);
+		
+		valor=valor.replace(".","");
+		valor=valor.replace(",",".");
+		
+		System.out.println(valor);
+		BigDecimal valorMovimentacao = new BigDecimal(valor);
+		System.out.println(valorMovimentacao);
 
 		ContaDespesa c = contaDespesaDAO.find(movimentacaoConta.getConta().getId());
 		Usuario u = usuarioDAO.loadUserByUsername(principal.getName());
@@ -134,11 +145,10 @@ public class MovimentacaoContaController {
 		movimentacaoConta.setConciliada(Conciliada.NAO);
 		movimentacaoConta.setCriadoPor(u);
 		movimentacaoConta.setResponsavel(Responsavel.EMPRESA);
+		movimentacaoConta.setValor(valorMovimentacao);
 
 		movimentacaoContaDAO.gravar(movimentacaoConta);
 		
-		String referer = request.getHeader("Referer");
-
 		redirectAttributes.addFlashAttribute("message", "Movimentação cadastrada com sucesso!");
 		return new ModelAndView("redirect:/contas");
 	}

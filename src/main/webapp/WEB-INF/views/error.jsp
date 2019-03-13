@@ -3,7 +3,7 @@
 
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
 
-<tags:pageTemplate titulo="Livros de Java, Android, iPhone, Ruby, PHP e muito mais ....">
+<tags:pageTemplate titulo="Erro">
 
 	<section id="index-section" class="container middle">
 		<h1>Erro genérico acontecendo!!!</h1>
