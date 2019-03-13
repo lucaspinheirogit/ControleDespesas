@@ -67,22 +67,19 @@ public class ContaDespesaController {
 		boolean hasUserRole = auth.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_USER"));
 
 		if (hasUserRole) {
-			Usuario usuario = usuarioDAO.loadUserByUsername(principal.getName());
+			Usuario usuario = (Usuario) ((Authentication) principal).getPrincipal();
 			contas = contaDespesaDAO.listarPorColaborador(usuario);
 			if (contas.size() == 0)
 				modelAndView.addObject("message", "Não existe nenhuma conta no seu nome");
 		} else {
-			System.out.println("ADMIN");
 			contas = contaDespesaDAO.listar();
 		}
-		
-		Map<Integer,BigDecimal> saldos = new HashMap<Integer,BigDecimal>();
+
+		Map<Integer, BigDecimal> saldos = new HashMap<Integer, BigDecimal>();
 		for (ContaDespesa conta : contas) {
 			BigDecimal saldo = contaDespesaDAO.calculaSaldo(conta.getId());
-			saldos.put(conta.getId(),saldo);
+			saldos.put(conta.getId(), saldo);
 		}
-		
-		System.out.println(saldos);
 
 		List<Usuario> usuarios = usuarioDAO.listar();
 		List<Cliente> clientes = clienteDAO.listar();
@@ -93,30 +90,21 @@ public class ContaDespesaController {
 		modelAndView.addObject("saldos", saldos);
 		return modelAndView;
 	}
-	
+
 	@RequestMapping(value = "/buscar", method = RequestMethod.GET)
-	public ModelAndView buscar(Principal principal,
-			Authentication auth,
-			@RequestParam("usuario") Optional<String> usuario,
-			@RequestParam("cliente") Optional<String> cliente,
+	public ModelAndView buscar(Principal principal, Authentication auth,
+			@RequestParam("usuario") Optional<String> usuario, @RequestParam("cliente") Optional<String> cliente,
 			@RequestParam("dataInicio") Optional<String> dataInicio,
-			@RequestParam("dataFinal") Optional<String> dataFinal,
-			@RequestParam("situacao") Optional<String> situacao, 
+			@RequestParam("dataFinal") Optional<String> dataFinal, @RequestParam("situacao") Optional<String> situacao,
 			RedirectAttributes redirectAttributes) throws ParseException {
 		ModelAndView modelAndView = new ModelAndView("home");
-		
-		String Usuario = (usuario.isPresent()) ? (Usuario = usuario.get()) : (Usuario="");
-		String Cliente = (cliente.isPresent()) ? (Cliente = cliente.get()) : (Cliente="");
-		String DataInicio = (dataInicio.isPresent()) ? (DataInicio = dataInicio.get()) : (DataInicio="");
-		String DataFinal = (dataFinal.isPresent()) ? (DataFinal = dataFinal.get()) : (DataFinal="");
-		String varSituacao = (situacao.isPresent()) ? (varSituacao = situacao.get()) : (varSituacao="");
-		
-		System.out.println("usuario: " + Usuario);
-		System.out.println("cliente: " + Cliente);
-		System.out.println("data inicial: " + DataInicio);
-		System.out.println("data final: " + DataFinal);
-		System.out.println("situacao: " + varSituacao);
-		
+
+		String Usuario = (usuario.isPresent()) ? (Usuario = usuario.get()) : (Usuario = "");
+		String Cliente = (cliente.isPresent()) ? (Cliente = cliente.get()) : (Cliente = "");
+		String DataInicio = (dataInicio.isPresent()) ? (DataInicio = dataInicio.get()) : (DataInicio = "");
+		String DataFinal = (dataFinal.isPresent()) ? (DataFinal = dataFinal.get()) : (DataFinal = "");
+		String varSituacao = (situacao.isPresent()) ? (varSituacao = situacao.get()) : (varSituacao = "");
+
 		Situacao sit = Situacao.valueOf(varSituacao);
 
 		Calendar cal_dataInicio = null;
@@ -128,7 +116,6 @@ public class ContaDespesaController {
 						"Erro! Data de início deve estar no formato dd/MM/yyyy!");
 				return new ModelAndView("redirect:/contas");
 			} else {
-				System.out.println("data final valida");
 				cal_dataInicio = StringToDate(DataInicio);
 			}
 		}
@@ -139,24 +126,22 @@ public class ContaDespesaController {
 						"Erro! Data de encerramento deve estar no formato dd/MM/yyyy!");
 				return new ModelAndView("redirect:/contas");
 			} else {
-				System.out.println("data final valida");
 				cal_dataFinal = StringToDate(DataFinal);
 			}
 		}
-		
+
 		List<ContaDespesa> contas;
 		boolean hasUserRole = auth.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals("ROLE_USER"));
 
 		if (hasUserRole) {
-			Usuario user = usuarioDAO.loadUserByUsername(principal.getName());
+			Usuario user = (Usuario) ((Authentication) principal).getPrincipal();
 			contas = contaDespesaDAO.listarComFiltro(user.getNome(), Cliente, cal_dataInicio, cal_dataFinal, sit);
 			if (contas.size() == 0)
 				modelAndView.addObject("message", "Nenhuma conta encontrada");
 		} else {
 			contas = contaDespesaDAO.listarComFiltro(Usuario, Cliente, cal_dataInicio, cal_dataFinal, sit);
 		}
-		
-		
+
 		List<Usuario> usuarios = usuarioDAO.listar();
 		List<Cliente> clientes = clienteDAO.listar();
 
@@ -164,27 +149,25 @@ public class ContaDespesaController {
 		modelAndView.addObject("usuarios", usuarios);
 		modelAndView.addObject("clientes", clientes);
 		modelAndView.addObject("contas", contas);
-		
+
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/admin/form", method = RequestMethod.GET)
 	public ModelAndView form(ContaDespesa contaDespesa) {
 		ModelAndView modelAndView = new ModelAndView("conta/form");
-
+		
 		List<Cliente> clientes = clienteDAO.listar();
 		modelAndView.addObject("clientes", clientes);
-
 		List<Usuario> usuarios = usuarioDAO.listar();
 		modelAndView.addObject("usuarios", usuarios);
-
+		
 		return modelAndView;
-
 	}
 
-	@RequestMapping(value="/admin/gravar",method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/gravar", method = RequestMethod.POST)
 	public ModelAndView gravar(ContaDespesa conta, RedirectAttributes redirectAttributes) throws ParseException {
-	
+
 		Date date = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		Date dt = sf.parse(sf.format(date));
@@ -202,7 +185,6 @@ public class ContaDespesaController {
 		contaDespesaDAO.gravar(conta);
 
 		redirectAttributes.addFlashAttribute("message", "Conta cadastrada com sucesso!");
-
 		return new ModelAndView("redirect:/contas");
 	}
 
@@ -216,7 +198,7 @@ public class ContaDespesaController {
 
 		MovimentacaoConta m = new MovimentacaoConta();
 		ContaDespesa c = contaDespesaDAO.find(Integer.parseInt(id));
-		Usuario u = usuarioDAO.loadUserByUsername(principal.getName());
+		Usuario u = (Usuario) ((Authentication) principal).getPrincipal();
 		m.setConta(c);
 		m.setTipo(Tipo.DEBITO);
 		m.setConciliada(Conciliada.SIM);
@@ -226,10 +208,9 @@ public class ContaDespesaController {
 		m.setResponsavel(Responsavel.EMPRESA);
 
 		movimentacaoContaDAO.gravar(m);
-
 		contaDespesaDAO.encerrar(Integer.parseInt(id));
+		
 		redirectAttributes.addFlashAttribute("message", "Conta encerrada com sucesso!");
-
 		return new ModelAndView("redirect:/contas");
 	}
 
@@ -241,17 +222,13 @@ public class ContaDespesaController {
 		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
 		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
 
-		System.out.println(saldo);
-
 		if (contaDespesaDAO.estaLiquidada(Integer.parseInt(id))) {
 
 			if (saldo.compareTo(BigDecimal.ZERO) != 0) {
-				System.out.println("diferente de zero, vou pro form");
 				modelAndView.addObject("conta", conta);
 				modelAndView.addObject("saldo", saldo);
 				return modelAndView;
 			} else {
-				System.out.println("igual a zero, vou encerrar");
 				contaDespesaDAO.encerrar(Integer.parseInt(id));
 				redirectAttributes.addFlashAttribute("message", "Conta encerrada com sucesso!");
 				return new ModelAndView("redirect:/contas");
@@ -265,7 +242,7 @@ public class ContaDespesaController {
 
 	}
 
-	//Converte strings (dd/MM/yyyy) para Calendar
+	// Converte strings (dd/MM/yyyy) para Calendar
 	private Calendar StringToDate(String data) throws ParseException {
 		String[] datas = data.split("/");
 		data = datas[2] + "-" + datas[1] + "-" + datas[0];

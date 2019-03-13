@@ -50,14 +50,10 @@ public class UsuarioController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(@Valid Usuario usuario, BindingResult result, RedirectAttributes redirectAttributes) {
-
 		if (usuarioDao.usuarioJaExiste(usuario)) {
-			System.out.println("Ja existe");
 			redirectAttributes.addFlashAttribute("message", "Erro! Colaborador já existe!");
 			return new ModelAndView("redirect:/usuarios/form");
 		}
-
-		System.out.println("gravando novo colaborador");
 		usuarioDao.gravar(usuario);
 		redirectAttributes.addFlashAttribute("message", "Usuário cadastrado com sucesso!");
 		return new ModelAndView("redirect:/contas");
@@ -65,10 +61,8 @@ public class UsuarioController {
 
 	@RequestMapping(value = "/alterarSenhaForm", method = RequestMethod.GET)
 	public ModelAndView alterarSenhaForm(Principal principal) {
-
 		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
 		usuarioLogado.setSenha("");
-
 		ModelAndView modelAndView = new ModelAndView("usuarios/formSenha");
 		modelAndView.addObject("usuario", usuarioLogado);
 		return modelAndView;
@@ -77,14 +71,11 @@ public class UsuarioController {
 	@RequestMapping(value = "/alterarSenha", method = RequestMethod.POST)
 	public ModelAndView alterarSenha(Usuario usuario, RedirectAttributes redirectAttributes,
 			BindingResult result, Principal principal) {
-
 		if(!usuario.getSenha().equals(usuario.getSenhaRepetida())) {
 			redirectAttributes.addFlashAttribute("message", "As senhas precisam ser iguais!");
 			return new ModelAndView("redirect:/usuarios/alterarSenhaForm");
 		}
-
 		usuarioDao.alterarSenha(usuario.getId(), usuario.getSenha());
-
 		redirectAttributes.addFlashAttribute("message", "senha alterada com sucesso!");
 		return new ModelAndView("redirect:/contas");
 	}
