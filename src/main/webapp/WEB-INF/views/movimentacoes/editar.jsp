@@ -6,6 +6,8 @@
 <%@ taglib uri="http://www.springframework.org/security/tags"
 	prefix="security"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:setLocale value="pt-BR" />
 
 <c:url value="/" var="contextPath" />
 
@@ -83,7 +85,8 @@
 							</form>
 						</td>
 						<td>${ m.descricao }</td>
-						<td>R$ ${ m.valor }</td>
+						<td><fmt:formatNumber value="${m.valor}"
+								minFractionDigits="2" type="currency" /></td>
 						<td>${ m.tipo }</td>
 						<td>${ m.conciliada }</td>
 						<td>${ m.criadoPor.nome }</td>

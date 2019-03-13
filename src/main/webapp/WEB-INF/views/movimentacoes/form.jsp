@@ -41,9 +41,9 @@
 						required="required" />
 			</div>
 			<div class="form-group">
-				<label>Valor: </label>
+				<label>Valor: R$</label>
 				<form:input cssClass="form-control" type="number" step="0.01"
-						value="0" path="valor" required="required" />
+						path="valor" required="required" />
 			</div>
 			<form:hidden path="conta.id" />
 			<button type="submit" class="btn btn-primary">Cadastrar</button>

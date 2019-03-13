@@ -26,8 +26,6 @@ public class ClienteController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView listar() {
 		List<Cliente> clientes = clienteDao.listar();
-		System.out.println(clientes);
-		System.out.println(clientes.get(0));
 		ModelAndView modelAndView = new ModelAndView("clientes/lista");
 		modelAndView.addObject("clientes", clientes);
 		return modelAndView;
@@ -41,12 +39,8 @@ public class ClienteController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(Cliente cliente, RedirectAttributes redirectAttributes) {
-
-		System.out.println(cliente);
-		
 		clienteDao.gravar(cliente);
 		redirectAttributes.addFlashAttribute("message", "Cliente cadastrado com sucesso!");
-
 		return new ModelAndView("redirect:/");
 	}
 

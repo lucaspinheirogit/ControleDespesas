@@ -26,6 +26,7 @@
 	<main class="container">
 
 	<h5 style="color: red; text-align: center" class="color-red">${ message }</h5>
+	<h5 style="color: red; text-align: center" class="color-red">${ message2 }</h5>
 
 	<div class="nova-conta">
 		<security:authorize access="hasRole('ROLE_ADMIN')">
@@ -110,7 +111,10 @@
 					<div class="movimentacoes">
 					<div style="display:flex; justify-content: space-between;">
 						<h5 class="card-title">Movimentações:</h5>
-						<small>${ saldos.get( conta.id ) }</small>
+						<small>
+						<fmt:formatNumber value="${ saldos.get( conta.id ) }"
+								minFractionDigits="2" type="currency" />
+						</small>
 						</div>
 						<div style="display: flex" class="botoes-conta">
 							<form action="${s:mvcUrl('MCC#listar').build() }" method="get">

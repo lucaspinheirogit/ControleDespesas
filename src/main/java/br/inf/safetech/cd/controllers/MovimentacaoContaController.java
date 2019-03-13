@@ -50,12 +50,11 @@ public class MovimentacaoContaController {
 			return new ModelAndView("redirect:/contas");
 		}
 
-		String colaborador = movimentacoes.get(0).getConta().getUsuario().getLogin();
-		String usuarioLogado = principal.getName();
+		int colaborador = movimentacoes.get(0).getConta().getUsuario().getId();
+		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
 
 		if (!hasRole(auth, "ROLE_ADMIN")) {
-			System.out.println("O usuario nao é admin, portanto verificar se ele é o colaborador da conta");
-			if (!colaborador.equals(usuarioLogado)) {
+			if (colaborador != usuarioLogado.getId()) {
 				redirectAttributes.addFlashAttribute("message", "ERRO! Você só pode ver as contas que lhe pertencem!");
 				return new ModelAndView("redirect:/contas");
 			}
@@ -79,13 +78,13 @@ public class MovimentacaoContaController {
 			return new ModelAndView("redirect:/contas");
 		}
 
-		String colaborador = movimentacoes.get(0).getConta().getUsuario().getLogin();
-		String usuarioLogado = principal.getName();
+		int colaborador = movimentacoes.get(0).getConta().getUsuario().getId();
+		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
+		
 		Situacao situacao = movimentacoes.get(0).getConta().getSituacao();
 
 		if (!hasRole(auth, "ROLE_ADMIN")) {
-			System.out.println("O usuario nao é admin, portanto verificar se ele é o colaborador da conta");
-			if (!colaborador.equals(usuarioLogado)) {
+			if (colaborador != usuarioLogado.getId()) {
 				redirectAttributes.addFlashAttribute("message", "ERRO! Você só pode editar as contas que lhe pertencem!");
 				return new ModelAndView("redirect:/contas");
 			} else if (situacao.equals(Situacao.ENCERRADA)) {
@@ -93,7 +92,6 @@ public class MovimentacaoContaController {
 				return new ModelAndView("redirect:/contas");
 			}
 		} else {
-			System.out.println("O user é admin, verificar se a conta nao ta encerrada");
 			if (situacao.equals(Situacao.ENCERRADA)) {
 				redirectAttributes.addFlashAttribute("message", "ERRO! A conta está encerrada !");
 				return new ModelAndView("redirect:/contas");
@@ -140,7 +138,6 @@ public class MovimentacaoContaController {
 		movimentacaoContaDAO.gravar(movimentacaoConta);
 		
 		String referer = request.getHeader("Referer");
-		System.out.println("Referer: " +referer);
 
 		redirectAttributes.addFlashAttribute("message", "Movimentação cadastrada com sucesso!");
 		return new ModelAndView("redirect:/contas");
@@ -176,10 +173,8 @@ public class MovimentacaoContaController {
 		contaId = contaId.substring(1);
 
 		if (movimentacaoContaDAO.estaConciliada(Integer.parseInt(id))) {
-			System.out.println("Conciliada");
 			redirectAttributes.addFlashAttribute("message", "Não é possível remover uma movimentação conciliada!");
 		} else {
-			System.out.println("Nao Conciliada");
 			movimentacaoContaDAO.remover(Integer.parseInt(id));
 			redirectAttributes.addFlashAttribute("message", "Movimentação removida com sucesso");
 		}

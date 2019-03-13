@@ -85,7 +85,7 @@ select {
 
 /* CARD */
 .card {
-	height: 18em;
+	height: 19em;
 	width: 19em;
 	border: 1px solid #2C3E50;
 	margin: 0 auto;
@@ -134,8 +134,8 @@ small {
 }
 
 .cliente {
-	margin-top: 1em;
-	margin-bottom: 1.5em;
+	/*margin-top: 1em;
+	margin-bottom: 1.5em;*/
 }
 
 .filtrar-por {

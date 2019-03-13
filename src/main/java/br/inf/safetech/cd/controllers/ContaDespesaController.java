@@ -70,7 +70,7 @@ public class ContaDespesaController {
 			Usuario usuario = (Usuario) ((Authentication) principal).getPrincipal();
 			contas = contaDespesaDAO.listarPorColaborador(usuario);
 			if (contas.size() == 0)
-				modelAndView.addObject("message", "Não existe nenhuma conta no seu nome");
+				modelAndView.addObject("message2", "Não existe nenhuma conta no seu nome");
 		} else {
 			contas = contaDespesaDAO.listar();
 		}
