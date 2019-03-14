@@ -94,7 +94,6 @@
 	<div class="contas">
 
 		<c:forEach items="${ contas }" var="conta">
-
 			<div class="card border-primary mb-3">
 				<div class="card-header">
 					<small class="data-inicio"> <fmt:formatDate
