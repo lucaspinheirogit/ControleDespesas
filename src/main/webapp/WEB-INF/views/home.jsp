@@ -102,7 +102,7 @@
 					</small> <small class="data-fim"><fmt:formatDate
 								value="${ conta.dataFim.time }" pattern="dd/MM/yyyy" /></small>
 				</div>
-				<div class="card-body">
+				<div class="card-body pb-0 pb-sm-1">
 					<div class="card-body-header">
 						<h4 class="card-title">${ conta.usuario.nome }</h4>
 						<small>${ conta.situacao }</small>
@@ -139,7 +139,7 @@
 				</div>
 				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<c:if test="${ conta.situacao != 'ENCERRADA' }">
-						<form onsubmit="return confirm('Deseja encerrar?');"
+						<form class="p-0 p-sm-1" onsubmit="return confirm('Deseja encerrar?');"
 								style="text-align: center"
 								action="${s:mvcUrl('CDC#encerrarForm').build() }" method="post">
 							<input name="id" type="hidden" value="${ conta.id }" />
