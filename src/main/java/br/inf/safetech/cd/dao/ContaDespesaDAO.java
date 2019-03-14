@@ -59,9 +59,10 @@ public class ContaDespesaDAO {
 
 	public List<ContaDespesa> listarPorColaborador(Usuario usuario) {
 		System.out.println("listando contas do colaborador: " + usuario.getLogin());
-		return manager.createQuery("select c from ContaDespesa c where c.usuario.id = :id", ContaDespesa.class)
-				.setParameter("id", usuario.getId()).getResultList();
-
+		return manager.createQuery("select c from ContaDespesa c where c.usuario.id = :id and c.situacao = :situacao", ContaDespesa.class)
+				.setParameter("id", usuario.getId())
+				.setParameter("situacao", Situacao.ATIVA)
+				.getResultList();
 	}
 
 	public void encerrar(int id) throws ParseException {
