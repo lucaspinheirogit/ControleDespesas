@@ -92,7 +92,7 @@ public class Usuario implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return this.login;
+		return this.nome;
 	}
 
 	public Integer getId() {
