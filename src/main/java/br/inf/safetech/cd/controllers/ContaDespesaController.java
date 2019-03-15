@@ -205,8 +205,14 @@ public class ContaDespesaController {
 		m.setCriadoPor(u);
 		m.setDescricao(opcao);
 		m.setValor(new BigDecimal(saldo)); // Valor que vem do form
-		m.setResponsavel(Responsavel.EMPRESA);
-
+		
+		System.out.println("opcao: " + opcao);
+		if(opcao.equals("Vale")) {
+			m.setResponsavel(Responsavel.COLABORADOR);
+		}else {
+			m.setResponsavel(Responsavel.EMPRESA);
+		}
+		
 		movimentacaoContaDAO.gravar(m);
 		contaDespesaDAO.encerrar(Integer.parseInt(id));
 		
@@ -236,7 +242,8 @@ public class ContaDespesaController {
 
 		} else {
 			redirectAttributes.addFlashAttribute("message",
-					"Não é possível encerrar uma conta que não está liquidada!");
+					"Não é possível encerrar uma conta que não está liquidada!"
+					+ " <br/> Confira se todas as movimentacões possuem um responsável e estão conciliadas.");
 			return new ModelAndView("redirect:/contas");
 		}
 

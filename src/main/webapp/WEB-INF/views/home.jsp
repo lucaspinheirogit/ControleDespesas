@@ -10,12 +10,33 @@
 
 <c:url value="/" var="contextPath" />
 
+<style>
+#voltar {
+	display: none;
+}
+
+.label {
+	font-size: 1rem;
+	color: #333;
+}
+</style>
+
+<security:authorize access="hasRole('ROLE_ADMIN')">
+	<style>
+form {
+	margin-bottom: 0;
+}
+</style>
+</security:authorize>
+
 <tags:pageTemplate titulo="Home">
 
-<jsp:attribute name="extraScripts">
+	<jsp:attribute name="extraScripts">
 <script>
 	$(document).ready(function() {
-		 $('[name=dataInicio], [name=dataFinal] ').mask("99/99/9999",{placeholder:"dd/MM/yyyy"});
+		$('[name=dataInicio], [name=dataFinal] ').mask("99/99/9999", {
+			placeholder : "dd/MM/yyyy"
+		});
 	});
 </script>
 </jsp:attribute>
@@ -101,22 +122,24 @@
 					</small> <small class="data-fim"><fmt:formatDate
 								value="${ conta.dataFim.time }" pattern="dd/MM/yyyy" /></small>
 				</div>
-				<div class="card-body pb-0 pb-sm-1">
+				<div class="card-body p-2 pb-0 pb-sm-1">
 					<div class="card-body-header">
-						<h4 class="card-title">${ conta.usuario.nome }</h4>
+						<h4 class="card-title"> <span class="label">Colaborador: </span>${ conta.usuario.nome }</h4>
 						<small>${ conta.situacao }</small>
 					</div>
-					<h5 class="card-title cliente">${ conta.cliente.nome }</h5>
+					<h4 class="card-title cliente">
+							<span class="label">Cliente: </span>${ conta.cliente.nome }</h4>
 					<div class="movimentacoes">
-					<div style="display:flex; justify-content: space-between;">
+					<div style="display: flex; justify-content: space-between;">
 						<h5 class="card-title">Movimentações:</h5>
 						<small>
 						<fmt:formatNumber value="${ saldos.get( conta.id ) }"
-								minFractionDigits="2" type="currency" />
+										minFractionDigits="2" type="currency" />
 						</small>
 						</div>
 						<div style="display: flex" class="botoes-conta">
-							<form action="${s:mvcUrl('MCC#listar').build() }" method="get">
+							<form action="${s:mvcUrl('MCC#listar').build() }"
+									method="get">
 								<input name="id" type="hidden" value="${ conta.id }" />
 								<button class="btn btn-primary my-2 my-sm-0 mr-1" type="submit">Ver</button>
 							</form>
@@ -138,7 +161,8 @@
 				</div>
 				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<c:if test="${ conta.situacao != 'ENCERRADA' }">
-						<form class="p-0 p-sm-1" onsubmit="return confirm('Deseja encerrar?');"
+						<form class="p-0 p-sm-1"
+								onsubmit="return confirm('Deseja encerrar?');"
 								style="text-align: center"
 								action="${s:mvcUrl('CDC#encerrarForm').build() }" method="post">
 							<input name="id" type="hidden" value="${ conta.id }" />

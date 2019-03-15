@@ -14,60 +14,62 @@
 
 	<jsp:attribute name="extraScripts">
 <script>
-	/*
-	 $('input.formatNumber, input.formatNumber2').on('blur', function() {
-	 const value = this.value.replace(/,/g, '');
-	 this.value = parseFloat(value).toLocaleString('pt-BR', {
-	 style : 'decimal',
-	 maximumFractionDigits : 2,
-	 minimumFractionDigits : 2
-	 });
-	 });
-	 */
-
 	$('input.formatNumber').on(
 			'blur',
 			function() {
-				if(this.value == '') this.value = 0;
-				
+				if (this.value == '')
+					this.value = 0;
+
 				this.value = parseFloat(this.value.replace(/,/g, ""))
-						.toFixed(2)
-						.toString()
-						.replace(/\B(?=(\d{3})+(?!\d))/g,",");
+						.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
+								",");
 			});
-	 
-	 $('#formMovimentacao').on(
-				'submit',
-				function(e) {
-					let value = $('input.formatNumber').val();
-					value = value.replace(".","a");
-					value = value.replace(/,/g,".");
-					value = value.replace("a",",");
-					$('input.formatNumber').val(value);
-				});
+
+	$('#formMovimentacao').on('submit', function(e) {
+		let value = $('input.formatNumber').val();
+
+		if (value.match(/[a-z]/i)) {
+			$('input.formatNumber').val("");
+			$('#message').text("Informe um valor válido");
+			e.preventDefault();
+		} else {
+			$('#message').text("");
+			value = value.replace(".", "a");
+			value = value.replace(/,/g, ".");
+			value = value.replace("a", ",");
+			$('input.formatNumber').val(value);
+		}
+	});
 </script>
 </jsp:attribute>
 
 	<jsp:body>
 	<div class="container container-login">
 		<h2 class="titulo-login">Cadastro de movimentação</h2>
-		<h5 class="color-red">${ message }</h5>
+		<h5 id="message" class="color-red">${ message }</h5>
 
-		<form:form id="formMovimentacao" action="${s:mvcUrl('MCC#gravar').build() }" method="post"
+		<form:form id="formMovimentacao"
+				action="${s:mvcUrl('MCC#gravar').build() }" method="post"
 				commandName="movimentacaoConta">
 			<div class="form-group">
-						<div class="custom-control custom-radio">
-							<form:radiobutton id="customRadio2" path="tipo" value="DEBITO"
+			<div class="custom-control d-none custom-radio">
+						<form:radiobutton id="customRadio1" path="tipo" value="DEBITO"
 							cssClass="custom-control-input" checked="checked"
 							required="required" />
-							<label class="custom-control-label" for="customRadio2">Débito</label>
-						</div>
-							<security:authorize access="hasRole('ROLE_ADMIN')">
-					<div class="custom-control custom-radio">
-						<form:radiobutton id="customRadio1" path="tipo" value="CREDITO"
+						<label class="custom-control-label" for="customRadio1">Débito</label>
+					</div>
+			<security:authorize access="hasRole('ROLE_ADMIN')">
+						<div class="custom-control custom-radio">
+							<form:radiobutton id="customRadio2" path="tipo" value="DEBITO"
 								cssClass="custom-control-input" checked="checked"
 								required="required" />
-						<label class="custom-control-label" for="customRadio1">Crédito</label>
+							<label class="custom-control-label" for="customRadio2">Débito</label>
+						</div>
+					<div class="custom-control custom-radio">
+						<form:radiobutton id="customRadio3" path="tipo" value="CREDITO"
+								cssClass="custom-control-input" checked="checked"
+								required="required" />
+						<label class="custom-control-label" for="customRadio3">Crédito</label>
 					</div>
 					</security:authorize>
 			</div>

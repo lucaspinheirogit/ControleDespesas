@@ -83,13 +83,15 @@ public class ContaDespesaDAO {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		System.out.println(movimentacoes);
 		for (MovimentacaoConta movimentacao : movimentacoes) {
-			if (movimentacao.getConciliada() == Conciliada.NAO) {
+			System.out.println(movimentacao.getResponsavel());
+			if (movimentacao.getConciliada() == Conciliada.NAO || movimentacao.getResponsavel() == null) {
 				System.out.println("mov. nao conciliada");
 				return false;
 			}
 		}
 		return true;
 	}
+	
 
 	public BigDecimal calculaSaldo(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);

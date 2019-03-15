@@ -24,6 +24,7 @@ import br.inf.safetech.cd.models.ContaDespesa;
 import br.inf.safetech.cd.models.MovimentacaoConta;
 import br.inf.safetech.cd.models.Responsavel;
 import br.inf.safetech.cd.models.Situacao;
+import br.inf.safetech.cd.models.Tipo;
 import br.inf.safetech.cd.models.Usuario;
 
 @RequestMapping("/movimentacoes")
@@ -142,9 +143,15 @@ public class MovimentacaoContaController {
 		ContaDespesa c = contaDespesaDAO.find(movimentacaoConta.getConta().getId());
 		Usuario u = usuarioDAO.loadUserByUsername(principal.getName());
 		movimentacaoConta.setConta(c);
-		movimentacaoConta.setConciliada(Conciliada.NAO);
+		
+		if(movimentacaoConta.getTipo() == Tipo.CREDITO){
+			movimentacaoConta.setConciliada(Conciliada.SIM);
+			movimentacaoConta.setResponsavel(Responsavel.EMPRESA);
+		}else {
+			movimentacaoConta.setConciliada(Conciliada.NAO);
+		}
+	
 		movimentacaoConta.setCriadoPor(u);
-		movimentacaoConta.setResponsavel(Responsavel.EMPRESA);
 		movimentacaoConta.setValor(valorMovimentacao);
 
 		movimentacaoContaDAO.gravar(movimentacaoConta);

@@ -5,6 +5,12 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="tags"%>
 
+<style>
+	#voltar{
+	display: none;
+	}
+</style>
+
 <tags:pageTemplate titulo="Login">
 
 	<div class="container container-login">

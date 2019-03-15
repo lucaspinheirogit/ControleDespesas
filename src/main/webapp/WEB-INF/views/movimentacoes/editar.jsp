@@ -91,7 +91,10 @@
 						<td>${ m.conciliada }</td>
 						<td>${ m.criadoPor.nome }</td>
 						<security:authorize access="hasRole('ROLE_ADMIN')">
-							<td class="td-concilia">
+						<td class="td-concilia">
+						<c:choose>
+							<c:when
+								test="${m.conciliada == 'NAO' }">
 								<form class="p-0" style="text-align: center"
 									action="${s:mvcUrl('MCC#conciliar').build() }" method="post">
 									<input name="id" type="hidden" value="${ m.id }" /> <input
@@ -102,7 +105,9 @@
 											alt="checked">
 									</button>
 								</form>
-								<form class="p-0" style="text-align: center"
+							</c:when>
+							<c:otherwise>
+							<form class="p-0" style="text-align: center"
 									action="${s:mvcUrl('MCC#conciliar').build() }" method="post">
 									<input name="id" type="hidden" value="${ m.id }" /> <input
 										name="tipo" type="hidden" value="NAO" /> <input name="conta"
@@ -112,7 +117,31 @@
 											alt="checked">
 									</button>
 								</form>
-							</td>
+								</c:otherwise>
+						</c:choose>
+						</td>
+<!-- 							<td class="td-concilia"> -->
+<%-- 								<form class="p-0" style="text-align: center" --%>
+<%-- 									action="${s:mvcUrl('MCC#conciliar').build() }" method="post"> --%>
+<%-- 									<input name="id" type="hidden" value="${ m.id }" /> <input --%>
+<!-- 										name="tipo" type="hidden" value="SIM" /> <input name="conta" -->
+<%-- 										type="hidden" value="${ movimentacoes[0].conta.id }" /> --%>
+<!-- 									<button type="submit"> -->
+<%-- 										<img src="${ contextPath }resources/imagens/checked.svg" --%>
+<!-- 											alt="checked"> -->
+<!-- 									</button> -->
+<%-- 								</form> --%>
+<%-- 								<form class="p-0" style="text-align: center" --%>
+<%-- 									action="${s:mvcUrl('MCC#conciliar').build() }" method="post"> --%>
+<%-- 									<input name="id" type="hidden" value="${ m.id }" /> <input --%>
+<!-- 										name="tipo" type="hidden" value="NAO" /> <input name="conta" -->
+<%-- 										type="hidden" value="${ movimentacoes[0].conta.id }" /> --%>
+<!-- 									<button type="submit"> -->
+<%-- 										<img src="${ contextPath }resources/imagens/cancel.svg" --%>
+<!-- 											alt="checked"> -->
+<!-- 									</button> -->
+<%-- 								</form> --%>
+<!-- 							</td> -->
 						</security:authorize>
 
 						<c:choose>

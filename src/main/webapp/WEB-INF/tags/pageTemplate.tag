@@ -37,6 +37,13 @@
 <body>
 	<div class="container-fluid">
 		<%@ include file="/WEB-INF/views/componentes/header.jsp"%>
+		
+		<div id="voltar" class="container p-2">
+			<a style="background-color: #3c546d"
+				href="${s:mvcUrl('HC#index').build() }"
+				class="btn btn-primary">Voltar</a>
+		</div>
+		
 		<jsp:doBody />
 	</div>
 	<footer>
