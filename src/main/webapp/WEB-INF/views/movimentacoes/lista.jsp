@@ -59,7 +59,16 @@
 				type="currency" />
 		</h5>
 		<br />
-		<button class="btn btn-primary mb-5">Gerar PDF</button>
+
+		<security:authorize access="hasRole('ROLE_ADMIN')">
+			<form class="p-0" style="text-align: center"
+				action="${s:mvcUrl('CDC#gerarRelatorio').build() }" method="post">
+				<input name="conta" type="hidden"
+					value="${ movimentacoes[0].conta.id }" />
+				<button class="btn btn-primary mb-5" type="submit">Gerar
+					PDF</button>
+			</form>
+		</security:authorize>
 
 	</div>
 

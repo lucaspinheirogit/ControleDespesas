@@ -41,10 +41,11 @@ import com.google.common.cache.CacheBuilder;
 import br.inf.safetech.cd.controllers.HomeController;
 import br.inf.safetech.cd.dao.UsuarioDAO;
 import br.inf.safetech.cd.models.Usuario;
+import br.inf.safetech.cd.relatorio.Relatorio;
 
 @EnableWebMvc
 @ComponentScan(basePackageClasses = { HomeController.class, UsuarioDAO.class,
-		Usuario.class })
+		Usuario.class, Relatorio.class })
 @EnableCaching
 @EnableTransactionManagement(proxyTargetClass = true)
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {

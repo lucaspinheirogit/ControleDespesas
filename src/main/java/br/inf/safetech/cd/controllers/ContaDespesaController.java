@@ -1,15 +1,21 @@
 package br.inf.safetech.cd.controllers;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -35,6 +41,17 @@ import br.inf.safetech.cd.models.Responsavel;
 import br.inf.safetech.cd.models.Situacao;
 import br.inf.safetech.cd.models.Tipo;
 import br.inf.safetech.cd.models.Usuario;
+import br.inf.safetech.cd.relatorio.Relatorio;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 
 @RequestMapping("/contas")
 @Controller
@@ -247,6 +264,46 @@ public class ContaDespesaController {
 			return new ModelAndView("redirect:/contas");
 		}
 
+	}
+	
+	@RequestMapping(value = "/admin/gerarRelatorio", method = RequestMethod.POST)
+	public void gerarRelatorio(HttpServletRequest request, HttpServletResponse response,@RequestParam("conta") String conta,RedirectAttributes redirectAttributes) throws ParseException, JRException, IOException {
+		conta = conta.substring(1);
+		System.out.println("Conta:  " + conta);
+		
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(conta));
+		
+		String colaborador = movimentacoes.get(0).getConta().getUsuario().getNome();
+		String cliente = movimentacoes.get(0).getConta().getCliente().getNome();
+		
+		List<Map<String,?>> datasource = new ArrayList<Map<String,?>>();
+		
+		System.out.println(movimentacoes);
+		System.out.println("ate aqui chegou??");
+		
+		for(MovimentacaoConta mov : movimentacoes) {
+			Map<String, Object> m = new HashMap<String, Object>();
+			m.put("tipo", mov.getTipo().name());
+			m.put("responsavel", mov.getResponsavel().name());
+			m.put("conciliada", mov.getConciliada().name());
+			m.put("valor", mov.getValor());
+			m.put("descricao", mov.getDescricao());
+			m.put("criadoPor", mov.getCriadoPor().getNome());
+			datasource.add(m);
+		} 
+		
+		JRDataSource jrDataSource = new JRBeanCollectionDataSource(datasource);
+		
+		String nome = request.getServletContext().getRealPath("/relatorio/relatorio.jasper");
+		
+		JasperPrint jasperPrint = JasperFillManager.fillReport(nome, null, jrDataSource);
+		
+		String filename = "Relatorio "+colaborador+"-"+cliente+".pdf";
+		response.setContentType("application/x-pdf");
+	    response.setHeader("Content-disposition", "inline; filename="+filename);
+	    
+	    final OutputStream outStream = response.getOutputStream();
+	    JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
 	}
 
 	// Converte strings (dd/MM/yyyy) para Calendar
