@@ -110,6 +110,32 @@ public class ContaDespesaDAO {
 		saldo = saldo.add(credito.subtract(debito));
 		return saldo;
 	}
+	
+	public BigDecimal calculaCredito(int id) {
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
+		BigDecimal credito = new BigDecimal(0);
+
+		for (MovimentacaoConta m : movimentacoes) {
+			if (m.getTipo() == Tipo.CREDITO) {
+				credito = credito.add(m.getValor());
+			}
+		}
+		
+		return credito;
+	}
+	
+	public BigDecimal calculaDebito(int id) {
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
+		BigDecimal debito = new BigDecimal(0);
+
+		for (MovimentacaoConta m : movimentacoes) {
+			if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
+				debito = debito.add(m.getValor());
+			}
+		}
+
+		return debito;
+	}
 
 	public List<ContaDespesa> listarComFiltro(String user, String cliente, Calendar dataInicio,
 			Calendar dataFinal, Situacao situacao) {

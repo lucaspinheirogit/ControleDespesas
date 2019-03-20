@@ -281,20 +281,28 @@ public class ContaDespesaController {
 		String colaborador = contaDespesa.getUsuario().getNome();
 		String cliente = contaDespesa.getCliente().getNome();
 		String situacaoConta = contaDespesa.getSituacao().name();
-		Date datainicio = contaDespesa.getDataInicio().getTime();
-		Date dataFim = contaDespesa.getDataFim().getTime();
 		
-		BigDecimal Credito;
-		BigDecimal Dedito;
-		BigDecimal Saldo;
+		Date dataInicio = contaDespesa.getDataInicio().getTime();
+		Date dataFim = contaDespesa.getDataFim() != null ? contaDespesa.getDataFim().getTime() : null;
+		
+		BigDecimal Credito = contaDespesaDAO.calculaCredito(Integer.parseInt(conta));
+		BigDecimal Dedito= contaDespesaDAO.calculaDebito(Integer.parseInt(conta));
+		BigDecimal Saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(conta));
+		
+		System.out.println(movimentacoes);
+		System.out.println(contaDespesa);
+		System.out.println("Relatorio criado por: " + RelatorioCriadoPor);
+		System.out.println("Data inicio: " + dataInicio);
+		System.out.println("Data fim: " + dataFim);
 		
 		
 		List<Map<String,?>> datasource = new ArrayList<Map<String,?>>();
 		
 		for(MovimentacaoConta mov : movimentacoes) {
 			Map<String, Object> m = new HashMap<String, Object>();
+			String responsavel = mov.getResponsavel() != null ? mov.getResponsavel().name() : "";
 			m.put("tipo", mov.getTipo().name());
-			m.put("responsavel", mov.getResponsavel().name());
+			m.put("responsavel", responsavel);
 			m.put("conciliada", mov.getConciliada().name());
 			m.put("valor", mov.getValor());
 			m.put("descricao", mov.getDescricao());
@@ -305,10 +313,10 @@ public class ContaDespesaController {
 			m.put("situacao", situacaoConta);
 			m.put("colaborador", colaborador);
 			m.put("cliente", cliente);
+			m.put("dataInicio", dataInicio);
+			m.put("dataFim", dataFim);
 			
 			/*
-			m.put("dataInicio", datainicio);
-			m.put("dataFim", dataFim);
 			m.put("credito", credito);
 			m.put("debito", debito);
 			m.put("saldo", saldo);
