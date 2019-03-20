@@ -267,19 +267,29 @@ public class ContaDespesaController {
 	}
 	
 	@RequestMapping(value = "/admin/gerarRelatorio", method = RequestMethod.POST)
-	public void gerarRelatorio(HttpServletRequest request, HttpServletResponse response,@RequestParam("conta") String conta,RedirectAttributes redirectAttributes) throws ParseException, JRException, IOException {
+	public void gerarRelatorio(Principal principal, HttpServletRequest request, HttpServletResponse response,@RequestParam("conta") String conta,RedirectAttributes redirectAttributes) throws ParseException, JRException, IOException {
 		conta = conta.substring(1);
 		System.out.println("Conta:  " + conta);
 		
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(conta));
 		
-		String colaborador = movimentacoes.get(0).getConta().getUsuario().getNome();
-		String cliente = movimentacoes.get(0).getConta().getCliente().getNome();
+		ContaDespesa contaDespesa = movimentacoes.get(0).getConta();
+		
+		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
+		
+		String RelatorioCriadoPor = usuarioLogado.getNome();
+		String colaborador = contaDespesa.getUsuario().getNome();
+		String cliente = contaDespesa.getCliente().getNome();
+		String situacaoConta = contaDespesa.getSituacao().name();
+		Date datainicio = contaDespesa.getDataInicio().getTime();
+		Date dataFim = contaDespesa.getDataFim().getTime();
+		
+		BigDecimal Credito;
+		BigDecimal Dedito;
+		BigDecimal Saldo;
+		
 		
 		List<Map<String,?>> datasource = new ArrayList<Map<String,?>>();
-		
-		System.out.println(movimentacoes);
-		System.out.println("ate aqui chegou??");
 		
 		for(MovimentacaoConta mov : movimentacoes) {
 			Map<String, Object> m = new HashMap<String, Object>();
@@ -289,8 +299,28 @@ public class ContaDespesaController {
 			m.put("valor", mov.getValor());
 			m.put("descricao", mov.getDescricao());
 			m.put("criadoPor", mov.getCriadoPor().getNome());
+			
+			//Outras variaveis
+			m.put("criador", RelatorioCriadoPor);
+			m.put("situacao", situacaoConta);
+			m.put("colaborador", colaborador);
+			m.put("cliente", cliente);
+			
+			/*
+			m.put("dataInicio", datainicio);
+			m.put("dataFim", dataFim);
+			m.put("credito", credito);
+			m.put("debito", debito);
+			m.put("saldo", saldo);
+			*/
+			
 			datasource.add(m);
 		} 
+		
+		//Map<String, Object> m = new HashMap<String, Object>();
+		//m.put("situacao", situacaoConta);
+		
+		//datasource.add(m);
 		
 		JRDataSource jrDataSource = new JRBeanCollectionDataSource(datasource);
 		

@@ -11,11 +11,17 @@
 	<field name="valor" class="java.math.BigDecimal"/>
 	<field name="descricao" class="java.lang.String"/>
 	<field name="criadoPor" class="java.lang.String"/>
+	<field name="situacao" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch"/>
+		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement x="22" y="25" width="100" height="30" uuid="ad475474-65fe-46c5-bae4-b8bd319d6fb3"/>
+				<textFieldExpression><![CDATA[$F{situacao}]]></textFieldExpression>
+			</textField>
+		</band>
 	</title>
 	<pageHeader>
 		<band height="35" splitType="Stretch"/>
