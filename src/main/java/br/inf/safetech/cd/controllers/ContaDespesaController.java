@@ -286,7 +286,7 @@ public class ContaDespesaController {
 		Date dataFim = contaDespesa.getDataFim() != null ? contaDespesa.getDataFim().getTime() : null;
 		
 		BigDecimal Credito = contaDespesaDAO.calculaCredito(Integer.parseInt(conta));
-		BigDecimal Dedito= contaDespesaDAO.calculaDebito(Integer.parseInt(conta));
+		BigDecimal Debito= contaDespesaDAO.calculaDebito(Integer.parseInt(conta));
 		BigDecimal Saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(conta));
 		
 		System.out.println(movimentacoes);
@@ -300,27 +300,31 @@ public class ContaDespesaController {
 		
 		for(MovimentacaoConta mov : movimentacoes) {
 			Map<String, Object> m = new HashMap<String, Object>();
-			String responsavel = mov.getResponsavel() != null ? mov.getResponsavel().name() : "";
-			m.put("tipo", mov.getTipo().name());
+			String responsavel = mov.getResponsavel() != null ? 
+					mov.getResponsavel().name().substring(0, 1).toUpperCase()
+					+ mov.getResponsavel().name().substring(1).toLowerCase()
+					: "";
+			
+			m.put("tipo", mov.getTipo().name().substring(0, 1).toUpperCase() + mov.getTipo().name().substring(1).toLowerCase());
 			m.put("responsavel", responsavel);
-			m.put("conciliada", mov.getConciliada().name());
+			m.put("conciliada", mov.getConciliada().name().substring(0, 1).toUpperCase() + mov.getConciliada().name().substring(1).toLowerCase());
 			m.put("valor", mov.getValor());
 			m.put("descricao", mov.getDescricao());
 			m.put("criadoPor", mov.getCriadoPor().getNome());
 			
 			//Outras variaveis
 			m.put("criador", RelatorioCriadoPor);
-			m.put("situacao", situacaoConta);
+			m.put("situacao", situacaoConta.substring(0, 1).toUpperCase() + situacaoConta.substring(1).toLowerCase());
 			m.put("colaborador", colaborador);
 			m.put("cliente", cliente);
 			m.put("dataInicio", dataInicio);
 			m.put("dataFim", dataFim);
 			
-			/*
-			m.put("credito", credito);
-			m.put("debito", debito);
-			m.put("saldo", saldo);
-			*/
+			
+			m.put("credito", Credito);
+			m.put("debito", Debito);
+			m.put("saldo", Saldo);
+			
 			
 			datasource.add(m);
 		} 
