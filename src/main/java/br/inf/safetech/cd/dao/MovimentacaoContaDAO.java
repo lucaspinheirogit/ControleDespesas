@@ -36,6 +36,15 @@ public class MovimentacaoContaDAO{
 				.setParameter("pId", contaId)
 				.getResultList();
 	}
+	
+	public List<MovimentacaoConta> listarDoClientePorId(Integer contaId) {
+		System.out.println("listando movimentacoes por id: " + contaId);
+		return manager.createQuery("select m from MovimentacaoConta m where m.conta.id = :pId and m.responsavel = :pResp", MovimentacaoConta.class)
+				.setParameter("pId", contaId)
+				.setParameter("pResp", Responsavel.CLIENTE)
+				.getResultList();
+	}
+
 
 	public void conciliar(int id) {
 		MovimentacaoConta conta = find(id);

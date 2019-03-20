@@ -110,6 +110,6 @@ public class MovimentacaoConta {
 
 	@Override
 	public String toString() {
-		return "ID: " + this.id + ", contaId: " + this.conta.getId() + ", desc: " + this.descricao + ", valor: " + this.valor + ", Tipo: " + this.tipo + ", Conc.: " + this.conciliada ;
+		return "\nID: " + this.id + ", contaId: " + this.conta.getId() + ", desc: " + this.descricao + ", valor: " + this.valor + ", Tipo: " + this.tipo + ", Conc.: " + this.conciliada ;
 	}
 }

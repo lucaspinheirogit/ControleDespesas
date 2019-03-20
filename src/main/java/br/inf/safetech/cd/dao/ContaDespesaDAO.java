@@ -102,7 +102,7 @@ public class ContaDespesaDAO {
 		for (MovimentacaoConta m : movimentacoes) {
 			if (m.getTipo() == Tipo.CREDITO) {
 				credito = credito.add(m.getValor());
-			} else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
+			} else if (m.getTipo() == Tipo.DEBITO) {
 				debito = debito.add(m.getValor());
 			}
 		}
@@ -129,7 +129,7 @@ public class ContaDespesaDAO {
 		BigDecimal debito = new BigDecimal(0);
 
 		for (MovimentacaoConta m : movimentacoes) {
-			if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
+			if (m.getTipo() == Tipo.DEBITO) {
 				debito = debito.add(m.getValor());
 			}
 		}

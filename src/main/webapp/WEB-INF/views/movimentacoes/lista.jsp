@@ -61,13 +61,23 @@
 		<br />
 
 		<security:authorize access="hasRole('ROLE_ADMIN')">
-			<form class="p-0" style="text-align: center"
-				action="${s:mvcUrl('CDC#gerarRelatorio').build() }" method="post">
-				<input name="conta" type="hidden"
-					value="${ movimentacoes[0].conta.id }" />
-				<button class="btn btn-primary mb-5" type="submit">Gerar
-					PDF</button>
-			</form>
+			<div class="d-flex">
+				<form class="p-0"
+					action="${s:mvcUrl('CDC#gerarRelatorio').build() }" method="post">
+					<input name="conta" type="hidden"
+						value="${ movimentacoes[0].conta.id }" />
+					<button class="btn btn-primary mr-1" type="submit">Gerar
+						PDF</button>
+				</form>
+				<form class="p-0"
+					action="${s:mvcUrl('CDC#gerarRelatorio').build() }" method="post">
+					<input name="conta" type="hidden"
+						value="${ movimentacoes[0].conta.id }" /> <input
+						name="pdfcliente" type="hidden" value="sim" />
+					<button class="btn btn-primary mb-5" type="submit">Gerar
+						PDF para o cliente</button>
+				</form>
+			</div>
 		</security:authorize>
 
 	</div>

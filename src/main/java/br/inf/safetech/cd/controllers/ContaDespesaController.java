@@ -173,12 +173,12 @@ public class ContaDespesaController {
 	@RequestMapping(value = "/admin/form", method = RequestMethod.GET)
 	public ModelAndView form(ContaDespesa contaDespesa) {
 		ModelAndView modelAndView = new ModelAndView("conta/form");
-		
+
 		List<Cliente> clientes = clienteDAO.listar();
 		modelAndView.addObject("clientes", clientes);
 		List<Usuario> usuarios = usuarioDAO.listar();
 		modelAndView.addObject("usuarios", usuarios);
-		
+
 		return modelAndView;
 	}
 
@@ -222,17 +222,17 @@ public class ContaDespesaController {
 		m.setCriadoPor(u);
 		m.setDescricao(opcao);
 		m.setValor(new BigDecimal(saldo)); // Valor que vem do form
-		
+
 		System.out.println("opcao: " + opcao);
-		if(opcao.equals("Vale")) {
+		if (opcao.equals("Vale")) {
 			m.setResponsavel(Responsavel.COLABORADOR);
-		}else {
+		} else {
 			m.setResponsavel(Responsavel.EMPRESA);
 		}
-		
+
 		movimentacaoContaDAO.gravar(m);
 		contaDespesaDAO.encerrar(Integer.parseInt(id));
-		
+
 		redirectAttributes.addFlashAttribute("message", "Conta encerrada com sucesso!");
 		return new ModelAndView("redirect:/contas");
 	}
@@ -258,94 +258,118 @@ public class ContaDespesaController {
 			}
 
 		} else {
-			redirectAttributes.addFlashAttribute("message",
-					"Não é possível encerrar uma conta que não está liquidada!"
+			redirectAttributes.addFlashAttribute("message", "Não é possível encerrar uma conta que não está liquidada!"
 					+ " <br/> Confira se todas as movimentacões possuem um responsável e estão conciliadas.");
 			return new ModelAndView("redirect:/contas");
 		}
 
 	}
-	
+
 	@RequestMapping(value = "/admin/gerarRelatorio", method = RequestMethod.POST)
-	public void gerarRelatorio(Principal principal, HttpServletRequest request, HttpServletResponse response,@RequestParam("conta") String conta,RedirectAttributes redirectAttributes) throws ParseException, JRException, IOException {
+	public void gerarRelatorio(@RequestParam("pdfcliente") Optional<String> pdfcliente, Principal principal, HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("conta") String conta, RedirectAttributes redirectAttributes)
+			throws ParseException, JRException, IOException {
 		conta = conta.substring(1);
 		System.out.println("Conta:  " + conta);
-		
-		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(conta));
-		
+
+		List<MovimentacaoConta> movimentacoes;
+		if(pdfcliente.isPresent() && pdfcliente.get() != "") {
+			System.out.println("param presente");
+			System.out.println(pdfcliente);
+			System.out.println(pdfcliente.get());
+			movimentacoes = movimentacaoContaDAO.listarDoClientePorId(Integer.parseInt(conta));
+		}else {
+			System.out.println("param ausente");
+			movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(conta));
+		}
+
 		ContaDespesa contaDespesa = movimentacoes.get(0).getConta();
-		
+
 		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
-		
+
 		String RelatorioCriadoPor = usuarioLogado.getNome();
 		String colaborador = contaDespesa.getUsuario().getNome();
 		String cliente = contaDespesa.getCliente().getNome();
 		String situacaoConta = contaDespesa.getSituacao().name();
-		
+
 		Date dataInicio = contaDespesa.getDataInicio().getTime();
 		Date dataFim = contaDespesa.getDataFim() != null ? contaDespesa.getDataFim().getTime() : null;
-		
+
 		BigDecimal Credito = contaDespesaDAO.calculaCredito(Integer.parseInt(conta));
-		BigDecimal Debito= contaDespesaDAO.calculaDebito(Integer.parseInt(conta));
+		BigDecimal Debito = contaDespesaDAO.calculaDebito(Integer.parseInt(conta));
 		BigDecimal Saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(conta));
-		
+
 		System.out.println(movimentacoes);
 		System.out.println(contaDespesa);
 		System.out.println("Relatorio criado por: " + RelatorioCriadoPor);
 		System.out.println("Data inicio: " + dataInicio);
 		System.out.println("Data fim: " + dataFim);
-		
-		
-		List<Map<String,?>> datasource = new ArrayList<Map<String,?>>();
-		
-		for(MovimentacaoConta mov : movimentacoes) {
+
+		List<Map<String, ?>> datasource = new ArrayList<Map<String, ?>>();
+
+		Map<String, Object> teste = new HashMap<String, Object>();
+		// Outras variaveis
+		teste.put("criador", RelatorioCriadoPor);
+		teste.put("situacao", situacaoConta.substring(0, 1).toUpperCase() + situacaoConta.substring(1).toLowerCase());
+		teste.put("colaborador", colaborador);
+		teste.put("cliente", cliente);
+		teste.put("dataInicio", dataInicio);
+		teste.put("dataFim", dataFim);
+		teste.put("credito", Credito);
+		teste.put("debito", Debito);
+		teste.put("saldo", Saldo);
+		datasource.add(teste);
+
+		for (MovimentacaoConta mov : movimentacoes) {
+
+			System.out.println(mov);
+
 			Map<String, Object> m = new HashMap<String, Object>();
-			String responsavel = mov.getResponsavel() != null ? 
-					mov.getResponsavel().name().substring(0, 1).toUpperCase()
-					+ mov.getResponsavel().name().substring(1).toLowerCase()
+			String responsavel = mov.getResponsavel() != null
+					? mov.getResponsavel().name().substring(0, 1).toUpperCase()
+							+ mov.getResponsavel().name().substring(1).toLowerCase()
 					: "";
-			
-			m.put("tipo", mov.getTipo().name().substring(0, 1).toUpperCase() + mov.getTipo().name().substring(1).toLowerCase());
+
+			m.put("tipo", mov.getTipo().name().substring(0, 1).toUpperCase()
+					+ mov.getTipo().name().substring(1).toLowerCase());
 			m.put("responsavel", responsavel);
-			m.put("conciliada", mov.getConciliada().name().substring(0, 1).toUpperCase() + mov.getConciliada().name().substring(1).toLowerCase());
+			m.put("conciliada", mov.getConciliada().name().substring(0, 1).toUpperCase()
+					+ mov.getConciliada().name().substring(1).toLowerCase());
 			m.put("valor", mov.getValor());
 			m.put("descricao", mov.getDescricao());
 			m.put("criadoPor", mov.getCriadoPor().getNome());
-			
-			//Outras variaveis
+
+			/* Outras variaveis
 			m.put("criador", RelatorioCriadoPor);
 			m.put("situacao", situacaoConta.substring(0, 1).toUpperCase() + situacaoConta.substring(1).toLowerCase());
 			m.put("colaborador", colaborador);
 			m.put("cliente", cliente);
 			m.put("dataInicio", dataInicio);
 			m.put("dataFim", dataFim);
-			
-			
+
 			m.put("credito", Credito);
 			m.put("debito", Debito);
 			m.put("saldo", Saldo);
-			
-			
+			*/
+
 			datasource.add(m);
-		} 
-		
-		//Map<String, Object> m = new HashMap<String, Object>();
-		//m.put("situacao", situacaoConta);
-		
-		//datasource.add(m);
-		
-		JRDataSource jrDataSource = new JRBeanCollectionDataSource(datasource);
-		
+		}
+
+		JRBeanCollectionDataSource jrDataSource = new JRBeanCollectionDataSource(datasource);
+
 		String nome = request.getServletContext().getRealPath("/relatorio/relatorio.jasper");
-		
-		JasperPrint jasperPrint = JasperFillManager.fillReport(nome, null, jrDataSource);
-		
-		String filename = "Relatorio "+colaborador+"-"+cliente+".pdf";
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put("ItemDataSource", jrDataSource);
+
+		JasperPrint jasperPrint = JasperFillManager.fillReport(nome, parameters, jrDataSource);
+
+		String filename = "Relatorio " + colaborador + "-" + cliente + ".pdf";
 		response.setContentType("application/x-pdf");
-	    response.setHeader("Content-disposition", "inline; filename="+filename);
-	    
-	    final OutputStream outStream = response.getOutputStream();
-	    JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+		response.setHeader("Content-disposition", "inline; filename=" + filename);
+
+		final OutputStream outStream = response.getOutputStream();
+		JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
 	}
 
 	// Converte strings (dd/MM/yyyy) para Calendar
