@@ -258,7 +258,7 @@ public class ContaDespesaController {
 
 	}
 
-	@RequestMapping(value = "/gerarRelatorio", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/gerarRelatorio", method = RequestMethod.POST)
 	public ModelAndView gerarRelatorio(@RequestParam("pdfcliente") Optional<String> pdfcliente, Principal principal,
 			HttpServletRequest request, HttpServletResponse response, @RequestParam("conta") String conta,
 			RedirectAttributes redirectAttributes) throws ParseException, JRException, IOException {
