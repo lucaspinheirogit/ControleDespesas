@@ -84,11 +84,10 @@ form {
 					</div>
 
 					<div class="form-group">
-						<label class="mr-2">Situação: </label> <select
+						<label class="mr-2">Situação: </label> <select style="min-width: 11em"
 								class="form-control mr-sm-2 ml-0" name="situacao"
 								form="formBusca">
 							<option value="ATIVA">ATIVA</option>
-							<option value="INATIVA">INATIVA</option>
 							<option value="ENCERRADA">ENCERRADA</option>
 						</select>
 					</div>
@@ -131,11 +130,10 @@ form {
 							<span class="label">Cliente: </span>${ conta.cliente.nome }</h4>
 					<div class="movimentacoes">
 					<div style="display: flex; justify-content: space-between;">
-						<h5 class="card-title">Movimentações:</h5>
-						<small>
+						<h5 style="font-size: 1rem;color: #666">Saldo: 
 						<fmt:formatNumber value="${ saldos.get( conta.id ) }"
 										minFractionDigits="2" type="currency" />
-						</small>
+						</h5>
 						</div>
 						<div style="display: flex" class="botoes-conta">
 							<form action="${s:mvcUrl('MCC#listar').build() }"
