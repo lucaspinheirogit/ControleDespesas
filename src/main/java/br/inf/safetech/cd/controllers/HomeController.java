@@ -89,11 +89,11 @@ public class HomeController {
 		usuarioDAO.gravar(usuario2);
 
 		ContaDespesa conta1 = new ContaDespesa(usuario2, cliente1, new GregorianCalendar(2019, 3, 20),
-				null, Situacao.ATIVA);
+				null, Situacao.ATIVA, usuario);
 		ContaDespesa conta2 = new ContaDespesa(usuario2, cliente2, new GregorianCalendar(2004, 3, 25),
-				null, Situacao.ATIVA);
+				null, Situacao.ATIVA, usuario);
 		ContaDespesa conta3 = new ContaDespesa(usuario, cliente2, new GregorianCalendar(2004, 7, 16),
-				null, Situacao.ATIVA);
+				null, Situacao.ATIVA, usuario);
 
 		MovimentacaoConta mc1 = new MovimentacaoConta(conta1, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1000),
 				"Aporte para viagem", Responsavel.EMPRESA, usuario);

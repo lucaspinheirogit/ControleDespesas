@@ -7,14 +7,26 @@ form {
 }
 
 main {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
 }
 
 .links-criacao {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
 }
 
 .links-criacao a {
@@ -34,10 +46,19 @@ main {
 }
 
 .nova-conta {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
 	margin-bottom: 0;
 }
 
@@ -46,26 +67,45 @@ main {
 }
 
 .nova-conta form {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
 	width: 100%;
 	padding: .5em;
 }
 
 .filtrar {
 	width: 100%;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 	margin: 0;
 }
 
 .search {
 	width: 100%;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	align-items: center;
-	flex: 1 !important;
-	flex-wrap: wrap;
-	justify-content: center;
-	flex-direction: column;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	-webkit-box-flex: 1 !important;
+	    -ms-flex: 1 !important;
+	        flex: 1 !important;
+	-ms-flex-wrap: wrap;
+	    flex-wrap: wrap;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
 }
 
 .search button {
@@ -78,9 +118,14 @@ select {
 }
 /* CONTAS */
 .contas {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-ms-flex-wrap: wrap;
+	    flex-wrap: wrap;
 }
 
 /* CARD */
@@ -92,14 +137,23 @@ select {
 }
 
 .card-body {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	flex-direction: column;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
 }
 
 .card-header {
 	background-color: #2C3E50;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	justify-content: space-between;
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
 }
 
 .card-header small {
@@ -107,9 +161,15 @@ select {
 }
 
 .card-body-header {
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	-webkit-box-pack: justify;
+	    -ms-flex-pack: justify;
+	        justify-content: space-between;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
 }
 
 .movimentacoes {
@@ -125,7 +185,9 @@ select {
 }
 
 .cliente {
-	flex-grow: 1;
+	-webkit-box-flex: 1;
+	    -ms-flex-positive: 1;
+	        flex-grow: 1;
 }
 
 small {
@@ -150,8 +212,13 @@ small {
 
 @media ( min-width : 576px) {
 	.form-inline .form-group {
+		display: -webkit-box;
+		display: -ms-flexbox;
 		display: flex;
-		flex-direction: column;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		    -ms-flex-direction: column;
+		        flex-direction: column;
 		margin-bottom: 1rem;
 	}
 }
@@ -164,16 +231,30 @@ small {
 		padding: 0.5rem 1rem;
 	}
 	.form-control {
-		flex-grow: 1;
+		-webkit-box-flex: 1;
+		    -ms-flex-positive: 1;
+		        flex-grow: 1;
 	}
 	.search {
 		width: 100%;
+		display: -webkit-box;
+		display: -ms-flexbox;
 		display: flex;
-		align-items: center !important;
-		flex: 1 !important;
-		flex-wrap: wrap !important;
-		justify-content: center;
-		flex-direction: column !important;
+		-webkit-box-align: center !important;
+		    -ms-flex-align: center !important;
+		        align-items: center !important;
+		-webkit-box-flex: 1 !important;
+		    -ms-flex: 1 !important;
+		        flex: 1 !important;
+		-ms-flex-wrap: wrap !important;
+		    flex-wrap: wrap !important;
+		-webkit-box-pack: center;
+		    -ms-flex-pack: center;
+		        justify-content: center;
+		-webkit-box-orient: vertical !important;
+		-webkit-box-direction: normal !important;
+		    -ms-flex-direction: column !important;
+		        flex-direction: column !important;
 	}
 }
 
@@ -182,8 +263,12 @@ small {
 		margin-bottom: 0;
 	}
 	.div-form-group {
+		display: -webkit-box;
+		display: -ms-flexbox;
 		display: flex;
-		flex: 1;
+		-webkit-box-flex: 1;
+		    -ms-flex: 1;
+		        flex: 1;
 	}
 	.form-group {
 		margin: .5em;
@@ -195,10 +280,15 @@ small {
 		padding: 0;
 	}
 	main {
-		align-items: inherit;
+		-webkit-box-align: inherit;
+		    -ms-flex-align: inherit;
+		        align-items: inherit;
 	}
 	.links-criacao {
-		flex-direction: row;
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		    -ms-flex-direction: row;
+		        flex-direction: row;
 	}
 	.links-criacao a {
 		margin: 0 .3em;
@@ -211,22 +301,38 @@ small {
 		margin: 0;
 	}
 	.nova-conta form {
+		display: -webkit-box;
+		display: -ms-flexbox;
 		display: flex;
-		flex-direction: row;
-		justify-content: flex-end;
+		-webkit-box-orient: horizontal;
+		-webkit-box-direction: normal;
+		    -ms-flex-direction: row;
+		        flex-direction: row;
+		-webkit-box-pack: end;
+		    -ms-flex-pack: end;
+		        justify-content: flex-end;
 		width: auto;
 		padding: 0 .5em .5em .5em;
 	}
 	.filtrar {
 		width: auto;
+		display: -webkit-box;
+		display: -ms-flexbox;
 		display: flex;
 		margin: 0;
 	}
 	.search {
 		width: auto;
+		display: -webkit-box;
+		display: -ms-flexbox;
 		display: flex;
-		align-items: center;
-		flex-direction: column !important;
+		-webkit-box-align: center;
+		    -ms-flex-align: center;
+		        align-items: center;
+		-webkit-box-orient: vertical !important;
+		-webkit-box-direction: normal !important;
+		    -ms-flex-direction: column !important;
+		        flex-direction: column !important;
 	}
 	select {
 		margin-left: .5em;

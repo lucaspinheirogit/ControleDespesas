@@ -177,7 +177,7 @@ public class ContaDespesaController {
 	}
 
 	@RequestMapping(value = "/admin/gravar", method = RequestMethod.POST)
-	public ModelAndView gravar(ContaDespesa conta, RedirectAttributes redirectAttributes) throws ParseException {
+	public ModelAndView gravar(ContaDespesa conta, Principal principal, RedirectAttributes redirectAttributes) throws ParseException {
 
 		Date date = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -187,11 +187,14 @@ public class ContaDespesaController {
 
 		Cliente c = clienteDAO.find(conta.getCliente().getId());
 		Usuario u = usuarioDAO.find(conta.getUsuario().getId());
+		
+		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
 
 		conta.setCliente(c);
 		conta.setUsuario(u);
 		conta.setDataInicio(cal);
 		conta.setSituacao(Situacao.ATIVA);
+		conta.setCriador(usuarioLogado);
 
 		contaDespesaDAO.gravar(conta);
 
@@ -295,7 +298,8 @@ public class ContaDespesaController {
 
 		Map<String, Object> teste = new HashMap<String, Object>();
 		// Outras variaveis
-		teste.put("criador", RelatorioCriadoPor);
+		teste.put("criadorPdf", RelatorioCriadoPor);
+		teste.put("criadorConta", contaDespesa.getCriador().getNome());
 		teste.put("situacao", situacaoConta.substring(0, 1).toUpperCase() + situacaoConta.substring(1).toLowerCase());
 		teste.put("colaborador", colaborador);
 		teste.put("cliente", cliente);

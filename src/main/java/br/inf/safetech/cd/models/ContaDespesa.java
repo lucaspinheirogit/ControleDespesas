@@ -24,12 +24,13 @@ public class ContaDespesa {
 	}
 
 	public ContaDespesa(Usuario usuario, Cliente cliente, Calendar dataInicio, Calendar dataFim,
-			Situacao situacao) {
+			Situacao situacao, Usuario criador) {
 		this.usuario = usuario;
 		this.cliente = cliente;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
 		this.situacao = situacao;
+		this.criador = criador;
 	}
 
 	@Id
@@ -40,8 +41,10 @@ public class ContaDespesa {
 	private Usuario usuario;
 	
 	@ManyToOne
-	//@JoinColumn(name = "id")
 	private Cliente cliente;
+	
+	@ManyToOne
+	private Usuario criador;
 	
 	@DateTimeFormat
 	private Calendar dataInicio;
@@ -97,6 +100,14 @@ public class ContaDespesa {
 
 	public void setSituacao(Situacao situacao) {
 		this.situacao = situacao;
+	}
+
+	public Usuario getCriador() {
+		return criador;
+	}
+
+	public void setCriador(Usuario criador) {
+		this.criador = criador;
 	}
 
 	@Override
