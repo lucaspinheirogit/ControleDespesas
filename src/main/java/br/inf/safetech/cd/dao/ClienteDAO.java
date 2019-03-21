@@ -24,17 +24,14 @@ public class ClienteDAO{
 	private EntityManager manager;
 	
 	public Cliente find(Integer id) {
-		System.out.println("Finding Cliente");
 		return manager.find(Cliente.class, id);
 	}
 
 	public List<Cliente> listar() {
-		System.out.println("listando clientes");
 		return manager.createQuery("select c from Cliente c", Cliente.class).getResultList();
 	}
 
 	public void gravar(Cliente cliente) {
-		System.out.println("gravando cliente");
 		manager.persist(cliente);
 	}
 

@@ -41,24 +41,20 @@ public class ContaDespesaDAO {
 	private EntityManager manager;
 
 	public ContaDespesa find(Integer id) {
-		System.out.println("Finding conta de despesa");
 		return manager.find(ContaDespesa.class, id);
 	}
 
 	public List<ContaDespesa> listar() {
-		System.out.println("listando contas de despesas");
 		return manager.createQuery("select c from ContaDespesa c where c.situacao = :situacao", ContaDespesa.class)
 				.setParameter("situacao", Situacao.ATIVA)
 				.getResultList();
 	}
 
 	public void gravar(ContaDespesa conta) {
-		System.out.println("gravando conta de despesa");
 		manager.persist(conta);
 	}
 
 	public List<ContaDespesa> listarPorColaborador(Usuario usuario) {
-		System.out.println("listando contas do colaborador: " + usuario.getLogin());
 		return manager.createQuery("select c from ContaDespesa c where c.usuario.id = :id and c.situacao = :situacao", ContaDespesa.class)
 				.setParameter("id", usuario.getId())
 				.setParameter("situacao", Situacao.ATIVA)
@@ -81,11 +77,8 @@ public class ContaDespesaDAO {
 
 	public boolean estaLiquidada(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
-		System.out.println(movimentacoes);
 		for (MovimentacaoConta movimentacao : movimentacoes) {
-			System.out.println(movimentacao.getResponsavel());
 			if (movimentacao.getConciliada() == Conciliada.NAO || movimentacao.getResponsavel() == null) {
-				System.out.println("mov. nao conciliada");
 				return false;
 			}
 		}
@@ -102,7 +95,7 @@ public class ContaDespesaDAO {
 		for (MovimentacaoConta m : movimentacoes) {
 			if (m.getTipo() == Tipo.CREDITO) {
 				credito = credito.add(m.getValor());
-			} else if (m.getTipo() == Tipo.DEBITO) {
+			} else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
 				debito = debito.add(m.getValor());
 			}
 		}
@@ -111,8 +104,24 @@ public class ContaDespesaDAO {
 		return saldo;
 	}
 	
-	public BigDecimal calculaCredito(int id) {
-		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
+	public BigDecimal calculaSaldoMovimentacoes(List<MovimentacaoConta> movimentacoes) {
+		BigDecimal credito = new BigDecimal(0);
+		BigDecimal debito = new BigDecimal(0);
+		BigDecimal saldo = new BigDecimal(0);
+
+		for (MovimentacaoConta m : movimentacoes) {
+			if (m.getTipo() == Tipo.CREDITO) {
+				credito = credito.add(m.getValor());
+			} else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
+				debito = debito.add(m.getValor());
+			}
+		}
+
+		saldo = saldo.add(credito.subtract(debito));
+		return saldo;
+	}
+	
+	public BigDecimal calculaCreditoMovimentacoes(List<MovimentacaoConta> movimentacoes) {
 		BigDecimal credito = new BigDecimal(0);
 
 		for (MovimentacaoConta m : movimentacoes) {
@@ -124,12 +133,11 @@ public class ContaDespesaDAO {
 		return credito;
 	}
 	
-	public BigDecimal calculaDebito(int id) {
-		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
+	public BigDecimal calculaDebitoMovimentacoes(List<MovimentacaoConta> movimentacoes) {
 		BigDecimal debito = new BigDecimal(0);
 
 		for (MovimentacaoConta m : movimentacoes) {
-			if (m.getTipo() == Tipo.DEBITO) {
+			if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
 				debito = debito.add(m.getValor());
 			}
 		}
@@ -139,10 +147,6 @@ public class ContaDespesaDAO {
 
 	public List<ContaDespesa> listarComFiltro(String user, String cliente, Calendar dataInicio,
 			Calendar dataFinal, Situacao situacao) {
-		System.out.println("listando contas filtradas do colaborador: " + user);
-
-		//dataInicio.setTimeInMillis(dataInicio.getTimeInMillis() - 86400000);
-		//dataFinal.setTimeInMillis(dataFinal.getTimeInMillis() + 86400000);
 		
 		List<ContaDespesa> resultado;
 		
@@ -158,31 +162,26 @@ public class ContaDespesaDAO {
 		Path<Situacao> situacaoPath = root.<Situacao> get("situacao");
 		
 		if (!user.isEmpty()) {
-			System.out.println("User foi informado");
 	        Predicate usuarioIgual = criteriaBuilder.equal(usuarioPath , user);
 	        predicates.add(usuarioIgual);
 	    }
 		
 		if (!cliente.isEmpty()) {
-			System.out.println("cliente foi informado");
 	        Predicate clienteIgual = criteriaBuilder.equal(clientePath , cliente);
 	        predicates.add(clienteIgual);
 	    }
 		
 		if (situacao != null) {
-			System.out.println("situacao foi informada");
 	        Predicate situacaoIgual = criteriaBuilder.equal(situacaoPath , situacao);
 	        predicates.add(situacaoIgual);
 	    }
 		
 		if (dataInicio != null) {
-			System.out.println("data de inicio foi informada");
 	        Predicate dataInicioIgual = criteriaBuilder.equal(dataInicioPath , dataInicio);
 	        predicates.add(dataInicioIgual);
 	    }
 		
 		if (dataFinal != null) {
-			System.out.println("data final foi informada");
 	        Predicate dataFinalIgual = criteriaBuilder.equal(dataFimPath, dataFinal);
 	        predicates.add(dataFinalIgual);
 	    }
@@ -190,8 +189,6 @@ public class ContaDespesaDAO {
 		query.where((Predicate[]) predicates.toArray(new Predicate[0]));
 	    TypedQuery<ContaDespesa> typedQuery = manager.createQuery(query);
 		resultado = typedQuery.getResultList();
-		System.out.println("Resultado: " + resultado.size());
-		System.out.println(resultado);
 		
 		return resultado;
 	}

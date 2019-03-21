@@ -83,8 +83,8 @@
 	<title>
 		<band height="176">
 			<staticText>
-				<reportElement x="134" y="23" width="418" height="45" forecolor="#000000" backcolor="#000000" uuid="51acd82b-de6c-45c8-9476-9373b852def3"/>
-				<textElement>
+				<reportElement x="28" y="23" width="527" height="45" forecolor="#000000" backcolor="#000000" uuid="51acd82b-de6c-45c8-9476-9373b852def3"/>
+				<textElement textAlignment="Center">
 					<font size="34" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Controle de Despesas]]></text>
@@ -126,7 +126,7 @@
 			</textField>
 			<image>
 				<reportElement x="28" y="9" width="106" height="72" uuid="0856cb5c-6b6c-4047-be23-4436cbc66f15"/>
-				<imageExpression><![CDATA["C:/Users/Mateus/Documents/crash.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["C:/Users/lucas.pinheiro/Desktop/logo_safe_pequeno.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="68" y="145" width="418" height="31" forecolor="#000000" backcolor="#000000" uuid="255f5554-c7c1-47fe-8623-603f5ce9bda1"/>
@@ -243,7 +243,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField pattern="¤ #,##0.00;¤ -#,##0.00">
+							<textField pattern="R¤ #,##0.00;R¤ -#,##0.00">
 								<reportElement x="0" y="0" width="96" height="30" uuid="3b8356ea-b997-4b71-8af0-d40130fe0907"/>
 								<box padding="5">
 									<pen lineWidth="1.5" lineStyle="Solid"/>
@@ -441,12 +441,12 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Usuário:  placeholder"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Usuário: " + $F{criador}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="72">
+		<band height="80">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="7" y="7" width="96" height="20" backcolor="#CCCCCC" uuid="49599931-2e2e-42cf-8cf6-8457e10d04ac"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -462,30 +462,30 @@
 				<textFieldExpression><![CDATA["Total Débito:"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="7" y="47" width="96" height="20" backcolor="#CCCCCC" uuid="e4a3321c-1d17-47f5-8892-19e375bd5a25"/>
+				<reportElement x="7" y="47" width="103" height="33" backcolor="#CCCCCC" uuid="e4a3321c-1d17-47f5-8892-19e375bd5a25"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
+					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Saldo: "]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00;¤ -#,##0.00" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="R¤ #,##0.00;R¤ -#,##0.00" isBlankWhenNull="true">
 				<reportElement x="103" y="7" width="91" height="20" backcolor="#CCCCCC" uuid="1f53d037-cbbd-4c1d-92f2-3e9b21eb0530"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="13"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{credito}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00;¤ -#,##0.00" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="R¤ #,##0.00;R¤ -#,##0.00" isBlankWhenNull="true">
 				<reportElement x="103" y="27" width="91" height="20" backcolor="#CCCCCC" uuid="2ce21764-2bc9-4bde-a040-85c171f84c42"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="13"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{debito}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00;¤ -#,##0.00" isBlankWhenNull="true">
-				<reportElement x="103" y="47" width="91" height="20" backcolor="#CCCCCC" uuid="51f93f12-dad8-4e36-ac6e-73a2f45957ba"/>
+			<textField isStretchWithOverflow="true" pattern="R¤ #,##0.00;R¤ -#,##0.00" isBlankWhenNull="true">
+				<reportElement x="103" y="47" width="91" height="33" backcolor="#CCCCCC" uuid="51f93f12-dad8-4e36-ac6e-73a2f45957ba"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="13" isBold="true"/>
+					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
 			</textField>

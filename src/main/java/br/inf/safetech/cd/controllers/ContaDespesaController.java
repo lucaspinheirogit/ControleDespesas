@@ -41,17 +41,11 @@ import br.inf.safetech.cd.models.Responsavel;
 import br.inf.safetech.cd.models.Situacao;
 import br.inf.safetech.cd.models.Tipo;
 import br.inf.safetech.cd.models.Usuario;
-import br.inf.safetech.cd.relatorio.Relatorio;
-import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 
 @RequestMapping("/contas")
 @Controller
@@ -223,7 +217,6 @@ public class ContaDespesaController {
 		m.setDescricao(opcao);
 		m.setValor(new BigDecimal(saldo)); // Valor que vem do form
 
-		System.out.println("opcao: " + opcao);
 		if (opcao.equals("Vale")) {
 			m.setResponsavel(Responsavel.COLABORADOR);
 		} else {
@@ -265,21 +258,20 @@ public class ContaDespesaController {
 
 	}
 
-	@RequestMapping(value = "/admin/gerarRelatorio", method = RequestMethod.POST)
-	public void gerarRelatorio(@RequestParam("pdfcliente") Optional<String> pdfcliente, Principal principal, HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("conta") String conta, RedirectAttributes redirectAttributes)
-			throws ParseException, JRException, IOException {
+	@RequestMapping(value = "/gerarRelatorio", method = RequestMethod.POST)
+	public ModelAndView gerarRelatorio(@RequestParam("pdfcliente") Optional<String> pdfcliente, Principal principal,
+			HttpServletRequest request, HttpServletResponse response, @RequestParam("conta") String conta,
+			RedirectAttributes redirectAttributes) throws ParseException, JRException, IOException {
 		conta = conta.substring(1);
-		System.out.println("Conta:  " + conta);
 
 		List<MovimentacaoConta> movimentacoes;
-		if(pdfcliente.isPresent() && pdfcliente.get() != "") {
-			System.out.println("param presente");
-			System.out.println(pdfcliente);
-			System.out.println(pdfcliente.get());
+		if (pdfcliente.isPresent() && pdfcliente.get() != "") {
 			movimentacoes = movimentacaoContaDAO.listarDoClientePorId(Integer.parseInt(conta));
-		}else {
-			System.out.println("param ausente");
+			if(movimentacoes.size() == 0) {
+				redirectAttributes.addFlashAttribute("message", "O cliente não é responsável por nenhuma movimentação!");
+				return new ModelAndView("redirect:/movimentacoes/ver?id="+conta);
+			}
+		} else {
 			movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(conta));
 		}
 
@@ -295,15 +287,9 @@ public class ContaDespesaController {
 		Date dataInicio = contaDespesa.getDataInicio().getTime();
 		Date dataFim = contaDespesa.getDataFim() != null ? contaDespesa.getDataFim().getTime() : null;
 
-		BigDecimal Credito = contaDespesaDAO.calculaCredito(Integer.parseInt(conta));
-		BigDecimal Debito = contaDespesaDAO.calculaDebito(Integer.parseInt(conta));
-		BigDecimal Saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(conta));
-
-		System.out.println(movimentacoes);
-		System.out.println(contaDespesa);
-		System.out.println("Relatorio criado por: " + RelatorioCriadoPor);
-		System.out.println("Data inicio: " + dataInicio);
-		System.out.println("Data fim: " + dataFim);
+		BigDecimal Credito = contaDespesaDAO.calculaCreditoMovimentacoes(movimentacoes);
+		BigDecimal Debito = contaDespesaDAO.calculaDebitoMovimentacoes(movimentacoes);
+		BigDecimal Saldo = contaDespesaDAO.calculaSaldoMovimentacoes(movimentacoes);
 
 		List<Map<String, ?>> datasource = new ArrayList<Map<String, ?>>();
 
@@ -322,8 +308,6 @@ public class ContaDespesaController {
 
 		for (MovimentacaoConta mov : movimentacoes) {
 
-			System.out.println(mov);
-
 			Map<String, Object> m = new HashMap<String, Object>();
 			String responsavel = mov.getResponsavel() != null
 					? mov.getResponsavel().name().substring(0, 1).toUpperCase()
@@ -338,19 +322,6 @@ public class ContaDespesaController {
 			m.put("valor", mov.getValor());
 			m.put("descricao", mov.getDescricao());
 			m.put("criadoPor", mov.getCriadoPor().getNome());
-
-			/* Outras variaveis
-			m.put("criador", RelatorioCriadoPor);
-			m.put("situacao", situacaoConta.substring(0, 1).toUpperCase() + situacaoConta.substring(1).toLowerCase());
-			m.put("colaborador", colaborador);
-			m.put("cliente", cliente);
-			m.put("dataInicio", dataInicio);
-			m.put("dataFim", dataFim);
-
-			m.put("credito", Credito);
-			m.put("debito", Debito);
-			m.put("saldo", Saldo);
-			*/
 
 			datasource.add(m);
 		}
@@ -367,9 +338,14 @@ public class ContaDespesaController {
 		String filename = "Relatorio " + colaborador + "-" + cliente + ".pdf";
 		response.setContentType("application/x-pdf");
 		response.setHeader("Content-disposition", "inline; filename=" + filename);
-
-		final OutputStream outStream = response.getOutputStream();
+		
+		OutputStream outStream = response.getOutputStream();
 		JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
+		
+		outStream.flush();
+		outStream.close();
+		
+		return new ModelAndView("redirect:/movimentacoes/ver?id="+conta);
 	}
 
 	// Converte strings (dd/MM/yyyy) para Calendar

@@ -130,15 +130,10 @@ public class MovimentacaoContaController {
 			RedirectAttributes redirectAttributes, HttpServletRequest request, @RequestParam("valor") String valor) {
 		valor = valor.substring(1);
 		
-		System.out.println(movimentacaoConta);
-		System.out.println(valor);
-		
 		valor=valor.replace(".","");
 		valor=valor.replace(",",".");
 		
-		System.out.println(valor);
 		BigDecimal valorMovimentacao = new BigDecimal(valor);
-		System.out.println(valorMovimentacao);
 
 		ContaDespesa c = contaDespesaDAO.find(movimentacaoConta.getConta().getId());
 		Usuario u = usuarioDAO.loadUserByUsername(principal.getName());

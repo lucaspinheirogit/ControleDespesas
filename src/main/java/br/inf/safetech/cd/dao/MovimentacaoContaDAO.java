@@ -21,24 +21,20 @@ public class MovimentacaoContaDAO{
 	private EntityManager manager;
 
 	public List<MovimentacaoConta> listar() {
-		System.out.println("listando movimentacoes");
 		return manager.createQuery("select m from MovimentacaoConta m", MovimentacaoConta.class).getResultList();
 	}
 
-	public void gravar(MovimentacaoConta movimentacao) {
-		System.out.println("gravando movimentacao na conta");
+	public void gravar(MovimentacaoConta movimentacao) {;
 		manager.persist(movimentacao);
 	}
 
 	public List<MovimentacaoConta> listarPorId(Integer contaId) {
-		System.out.println("listando movimentacoes por id: " + contaId);
 		return manager.createQuery("select m from MovimentacaoConta m where m.conta.id = :pId", MovimentacaoConta.class)
 				.setParameter("pId", contaId)
 				.getResultList();
 	}
 	
 	public List<MovimentacaoConta> listarDoClientePorId(Integer contaId) {
-		System.out.println("listando movimentacoes por id: " + contaId);
 		return manager.createQuery("select m from MovimentacaoConta m where m.conta.id = :pId and m.responsavel = :pResp", MovimentacaoConta.class)
 				.setParameter("pId", contaId)
 				.setParameter("pResp", Responsavel.CLIENTE)

@@ -48,7 +48,6 @@ public class HomeController {
 
 	@RequestMapping("/")
 	public ModelAndView index() {
-		System.out.println("Home");
 		return new ModelAndView("redirect:/contas");
 	}
 
@@ -56,7 +55,6 @@ public class HomeController {
 	@ResponseBody
 	@RequestMapping("/magia")
 	public String urlMagicaMaluca() {
-		System.out.println("Home controller");
 		
 		Role admin = new Role("ROLE_ADMIN");
 		Role user = new Role("ROLE_USER");
@@ -90,19 +88,20 @@ public class HomeController {
 		usuarioDAO.gravar(usuario);
 		usuarioDAO.gravar(usuario2);
 
-		ContaDespesa conta1 = new ContaDespesa(usuario2, cliente1, new GregorianCalendar(2004, 2, 3),
-				new GregorianCalendar(2004, 2, 16), Situacao.ATIVA);
+		ContaDespesa conta1 = new ContaDespesa(usuario2, cliente1, new GregorianCalendar(2019, 3, 20),
+				null, Situacao.ATIVA);
 		ContaDespesa conta2 = new ContaDespesa(usuario2, cliente2, new GregorianCalendar(2004, 3, 25),
-				new GregorianCalendar(2004, 4, 5), Situacao.ATIVA);
+				null, Situacao.ATIVA);
 		ContaDespesa conta3 = new ContaDespesa(usuario, cliente2, new GregorianCalendar(2004, 7, 16),
-				new GregorianCalendar(2004, 8, 1), Situacao.ATIVA);
+				null, Situacao.ATIVA);
 
-		MovimentacaoConta mc1 = new MovimentacaoConta(conta1, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(300),
-				"Taxi", Responsavel.CLIENTE, usuario);
-		MovimentacaoConta mc2 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(500), "Comida", Responsavel.EMPRESA, usuario);
-		MovimentacaoConta mc3 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(700), "Hotel", Responsavel.CLIENTE, usuario2);
-		MovimentacaoConta mc4 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(100), "Terno", Responsavel.COLABORADOR, usuario2);
-		MovimentacaoConta mc5 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(320), "Passeio de barco", Responsavel.EMPRESA, usuario);
+		MovimentacaoConta mc1 = new MovimentacaoConta(conta1, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1000),
+				"Aporte para viagem", Responsavel.EMPRESA, usuario);
+		MovimentacaoConta mc2 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(100), "Jantar", Responsavel.EMPRESA, usuario2);
+		MovimentacaoConta mc3 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(200), "Taxi", Responsavel.EMPRESA, usuario2);
+		MovimentacaoConta mc4 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(280), "Almoço", Responsavel.EMPRESA, usuario2);
+		MovimentacaoConta mc5 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(410), "Taxi Aeroporto", Responsavel.EMPRESA, usuario2);
+		
 		MovimentacaoConta mc6 = new MovimentacaoConta(conta2, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1200), "Passagem", Responsavel.COLABORADOR, usuario2);
 		MovimentacaoConta mc7 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(50), "Comida", Responsavel.COLABORADOR, usuario);
 		MovimentacaoConta mc8 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(100), "Transporte", Responsavel.CLIENTE, usuario2);
@@ -123,14 +122,6 @@ public class HomeController {
 		contaDespesaDAO.gravar(conta3);
 
 		return "Url Mágica executada";
-	}
-	
-	
-	@RequestMapping("/teste")
-	public ModelAndView teste(Principal principal, User user) {
-		System.out.println(principal);
-		System.out.println(user);
-		return new ModelAndView("redirect:/contas");
 	}
 	
 	
