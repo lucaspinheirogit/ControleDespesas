@@ -14,31 +14,10 @@
 
 	<jsp:attribute name="extraScripts">
 <script>
-	$('input.formatNumber').on(
-			'blur',
-			function() {
-				if (this.value == '')
-					this.value = 0;
-
-				this.value = parseFloat(this.value.replace(/,/g, ""))
-						.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g,
-								",");
-			});
-
-	$('#formMovimentacao').on('submit', function(e) {
-		let value = $('input.formatNumber').val();
-
-		if (value.match(/[a-z]/i)) {
-			$('input.formatNumber').val("");
-			$('#message').text("Informe um valor válido");
-			e.preventDefault();
-		} else {
-			$('#message').text("");
-			value = value.replace(".", "a");
-			value = value.replace(/,/g, ".");
-			value = value.replace("a", ",");
-			$('input.formatNumber').val(value);
-		}
+	$(document).ready(function() {
+		$('input.formatNumber').mask('000.000.000.000.000,00', {
+			reverse : true
+		});
 	});
 </script>
 </jsp:attribute>
