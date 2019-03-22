@@ -44,7 +44,10 @@ public class MovimentacaoContaController {
 	public ModelAndView listar(Authentication auth, Principal principal, @RequestParam("id") String id,
 			RedirectAttributes redirectAttributes) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
-		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+		BigDecimal saldoGeral = contaDespesaDAO.calculaSaldoGeral(Integer.parseInt(id));
+		BigDecimal saldoLiquido = contaDespesaDAO.calculaSaldoLiquido(Integer.parseInt(id));
+		
+		
 		
 		if(movimentacoes.size() == 0) {
 			redirectAttributes.addFlashAttribute("message", "Essa conta não possui movimentações!");
@@ -53,6 +56,10 @@ public class MovimentacaoContaController {
 
 		int colaborador = movimentacoes.get(0).getConta().getUsuario().getId();
 		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
+		
+		if(movimentacoes.get(0).getConta().getSituacao() == Situacao.ENCERRADA) {
+			saldoLiquido = new BigDecimal(0);
+		}
 
 		if (!hasRole(auth, "ROLE_ADMIN")) {
 			if (colaborador != usuarioLogado.getId()) {
@@ -63,7 +70,8 @@ public class MovimentacaoContaController {
 
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/lista");
 		modelAndView.addObject("movimentacoes", movimentacoes);
-		modelAndView.addObject("saldo", saldo);
+		modelAndView.addObject("saldoGeral", saldoGeral);
+		modelAndView.addObject("saldoLiquido", saldoLiquido);
 		return modelAndView;
 	}
 
@@ -72,7 +80,8 @@ public class MovimentacaoContaController {
 			@RequestParam("id") String id) {
 		//id = id.substring(1);
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(id));
-		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+		BigDecimal saldoGeral = contaDespesaDAO.calculaSaldoGeral(Integer.parseInt(id));
+		BigDecimal saldoLiquido = contaDespesaDAO.calculaSaldoLiquido(Integer.parseInt(id));
 
 		if(movimentacoes.size() == 0) {
 			redirectAttributes.addFlashAttribute("message", "Essa conta não possui movimentações!");
@@ -107,7 +116,8 @@ public class MovimentacaoContaController {
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
 		modelAndView.addObject("movimentacoes", movimentacoes);
 		modelAndView.addObject("responsaveis", responsaveis);
-		modelAndView.addObject("saldo", saldo);
+		modelAndView.addObject("saldoGeral", saldoGeral);
+		modelAndView.addObject("saldoLiquido", saldoLiquido);
 		return modelAndView;
 	}
 

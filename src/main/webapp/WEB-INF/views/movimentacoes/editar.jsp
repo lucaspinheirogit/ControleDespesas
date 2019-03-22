@@ -178,9 +178,14 @@
 			</tbody>
 		</table>
 		<br />
-		<h5 class="mb-5">
-			Saldo:
-			<fmt:formatNumber value="${ saldo }" minFractionDigits="2"
+		<h5 class="mb-2">
+			Saldo líquido:
+			<fmt:formatNumber value="${ saldoLiquido }" minFractionDigits="2"
+				type="currency" />
+		</h5>
+		<h5 class="mb-0">
+			Saldo geral:
+			<fmt:formatNumber value="${ saldoGeral }" minFractionDigits="2"
 				type="currency" />
 		</h5>
 	</div>

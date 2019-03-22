@@ -126,7 +126,7 @@
 			</textField>
 			<image>
 				<reportElement x="28" y="9" width="106" height="72" uuid="0856cb5c-6b6c-4047-be23-4436cbc66f15"/>
-				<imageExpression><![CDATA["C:/Users/Mateus/Documents/crash.jpg"]]></imageExpression>
+				<imageExpression><![CDATA["C:/Users/lucas.pinheiro/Desktop/logo_safe_pequeno.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="68" y="145" width="418" height="31" forecolor="#000000" backcolor="#000000" uuid="255f5554-c7c1-47fe-8623-603f5ce9bda1"/>

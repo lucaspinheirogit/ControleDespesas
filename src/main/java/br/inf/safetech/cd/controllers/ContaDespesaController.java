@@ -88,7 +88,7 @@ public class ContaDespesaController {
 
 		Map<Integer, BigDecimal> saldos = new HashMap<Integer, BigDecimal>();
 		for (ContaDespesa conta : contas) {
-			BigDecimal saldo = contaDespesaDAO.calculaSaldo(conta.getId());
+			BigDecimal saldo = contaDespesaDAO.calculaSaldoLiquido(conta.getId());
 			saldos.put(conta.getId(), saldo);
 		}
 
@@ -204,29 +204,37 @@ public class ContaDespesaController {
 
 	@RequestMapping(value = "/admin/encerrar", method = RequestMethod.POST)
 	public ModelAndView encerrar(Principal principal, @RequestParam("id") String id,
-			@RequestParam("opcao") String opcao, @RequestParam("saldo") String saldo,
+			@RequestParam("valorDevolucao") String devolucao, @RequestParam("valorVale") String vale, @RequestParam("saldo") String saldo,
 			RedirectAttributes redirectAttributes) throws NumberFormatException, ParseException {
 		id = id.substring(1);
-		opcao = opcao.substring(1);
+		devolucao = devolucao.substring(1);
+		vale = vale.substring(1);
 		saldo = saldo.substring(1);
 
-		MovimentacaoConta m = new MovimentacaoConta();
 		ContaDespesa c = contaDespesaDAO.find(Integer.parseInt(id));
 		Usuario u = (Usuario) ((Authentication) principal).getPrincipal();
-		m.setConta(c);
-		m.setTipo(Tipo.DEBITO);
-		m.setConciliada(Conciliada.SIM);
-		m.setCriadoPor(u);
-		m.setDescricao(opcao);
-		m.setValor(new BigDecimal(saldo)); // Valor que vem do form
+		
+		MovimentacaoConta m1 = new MovimentacaoConta();
+		m1.setConta(c);
+		m1.setTipo(Tipo.DEBITO);
+		m1.setConciliada(Conciliada.SIM);
+		m1.setCriadoPor(u);
+		m1.setDescricao("Vale");
+		m1.setValor(new BigDecimal(vale)); 
+		m1.setResponsavel(Responsavel.EMPRESA);
+		
+		MovimentacaoConta m2 = new MovimentacaoConta();
+		m2.setConta(c);
+		m2.setTipo(Tipo.DEBITO);
+		m2.setConciliada(Conciliada.SIM);
+		m2.setCriadoPor(u);
+		m2.setDescricao("Devolução");
+		m2.setValor(new BigDecimal(devolucao)); 
+		m2.setResponsavel(Responsavel.COLABORADOR);
 
-		if (opcao.equals("Vale")) {
-			m.setResponsavel(Responsavel.COLABORADOR);
-		} else {
-			m.setResponsavel(Responsavel.EMPRESA);
-		}
-
-		movimentacaoContaDAO.gravar(m);
+		movimentacaoContaDAO.gravar(m1);
+		movimentacaoContaDAO.gravar(m2);
+		
 		contaDespesaDAO.encerrar(Integer.parseInt(id));
 
 		redirectAttributes.addFlashAttribute("message", "Conta encerrada com sucesso!");
@@ -238,8 +246,9 @@ public class ContaDespesaController {
 			throws NumberFormatException, ParseException {
 		ModelAndView modelAndView = new ModelAndView("conta/encerrar");
 		id = id.substring(1);
+		
 		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
-		BigDecimal saldo = contaDespesaDAO.calculaSaldo(Integer.parseInt(id));
+		BigDecimal saldo = contaDespesaDAO.calculaSaldoLiquido(Integer.parseInt(id));
 
 		if (contaDespesaDAO.estaLiquidada(Integer.parseInt(id))) {
 

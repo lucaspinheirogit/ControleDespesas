@@ -86,7 +86,7 @@ public class ContaDespesaDAO {
 	}
 	
 
-	public BigDecimal calculaSaldo(int id) {
+	public BigDecimal calculaSaldoLiquido(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		BigDecimal credito = new BigDecimal(0);
 		BigDecimal debito = new BigDecimal(0);
@@ -96,6 +96,24 @@ public class ContaDespesaDAO {
 			if (m.getTipo() == Tipo.CREDITO) {
 				credito = credito.add(m.getValor());
 			} else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
+				debito = debito.add(m.getValor());
+			}
+		}
+
+		saldo = saldo.add(credito.subtract(debito));
+		return saldo;
+	}
+	
+	public BigDecimal calculaSaldoGeral(int id) {
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
+		BigDecimal credito = new BigDecimal(0);
+		BigDecimal debito = new BigDecimal(0);
+		BigDecimal saldo = new BigDecimal(0);
+
+		for (MovimentacaoConta m : movimentacoes) {
+			if (m.getTipo() == Tipo.CREDITO) {
+				credito = credito.add(m.getValor());
+			} else {
 				debito = debito.add(m.getValor());
 			}
 		}
