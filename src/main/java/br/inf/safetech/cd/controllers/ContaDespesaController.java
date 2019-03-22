@@ -345,6 +345,9 @@ public class ContaDespesaController {
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ItemDataSource", jrDataSource);
+		
+		parameters.put("pdfGeral", true);
+		parameters.put("pdfCliente", true);
 
 		JasperPrint jasperPrint = JasperFillManager.fillReport(nome, parameters, jrDataSource);
 
