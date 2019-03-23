@@ -204,12 +204,18 @@ public class ContaDespesaController {
 
 	@RequestMapping(value = "/admin/encerrar", method = RequestMethod.POST)
 	public ModelAndView encerrar(Principal principal, @RequestParam("id") String id,
-			@RequestParam("valorDevolucao") String devolucao, @RequestParam("valorVale") String vale, @RequestParam("saldo") String saldo,
+			@RequestParam("valorDevolucao") String devolucao, @RequestParam("valorVale") String vale,
 			RedirectAttributes redirectAttributes) throws NumberFormatException, ParseException {
 		id = id.substring(1);
 		devolucao = devolucao.substring(1);
 		vale = vale.substring(1);
-		saldo = saldo.substring(1);
+		
+		System.out.println("devolucao: " + devolucao);
+		System.out.println("vale: " + vale);
+		
+		System.out.println("Convertendo para padrao americano: ");
+		System.out.println("devolucao: " + ConverterParaDinheiroAmericano(devolucao));
+		System.out.println("vale: " + ConverterParaDinheiroAmericano(vale));
 
 		ContaDespesa c = contaDespesaDAO.find(Integer.parseInt(id));
 		Usuario u = (Usuario) ((Authentication) principal).getPrincipal();
@@ -220,7 +226,7 @@ public class ContaDespesaController {
 		m1.setConciliada(Conciliada.SIM);
 		m1.setCriadoPor(u);
 		m1.setDescricao("Vale");
-		m1.setValor(new BigDecimal(vale)); 
+		m1.setValor(new BigDecimal(ConverterParaDinheiroAmericano(vale).replaceAll(",",""))); 
 		m1.setResponsavel(Responsavel.EMPRESA);
 		
 		MovimentacaoConta m2 = new MovimentacaoConta();
@@ -229,7 +235,7 @@ public class ContaDespesaController {
 		m2.setConciliada(Conciliada.SIM);
 		m2.setCriadoPor(u);
 		m2.setDescricao("Devolução");
-		m2.setValor(new BigDecimal(devolucao)); 
+		m2.setValor(new BigDecimal(ConverterParaDinheiroAmericano(devolucao).replaceAll(",",""))); 
 		m2.setResponsavel(Responsavel.COLABORADOR);
 
 		movimentacaoContaDAO.gravar(m1);
@@ -275,6 +281,8 @@ public class ContaDespesaController {
 			HttpServletRequest request, HttpServletResponse response, @RequestParam("conta") String conta,
 			RedirectAttributes redirectAttributes) throws ParseException, JRException, IOException {
 		conta = conta.substring(1);
+		
+		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		List<MovimentacaoConta> movimentacoes;
 		if (pdfcliente.isPresent() && pdfcliente.get() != "") {
@@ -283,8 +291,12 @@ public class ContaDespesaController {
 				redirectAttributes.addFlashAttribute("message", "O cliente não é responsável por nenhuma movimentação!");
 				return new ModelAndView("redirect:/movimentacoes/ver?id="+conta);
 			}
+			BigDecimal totalCliente = contaDespesaDAO.calculaTotalCliente(Integer.parseInt(conta));
+			parameters.put("pdfCliente", true);
+			parameters.put("totalCliente", totalCliente);
 		} else {
 			movimentacoes = movimentacaoContaDAO.listarPorId(Integer.parseInt(conta));
+			parameters.put("pdfCliente", false);
 		}
 
 		ContaDespesa contaDespesa = movimentacoes.get(0).getConta();
@@ -301,7 +313,9 @@ public class ContaDespesaController {
 
 		BigDecimal Credito = contaDespesaDAO.calculaCreditoMovimentacoes(movimentacoes);
 		BigDecimal Debito = contaDespesaDAO.calculaDebitoMovimentacoes(movimentacoes);
-		BigDecimal Saldo = contaDespesaDAO.calculaSaldoMovimentacoes(movimentacoes);
+		BigDecimal totalColaborador = contaDespesaDAO.calculaTotalColaborador(Integer.parseInt(conta));
+		BigDecimal SaldoLiquido = contaDespesaDAO.calculaSaldoLiquido(Integer.parseInt(conta));
+		BigDecimal SaldoGeral = contaDespesaDAO.calculaSaldoGeral(Integer.parseInt(conta));
 
 		List<Map<String, ?>> datasource = new ArrayList<Map<String, ?>>();
 
@@ -316,7 +330,9 @@ public class ContaDespesaController {
 		teste.put("dataFim", dataFim);
 		teste.put("credito", Credito);
 		teste.put("debito", Debito);
-		teste.put("saldo", Saldo);
+		teste.put("totalColaborador", totalColaborador);
+		teste.put("saldoLiquido", SaldoLiquido);
+		teste.put("saldoGeral", SaldoGeral);
 		datasource.add(teste);
 
 		for (MovimentacaoConta mov : movimentacoes) {
@@ -344,11 +360,8 @@ public class ContaDespesaController {
 		String nome = request.getServletContext().getRealPath("/relatorio/relatorio.jasper");
 		String logo = request.getServletContext().getRealPath("/resources/imagens/logo_safe_pequeno.png");
 		
-		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ItemDataSource", jrDataSource);
 		parameters.put("logo", logo);
-		parameters.put("pdfGeral", true);
-		parameters.put("pdfCliente", true);
 
 		JasperPrint jasperPrint = JasperFillManager.fillReport(nome, parameters, jrDataSource);
 
@@ -378,5 +391,21 @@ public class ContaDespesaController {
 
 		return cal_data;
 	}
+	
+	// Converte dinheiro para o padrao americano
+		private String ConverterParaDinheiroAmericano(String valor){
+			//1.710,60
+			
+			valor = valor.replace(",", "a");
+			//1.710a60
+			
+			valor = valor.replace(".", ",");
+			//1,710a60
+			
+			valor = valor.replace("a", ".");
+			//1,710.60
+
+			return valor;
+		}
 
 }

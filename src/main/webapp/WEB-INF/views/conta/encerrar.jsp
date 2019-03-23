@@ -18,9 +18,11 @@
 <tags:pageTemplate titulo="Cadastro de contas de despesa">
 
 	<jsp:attribute name="extraScripts">
+	<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
 <script>
 $(document).ready(function() {
-		var saldoTotal = ${saldo};
+		var saldoTotal = parseFloat(${saldo});
 		console.log(saldoTotal);
 		
 		$('#checkbox1').change(() => {
@@ -31,21 +33,32 @@ $(document).ready(function() {
 			$('#devolucao').prop('disabled', function(i, v) { return !v; });
 		});
 		
-		$('#vale').on('change', function() {
-			$('#devolucao').val(saldoTotal - this.value);
+		$('#vale').on('blur', function() {
+			vale = this.value.replace( '.', '' ).replace( ',', '.' );
+			vale = parseFloat(vale);
+			resultado = String(saldoTotal - vale);
+			
+			resultado = resultado.replace( '.', ',' );
+			$('#devolucao').val(resultado);
 		});
 		
-		$('#devolucao').on('change', function() {
-			$('#vale').val(saldoTotal - this.value);
+		$('#devolucao').on('blur', function() {
+			devolucao = this.value.replace( '.', '' ).replace( ',', '.' );
+			devolucao = parseFloat(devolucao);
+			resultado = String(saldoTotal - devolucao);
+			
+			resultado = resultado.replace( '.', ',' );
+			$('#vale').val(resultado);
 		});
 		
 		$("form").submit(function(e){
-			valorDevolucao = parseInt($('#devolucao').val());
-			valorVale = parseInt($('#vale').val());
-			valorInformado = valorDevolucao + valorVale;
+			devolucao = $('#devolucao').replace( '.', '' ).replace( ',', '.' );
+			vale = $('#vale').replace( '.', '' ).replace( ',', '.' );
 			
-			console.log(valorInformado);
-			console.log(saldoTotal)
+			valorInformado = devolucao + vale;
+			
+			console.log("valor informado: " + valorInformado);
+			console.log("Saldo total: " + saldoTotal)
 			
 			if(valorInformado < saldoTotal){
 				$('#message').text("Ainda há saldo remanescente de R$ " + (saldoTotal - valorInformado));
@@ -56,6 +69,12 @@ $(document).ready(function() {
 			}
         });
 		
+			$('#devolucao, #vale').maskMoney({
+				decimal : ',',
+				thousands : '.',
+				precision : 2
+			});
+
 });	
 </script>
 </jsp:attribute>
@@ -78,8 +97,10 @@ $(document).ready(function() {
 									Class="custom-control-input" required /> <label
 									class="custom-control-label" for="checkbox1">Vale</label>
 						</div>
-						<input id="vale" type="number" name="valorVale" value="0"
-								max="${saldo }" min="0" step="0.01" disabled />
+<!-- 						<input id="vale" type="number" name="valorVale" value="0" -->
+<%-- 								max="${saldo }" min="0" step="0.01" disabled /> --%>
+								<input style="flex-grow:0" id="vale" type="text" class="form-control formatNumber w-50" name="valorVale"
+						required disabled />
 					</div>
 					<div class="custom-control custom-radio">
 						<div>
@@ -87,12 +108,13 @@ $(document).ready(function() {
 									value="Devolução" Class="custom-control-input" required /> <label
 									class="custom-control-label" for="checkbox2">Devolução</label>
 						</div>
-							<input id="devolucao" type="number" name="valorDevolucao"
-								value="0" max="${saldo }" min="0" step="0.01" disabled />
+<!-- 							<input id="devolucao" type="number" name="valorDevolucao" -->
+<%-- 								value="0" max="${saldo }" min="0" step="0.01" disabled /> --%>
+								<input style="flex-grow:0" id="devolucao" type="text" class="form-control formatNumber w-50" name="valorDevolucao"
+						required disabled />
 					</div>
 				</div>
 				<input type="hidden" name="id" value="${ conta.id }" />
-				<input type="hidden" name="saldo" value="${ saldo }" />
 				<button type="submit" class="btn btn-danger">Encerrar</button>
 			</form>
 		</div>

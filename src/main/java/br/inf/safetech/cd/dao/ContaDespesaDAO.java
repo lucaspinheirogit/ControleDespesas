@@ -155,7 +155,7 @@ public class ContaDespesaDAO {
 		BigDecimal debito = new BigDecimal(0);
 
 		for (MovimentacaoConta m : movimentacoes) {
-			if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
+			if (m.getTipo() == Tipo.DEBITO) {
 				debito = debito.add(m.getValor());
 			}
 		}
@@ -209,6 +209,32 @@ public class ContaDespesaDAO {
 		resultado = typedQuery.getResultList();
 		
 		return resultado;
+	}
+
+	public BigDecimal calculaTotalCliente(int id) {
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
+		BigDecimal total = new BigDecimal(0);
+
+		for (MovimentacaoConta m : movimentacoes) {
+			if (m.getResponsavel() == Responsavel.CLIENTE) {
+				total = total.add(m.getValor());
+			}
+		}
+
+		return total;
+	}
+
+	public BigDecimal calculaTotalColaborador(int id) {
+		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
+		BigDecimal total = new BigDecimal(0);
+
+		for (MovimentacaoConta m : movimentacoes) {
+			if (m.getResponsavel() == Responsavel.COLABORADOR) {
+				total = total.add(m.getValor());
+			}
+		}
+
+		return total;
 	}
 
 }

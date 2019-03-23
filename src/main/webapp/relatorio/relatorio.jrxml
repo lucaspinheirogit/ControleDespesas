@@ -54,6 +54,7 @@
 	<parameter name="ItemDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="pdfCliente" class="java.lang.Boolean"/>
 	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="totalCliente" class="java.math.BigDecimal"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -71,7 +72,9 @@
 	<field name="dataFim" class="java.util.Date"/>
 	<field name="credito" class="java.math.BigDecimal"/>
 	<field name="debito" class="java.math.BigDecimal"/>
-	<field name="saldo" class="java.math.BigDecimal"/>
+	<field name="saldoGeral" class="java.math.BigDecimal"/>
+	<field name="saldoLiquido" class="java.math.BigDecimal"/>
+	<field name="totalColaborador" class="java.math.BigDecimal"/>
 	<background>
 		<band height="802">
 			<rectangle>
@@ -130,13 +133,6 @@
 				<reportElement x="28" y="9" width="106" height="72" uuid="0856cb5c-6b6c-4047-be23-4436cbc66f15"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement x="68" y="145" width="418" height="31" forecolor="#000000" backcolor="#000000" uuid="255f5554-c7c1-47fe-8623-603f5ce9bda1"/>
-				<textElement textAlignment="Center">
-					<font size="18" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Movimentações]]></text>
-			</staticText>
 			<line>
 				<reportElement x="0" y="89" width="555" height="1" uuid="9eea9583-c41d-4dd5-a33e-99d2c85ecbc6"/>
 				<graphicElement>
@@ -169,6 +165,13 @@
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dataFim}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="143" width="555" height="30" uuid="0a10902f-3e09-4644-b841-5b1f50900546"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pdfCliente} == true ? "Movimentações do cliente" : "Movimentações"]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -448,48 +451,33 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="80">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="7" y="7" width="96" height="20" backcolor="#CCCCCC" uuid="49599931-2e2e-42cf-8cf6-8457e10d04ac"/>
+		<band height="130">
+			<textField isStretchWithOverflow="true" pattern="¤#,##0.##;¤-#,##0.##" isBlankWhenNull="true">
+				<reportElement x="7" y="7" width="243" height="20" backcolor="#CCCCCC" uuid="49599931-2e2e-42cf-8cf6-8457e10d04ac"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Total Crédito:"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{pdfCliente} == true ?
+"Total: " + new DecimalFormat ("R$#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format($P{totalCliente}) :
+"Total Crédito: " + new DecimalFormat ("R$#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format($F{credito}) ]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="7" y="27" width="96" height="20" backcolor="#CCCCCC" uuid="ed5d1cb4-e551-4aaf-a9bf-79c9973f04c5"/>
+				<reportElement x="7" y="27" width="243" height="20" backcolor="#CCCCCC" uuid="ed5d1cb4-e551-4aaf-a9bf-79c9973f04c5">
+					<printWhenExpression><![CDATA[$P{pdfCliente} == false]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Total Débito:"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Total Débito: " + new DecimalFormat ("R$#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format($F{debito}) ]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="7" y="47" width="103" height="33" backcolor="#CCCCCC" uuid="e4a3321c-1d17-47f5-8892-19e375bd5a25"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<reportElement x="7" y="74" width="243" height="20" backcolor="#CCCCCC" uuid="e4a3321c-1d17-47f5-8892-19e375bd5a25">
+					<printWhenExpression><![CDATA[$P{pdfCliente} == false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Saldo: "]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00;¤ -#,##0.00" isBlankWhenNull="true">
-				<reportElement x="103" y="7" width="91" height="20" backcolor="#CCCCCC" uuid="1f53d037-cbbd-4c1d-92f2-3e9b21eb0530"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{credito}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00;¤ -#,##0.00" isBlankWhenNull="true">
-				<reportElement x="103" y="27" width="91" height="20" backcolor="#CCCCCC" uuid="2ce21764-2bc9-4bde-a040-85c171f84c42"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{debito}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="¤ #,##0.00;¤ -#,##0.00" isBlankWhenNull="true">
-				<reportElement x="103" y="47" width="91" height="33" backcolor="#CCCCCC" uuid="51f93f12-dad8-4e36-ac6e-73a2f45957ba"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Saldo líquido: " + new DecimalFormat ("R$#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format($F{saldoLiquido}) ]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="-1" width="555" height="1" uuid="1b3bb6a7-c52e-4a6b-a0b4-88aab7d2af97"/>
@@ -497,12 +485,24 @@
 					<pen lineWidth="1.5"/>
 				</graphicElement>
 			</line>
-			<staticText>
-				<reportElement x="261" y="33" width="100" height="30" isRemoveLineWhenBlank="true" uuid="595bb399-9987-407f-8eb9-53bd6d149326">
-					<printWhenExpression><![CDATA[$P{pdfCliente} == true]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="7" y="94" width="243" height="33" backcolor="#CCCCCC" uuid="10487660-8f46-4adc-ab08-21eab1a69ab3">
+					<printWhenExpression><![CDATA[$P{pdfCliente} == false]]></printWhenExpression>
 				</reportElement>
-				<text><![CDATA[pdf cliente]]></text>
-			</staticText>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Saldo geral: " + new DecimalFormat ("R$#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format($F{saldoGeral}) ]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="7" y="47" width="243" height="20" backcolor="#CCCCCC" uuid="3f84ba20-6bfa-4ee4-be91-6e8f55331e16">
+					<printWhenExpression><![CDATA[$P{pdfCliente} == false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total Colaborador: " + new DecimalFormat ("R$#,##0.00", new DecimalFormatSymbols (new Locale ("pt", "BR"))).format($F{totalColaborador}) ]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

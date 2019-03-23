@@ -13,11 +13,21 @@
 <tags:pageTemplate titulo="Cadastro de movimentacao">
 
 	<jsp:attribute name="extraScripts">
+	<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
 <script>
 	$(document).ready(function() {
-		$('input.formatNumber').mask('000.000.000.000.000,00', {
-			reverse : true
+
+		// 		$('input.formatNumber').mask('000.000.000.000.000,00', {
+		// 			reverse : true
+		// 		});
+
+		$('input.formatNumber').maskMoney({
+			decimal : ',',
+			thousands : '.',
+			precision : 2
 		});
+
 	});
 </script>
 </jsp:attribute>
