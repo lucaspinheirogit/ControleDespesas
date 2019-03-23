@@ -342,10 +342,11 @@ public class ContaDespesaController {
 		JRBeanCollectionDataSource jrDataSource = new JRBeanCollectionDataSource(datasource);
 
 		String nome = request.getServletContext().getRealPath("/relatorio/relatorio.jasper");
-
+		String logo = request.getServletContext().getRealPath("/resources/imagens/logo_safe_pequeno.png");
+		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("ItemDataSource", jrDataSource);
-		
+		parameters.put("logo", logo);
 		parameters.put("pdfGeral", true);
 		parameters.put("pdfCliente", true);
 

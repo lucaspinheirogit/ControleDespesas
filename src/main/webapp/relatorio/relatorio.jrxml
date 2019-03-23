@@ -53,6 +53,7 @@
 	</subDataset>
 	<parameter name="ItemDataSource" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<parameter name="pdfCliente" class="java.lang.Boolean"/>
+	<parameter name="logo" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -127,7 +128,7 @@
 			</textField>
 			<image>
 				<reportElement x="28" y="9" width="106" height="72" uuid="0856cb5c-6b6c-4047-be23-4436cbc66f15"/>
-				<imageExpression><![CDATA["C:/Users/lucas.pinheiro/Desktop/logo_safe_pequeno.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="68" y="145" width="418" height="31" forecolor="#000000" backcolor="#000000" uuid="255f5554-c7c1-47fe-8623-603f5ce9bda1"/>
@@ -500,7 +501,7 @@
 				<reportElement x="261" y="33" width="100" height="30" isRemoveLineWhenBlank="true" uuid="595bb399-9987-407f-8eb9-53bd6d149326">
 					<printWhenExpression><![CDATA[$P{pdfCliente} == true]]></printWhenExpression>
 				</reportElement>
-				<text><![CDATA[Pdf para cliente]]></text>
+				<text><![CDATA[pdf cliente]]></text>
 			</staticText>
 		</band>
 	</summary>
