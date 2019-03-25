@@ -46,8 +46,7 @@ public class ContaDespesaDAO {
 
 	public List<ContaDespesa> listar() {
 		return manager.createQuery("select c from ContaDespesa c where c.situacao = :situacao", ContaDespesa.class)
-				.setParameter("situacao", Situacao.ATIVA)
-				.getResultList();
+				.setParameter("situacao", Situacao.ATIVA).getResultList();
 	}
 
 	public void gravar(ContaDespesa conta) {
@@ -55,10 +54,10 @@ public class ContaDespesaDAO {
 	}
 
 	public List<ContaDespesa> listarPorColaborador(Usuario usuario) {
-		return manager.createQuery("select c from ContaDespesa c where c.usuario.id = :id and c.situacao = :situacao", ContaDespesa.class)
-				.setParameter("id", usuario.getId())
-				.setParameter("situacao", Situacao.ATIVA)
-				.getResultList();
+		return manager
+				.createQuery("select c from ContaDespesa c where c.usuario.id = :id and c.situacao = :situacao",
+						ContaDespesa.class)
+				.setParameter("id", usuario.getId()).setParameter("situacao", Situacao.ATIVA).getResultList();
 	}
 
 	public void encerrar(int id) throws ParseException {
@@ -67,7 +66,7 @@ public class ContaDespesaDAO {
 		Date date = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 		Date dt = sf.parse(sf.format(date));
-		
+
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dt);
 
@@ -84,7 +83,6 @@ public class ContaDespesaDAO {
 		}
 		return true;
 	}
-	
 
 	public BigDecimal calculaSaldoLiquido(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
@@ -93,17 +91,28 @@ public class ContaDespesaDAO {
 		BigDecimal saldo = new BigDecimal(0);
 
 		for (MovimentacaoConta m : movimentacoes) {
+			// Se for credito, apenas soma o credito
 			if (m.getTipo() == Tipo.CREDITO) {
 				credito = credito.add(m.getValor());
-			} else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
-				debito = debito.add(m.getValor());
+			} else {
+				// Se for debito e a conta estiver encerrada, debita tudo
+				if (m.getConta().getSituacao() == Situacao.ENCERRADA && m.getTipo() == Tipo.DEBITO) {
+					System.out.println("Conta encerrada, debitando tuto");
+					debito = debito.add(m.getValor());
+				}
+				// Se for debito e a conta nao estiver encerrada, debita tudo menos as movim. do
+				// colaborador
+				else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
+					System.out.println("Conta ativa, nao debitando o colab");
+					debito = debito.add(m.getValor());
+				}
 			}
 		}
 
 		saldo = saldo.add(credito.subtract(debito));
 		return saldo;
 	}
-	
+
 	public BigDecimal calculaSaldoGeral(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		BigDecimal credito = new BigDecimal(0);
@@ -121,7 +130,7 @@ public class ContaDespesaDAO {
 		saldo = saldo.add(credito.subtract(debito));
 		return saldo;
 	}
-	
+
 	public BigDecimal calculaSaldoMovimentacoes(List<MovimentacaoConta> movimentacoes) {
 		BigDecimal credito = new BigDecimal(0);
 		BigDecimal debito = new BigDecimal(0);
@@ -138,7 +147,7 @@ public class ContaDespesaDAO {
 		saldo = saldo.add(credito.subtract(debito));
 		return saldo;
 	}
-	
+
 	public BigDecimal calculaCreditoMovimentacoes(List<MovimentacaoConta> movimentacoes) {
 		BigDecimal credito = new BigDecimal(0);
 
@@ -147,10 +156,10 @@ public class ContaDespesaDAO {
 				credito = credito.add(m.getValor());
 			}
 		}
-		
+
 		return credito;
 	}
-	
+
 	public BigDecimal calculaDebitoMovimentacoes(List<MovimentacaoConta> movimentacoes) {
 		BigDecimal debito = new BigDecimal(0);
 
@@ -163,51 +172,51 @@ public class ContaDespesaDAO {
 		return debito;
 	}
 
-	public List<ContaDespesa> listarComFiltro(String user, String cliente, Calendar dataInicio,
-			Calendar dataFinal, Situacao situacao) {
-		
+	public List<ContaDespesa> listarComFiltro(String user, String cliente, Calendar dataInicio, Calendar dataFinal,
+			Situacao situacao) {
+
 		List<ContaDespesa> resultado;
-		
+
 		CriteriaBuilder criteriaBuilder = manager.getCriteriaBuilder();
 		CriteriaQuery<ContaDespesa> query = criteriaBuilder.createQuery(ContaDespesa.class);
 		Root<ContaDespesa> root = query.from(ContaDespesa.class);
 		List<Predicate> predicates = new ArrayList<Predicate>();
-		
-		Path<String> usuarioPath = root.<Usuario> get("usuario").<String> get("nome");
-		Path<String> clientePath = root.<Cliente> get("cliente").<String> get("nome");
-		Path<Calendar> dataInicioPath = root.<Calendar> get("dataInicio");
-		Path<Calendar> dataFimPath = root.<Calendar> get("dataFim");
-		Path<Situacao> situacaoPath = root.<Situacao> get("situacao");
-		
+
+		Path<String> usuarioPath = root.<Usuario>get("usuario").<String>get("nome");
+		Path<String> clientePath = root.<Cliente>get("cliente").<String>get("nome");
+		Path<Calendar> dataInicioPath = root.<Calendar>get("dataInicio");
+		Path<Calendar> dataFimPath = root.<Calendar>get("dataFim");
+		Path<Situacao> situacaoPath = root.<Situacao>get("situacao");
+
 		if (!user.isEmpty()) {
-	        Predicate usuarioIgual = criteriaBuilder.equal(usuarioPath , user);
-	        predicates.add(usuarioIgual);
-	    }
-		
+			Predicate usuarioIgual = criteriaBuilder.equal(usuarioPath, user);
+			predicates.add(usuarioIgual);
+		}
+
 		if (!cliente.isEmpty()) {
-	        Predicate clienteIgual = criteriaBuilder.equal(clientePath , cliente);
-	        predicates.add(clienteIgual);
-	    }
-		
+			Predicate clienteIgual = criteriaBuilder.equal(clientePath, cliente);
+			predicates.add(clienteIgual);
+		}
+
 		if (situacao != null) {
-	        Predicate situacaoIgual = criteriaBuilder.equal(situacaoPath , situacao);
-	        predicates.add(situacaoIgual);
-	    }
-		
+			Predicate situacaoIgual = criteriaBuilder.equal(situacaoPath, situacao);
+			predicates.add(situacaoIgual);
+		}
+
 		if (dataInicio != null) {
-	        Predicate dataInicioIgual = criteriaBuilder.equal(dataInicioPath , dataInicio);
-	        predicates.add(dataInicioIgual);
-	    }
-		
+			Predicate dataInicioIgual = criteriaBuilder.equal(dataInicioPath, dataInicio);
+			predicates.add(dataInicioIgual);
+		}
+
 		if (dataFinal != null) {
-	        Predicate dataFinalIgual = criteriaBuilder.equal(dataFimPath, dataFinal);
-	        predicates.add(dataFinalIgual);
-	    }
-	    
+			Predicate dataFinalIgual = criteriaBuilder.equal(dataFimPath, dataFinal);
+			predicates.add(dataFinalIgual);
+		}
+
 		query.where((Predicate[]) predicates.toArray(new Predicate[0]));
-	    TypedQuery<ContaDespesa> typedQuery = manager.createQuery(query);
+		TypedQuery<ContaDespesa> typedQuery = manager.createQuery(query);
 		resultado = typedQuery.getResultList();
-		
+
 		return resultado;
 	}
 

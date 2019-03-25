@@ -57,9 +57,9 @@ public class MovimentacaoContaController {
 		int colaborador = movimentacoes.get(0).getConta().getUsuario().getId();
 		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
 		
-		if(movimentacoes.get(0).getConta().getSituacao() == Situacao.ENCERRADA) {
-			saldoLiquido = new BigDecimal(0);
-		}
+//		if(movimentacoes.get(0).getConta().getSituacao() == Situacao.ENCERRADA) {
+//			saldoLiquido = new BigDecimal(0);
+//		}
 
 		if (!hasRole(auth, "ROLE_ADMIN")) {
 			if (colaborador != usuarioLogado.getId()) {

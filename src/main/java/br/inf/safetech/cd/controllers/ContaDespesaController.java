@@ -334,6 +334,8 @@ public class ContaDespesaController {
 		teste.put("saldoLiquido", SaldoLiquido);
 		teste.put("saldoGeral", SaldoGeral);
 		datasource.add(teste);
+		
+		List<Map<String, ?>> itemArray = new ArrayList<Map<String, ?>>();
 
 		for (MovimentacaoConta mov : movimentacoes) {
 
@@ -352,15 +354,16 @@ public class ContaDespesaController {
 			m.put("descricao", mov.getDescricao());
 			m.put("criadoPor", mov.getCriadoPor().getNome());
 
-			datasource.add(m);
+			itemArray.add(m);
 		}
 
+		JRBeanCollectionDataSource itemDataSource = new JRBeanCollectionDataSource(itemArray);
 		JRBeanCollectionDataSource jrDataSource = new JRBeanCollectionDataSource(datasource);
 
 		String nome = request.getServletContext().getRealPath("/relatorio/relatorio.jasper");
 		String logo = request.getServletContext().getRealPath("/resources/imagens/logo_safe_pequeno.png");
 		
-		parameters.put("ItemDataSource", jrDataSource);
+		parameters.put("ItemDataSource", itemDataSource);
 		parameters.put("logo", logo);
 
 		JasperPrint jasperPrint = JasperFillManager.fillReport(nome, parameters, jrDataSource);
