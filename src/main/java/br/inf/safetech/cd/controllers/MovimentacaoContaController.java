@@ -30,6 +30,7 @@ import br.inf.safetech.cd.models.Usuario;
 @RequestMapping("/movimentacoes")
 @Controller
 public class MovimentacaoContaController {
+	//TODO: Refatorar o método de listar e editar, pois há muito código duplicado
 
 	@Autowired
 	private ContaDespesaDAO contaDespesaDAO;
@@ -40,6 +41,7 @@ public class MovimentacaoContaController {
 	@Autowired
 	private MovimentacaoContaDAO movimentacaoContaDAO;
 
+	//Listagem das movimentacoes de uma conta de despesa
 	@RequestMapping(value = "/ver", method = RequestMethod.GET)
 	public ModelAndView listar(Authentication auth, Principal principal, @RequestParam("id") String id,
 			RedirectAttributes redirectAttributes) {
@@ -75,6 +77,7 @@ public class MovimentacaoContaController {
 		return modelAndView;
 	}
 
+	//Listagem das movimentacoes na pagina de edição das mesmas
 	@RequestMapping(value = "/editar", method = RequestMethod.GET)
 	public ModelAndView editar(Authentication auth, Principal principal, RedirectAttributes redirectAttributes,
 			@RequestParam("id") String id) {
@@ -121,6 +124,7 @@ public class MovimentacaoContaController {
 		return modelAndView;
 	}
 
+	//Formulario de cadastro de movimentacao
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
 	public ModelAndView form(MovimentacaoConta movimentacaoConta,HttpServletRequest request, @RequestParam("id") String id) {
 		id = id.substring(1);
@@ -135,6 +139,7 @@ public class MovimentacaoContaController {
 		return modelAndView;
 	}
 
+	//Criacao de movimentacao de conta
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView gravar(Principal principal, MovimentacaoConta movimentacaoConta,
 			RedirectAttributes redirectAttributes, HttpServletRequest request, @RequestParam("valor") String valor) {
@@ -146,7 +151,7 @@ public class MovimentacaoContaController {
 		BigDecimal valorMovimentacao = new BigDecimal(valor);
 
 		ContaDespesa c = contaDespesaDAO.find(movimentacaoConta.getConta().getId());
-		Usuario u = usuarioDAO.loadUserByUsername(principal.getName());
+		Usuario u = (Usuario) ((Authentication) principal).getPrincipal();
 		movimentacaoConta.setConta(c);
 		
 		if(movimentacaoConta.getTipo() == Tipo.CREDITO){
@@ -165,6 +170,7 @@ public class MovimentacaoContaController {
 		return new ModelAndView("redirect:/contas");
 	}
 
+	//Conciliacao e desconciliacao de movimentacao 
 	@RequestMapping(value = "/admin/conciliar", method = RequestMethod.POST)
 	public ModelAndView conciliar(Authentication auth, RedirectAttributes redirectAttributes,
 			@RequestParam("id") String id, @RequestParam("conta") String contaId, @RequestParam("tipo") String tipo) {
@@ -188,6 +194,7 @@ public class MovimentacaoContaController {
 
 	}
 
+	//Remoção de movimentação, caso a mesma esteja desconciliada pelo administrador
 	@RequestMapping(value = "/remover", method = RequestMethod.POST)
 	public ModelAndView remover(RedirectAttributes redirectAttributes, @RequestParam("id") String id, @RequestParam("conta") String contaId) {
 		ModelAndView modelAndView = new ModelAndView("movimentacoes/editar");
@@ -204,6 +211,7 @@ public class MovimentacaoContaController {
 		return new ModelAndView("redirect:/movimentacoes/editar?id="+contaId);
 	}
 
+	//Alteração do responsável por determinada movimentação
 	@RequestMapping(value = "/admin/alterarResponsavel", method = RequestMethod.POST)
 	public ModelAndView alterarResponsavel(RedirectAttributes redirectAttributes, @RequestParam("id") String id, @RequestParam("conta") String contaId,
 			@RequestParam("responsavel") String responsavel) {
@@ -220,6 +228,7 @@ public class MovimentacaoContaController {
 		return new ModelAndView("redirect:/movimentacoes/editar?id="+contaId);
 	}
 
+	//Método que checa se o usuario tem alguma Role (permissão)
 	private boolean hasRole(Authentication auth, String role) {
 		return auth.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals(role));
 	}

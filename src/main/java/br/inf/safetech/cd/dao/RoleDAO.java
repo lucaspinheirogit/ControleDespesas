@@ -15,6 +15,7 @@ public class RoleDAO {
 	@PersistenceContext
 	private EntityManager manager;
 
+	//Criação de Role (permissão)
 	public void gravar(Role role) {
 		manager.persist(role);
 	}

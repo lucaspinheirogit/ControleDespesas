@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.inf.safetech.cd.models.Role;
 import br.inf.safetech.cd.models.Usuario;
 
 @Repository
@@ -28,14 +27,17 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 	@PersistenceContext
 	private EntityManager manager;
 
+	//Busca de usuário com id específico
 	public Usuario find(Integer id) {
 		return manager.find(Usuario.class, id);
 	}
 
+	//Listagem de todos os usuários
 	public List<Usuario> listar() {
 		return manager.createQuery("select u from Usuario u", Usuario.class).getResultList();
 	}
 
+	//Método que faz o login, implementação obrigatória
 	public Usuario loadUserByUsername(String login) {
 		List<Usuario> usuarios = manager
 				.createQuery("select u from Usuario u join fetch u.roles where login = :login", Usuario.class)
@@ -47,12 +49,16 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 
 		return usuarios.get(0);
 	}
+	
 
+	//Criação de um novo usuário
 	public void gravar(Usuario usuario) {
+		System.out.println(usuario);
 		usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 		manager.persist(usuario);
 	}
 
+	//Método que checa se determinado usuário já existe
 	public boolean usuarioJaExiste(Usuario usuario) {
 		if (!manager.createQuery("select u from Usuario u where login = :pLogin", Usuario.class)
 				.setParameter("pLogin", usuario.getLogin()).getResultList().isEmpty()) {
@@ -61,6 +67,7 @@ public class UsuarioDAO implements UserDetailsService, Serializable {
 		return false;
 	}
 
+	//Alterar senha de determinado usuário
 	public void alterarSenha(Integer id, String senha) {
 		Usuario usuario = manager.find(Usuario.class, id);
 		usuario.setSenha(passwordEncoder.encode(senha));

@@ -19,18 +19,20 @@ import br.inf.safetech.cd.models.Usuario;
 @Transactional
 public class ClienteDAO{
 
-
 	@PersistenceContext
 	private EntityManager manager;
 	
+	//Buscar um cliente com id específico
 	public Cliente find(Integer id) {
 		return manager.find(Cliente.class, id);
 	}
 
+	//Listar todos os clientes
 	public List<Cliente> listar() {
 		return manager.createQuery("select c from Cliente c", Cliente.class).getResultList();
 	}
 
+	//Gravar um novo cliente
 	public void gravar(Cliente cliente) {
 		manager.persist(cliente);
 	}

@@ -63,13 +63,8 @@ public class ContaDespesaController {
 	@Autowired
 	private UsuarioDAO usuarioDAO;
 
-	@InitBinder
-	public void initBinder(WebDataBinder webDataBinder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		dateFormat.setLenient(false);
-		webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-	}
-
+	// Listar todas as contas se for admin
+	// Listar somente as contas do próprio colaborador
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView listar(Principal principal, Authentication auth) {
 		ModelAndView modelAndView = new ModelAndView("home");
@@ -102,6 +97,10 @@ public class ContaDespesaController {
 		return modelAndView;
 	}
 
+	// Busca de contas atraves de parametros opcionais (colaborador, cliente,
+	// dataInicio, dataFim, situacaoConta)
+	// A listagem das contas buscadas também é baseada no tipo de usuario logado
+	// (admin ou colaborador)
 	@RequestMapping(value = "/buscar", method = RequestMethod.GET)
 	public ModelAndView buscar(Principal principal, Authentication auth,
 			@RequestParam("usuario") Optional<String> usuario, @RequestParam("cliente") Optional<String> cliente,
@@ -152,7 +151,7 @@ public class ContaDespesaController {
 		} else {
 			contas = contaDespesaDAO.listarComFiltro(Usuario, Cliente, cal_dataInicio, cal_dataFinal, sit);
 		}
-		
+
 		Map<Integer, BigDecimal> saldos = new HashMap<Integer, BigDecimal>();
 		for (ContaDespesa conta : contas) {
 			BigDecimal saldo = contaDespesaDAO.calculaSaldoLiquido(conta.getId());
@@ -171,6 +170,7 @@ public class ContaDespesaController {
 		return modelAndView;
 	}
 
+	// Formulario de cadastro de conta de despesa
 	@RequestMapping(value = "/admin/form", method = RequestMethod.GET)
 	public ModelAndView form(ContaDespesa contaDespesa) {
 		ModelAndView modelAndView = new ModelAndView("conta/form");
@@ -183,8 +183,10 @@ public class ContaDespesaController {
 		return modelAndView;
 	}
 
+	// Criacao de conta de despesa
 	@RequestMapping(value = "/admin/gravar", method = RequestMethod.POST)
-	public ModelAndView gravar(ContaDespesa conta, Principal principal, RedirectAttributes redirectAttributes) throws ParseException {
+	public ModelAndView gravar(ContaDespesa conta, Principal principal, RedirectAttributes redirectAttributes)
+			throws ParseException {
 
 		Date date = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -194,7 +196,7 @@ public class ContaDespesaController {
 
 		Cliente c = clienteDAO.find(conta.getCliente().getId());
 		Usuario u = usuarioDAO.find(conta.getUsuario().getId());
-		
+
 		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
 
 		conta.setCliente(c);
@@ -209,6 +211,7 @@ public class ContaDespesaController {
 		return new ModelAndView("redirect:/contas");
 	}
 
+	// Encerramento de uma conta ativa, caso a mesma esteja liquidada
 	@RequestMapping(value = "/admin/encerrar", method = RequestMethod.POST)
 	public ModelAndView encerrar(Principal principal, @RequestParam("id") String id,
 			@RequestParam("valorDevolucao") String devolucao, @RequestParam("valorVale") String vale,
@@ -216,50 +219,44 @@ public class ContaDespesaController {
 		id = id.substring(1);
 		devolucao = devolucao.substring(1);
 		vale = vale.substring(1);
-		
-		System.out.println("devolucao: " + devolucao);
-		System.out.println("vale: " + vale);
-		
-		System.out.println("Convertendo para padrao americano: ");
-		System.out.println("devolucao: " + ConverterParaDinheiroAmericano(devolucao));
-		System.out.println("vale: " + ConverterParaDinheiroAmericano(vale));
 
 		ContaDespesa c = contaDespesaDAO.find(Integer.parseInt(id));
 		Usuario u = (Usuario) ((Authentication) principal).getPrincipal();
-		
+
 		MovimentacaoConta m1 = new MovimentacaoConta();
 		m1.setConta(c);
 		m1.setTipo(Tipo.DEBITO);
 		m1.setConciliada(Conciliada.SIM);
 		m1.setCriadoPor(u);
 		m1.setDescricao("Vale");
-		m1.setValor(new BigDecimal(ConverterParaDinheiroAmericano(vale).replaceAll(",",""))); 
+		m1.setValor(new BigDecimal(ConverterParaDinheiroAmericano(vale).replaceAll(",", "")));
 		m1.setResponsavel(Responsavel.EMPRESA);
-		
+
 		MovimentacaoConta m2 = new MovimentacaoConta();
 		m2.setConta(c);
 		m2.setTipo(Tipo.DEBITO);
 		m2.setConciliada(Conciliada.SIM);
 		m2.setCriadoPor(u);
 		m2.setDescricao("Devolução");
-		m2.setValor(new BigDecimal(ConverterParaDinheiroAmericano(devolucao).replaceAll(",",""))); 
+		m2.setValor(new BigDecimal(ConverterParaDinheiroAmericano(devolucao).replaceAll(",", "")));
 		m2.setResponsavel(Responsavel.COLABORADOR);
 
 		movimentacaoContaDAO.gravar(m1);
 		movimentacaoContaDAO.gravar(m2);
-		
+
 		contaDespesaDAO.encerrar(Integer.parseInt(id));
 
 		redirectAttributes.addFlashAttribute("message", "Conta encerrada com sucesso!");
 		return new ModelAndView("redirect:/contas");
 	}
 
+	// Formulario de encerramento de conta de despesa
 	@RequestMapping(value = "/admin/encerrar/form", method = RequestMethod.POST)
 	public ModelAndView encerrarForm(@RequestParam("id") String id, RedirectAttributes redirectAttributes)
 			throws NumberFormatException, ParseException {
 		ModelAndView modelAndView = new ModelAndView("conta/encerrar");
 		id = id.substring(1);
-		
+
 		ContaDespesa conta = contaDespesaDAO.find(Integer.parseInt(id));
 		BigDecimal saldo = contaDespesaDAO.calculaSaldoLiquido(Integer.parseInt(id));
 
@@ -283,20 +280,22 @@ public class ContaDespesaController {
 
 	}
 
+	// Geracao de relatorio das movimentacoes de uma conta de despesa
 	@RequestMapping(value = "/admin/gerarRelatorio", method = RequestMethod.POST)
 	public ModelAndView gerarRelatorio(@RequestParam("pdfcliente") Optional<String> pdfcliente, Principal principal,
 			HttpServletRequest request, HttpServletResponse response, @RequestParam("conta") String conta,
 			RedirectAttributes redirectAttributes) throws ParseException, JRException, IOException {
 		conta = conta.substring(1);
-		
+
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		List<MovimentacaoConta> movimentacoes;
 		if (pdfcliente.isPresent() && pdfcliente.get() != "") {
 			movimentacoes = movimentacaoContaDAO.listarDoClientePorId(Integer.parseInt(conta));
-			if(movimentacoes.size() == 0) {
-				redirectAttributes.addFlashAttribute("message", "O cliente não é responsável por nenhuma movimentação!");
-				return new ModelAndView("redirect:/movimentacoes/ver?id="+conta);
+			if (movimentacoes.size() == 0) {
+				redirectAttributes.addFlashAttribute("message",
+						"O cliente não é responsável por nenhuma movimentação!");
+				return new ModelAndView("redirect:/movimentacoes/ver?id=" + conta);
 			}
 			BigDecimal totalCliente = contaDespesaDAO.calculaTotalCliente(Integer.parseInt(conta));
 			parameters.put("pdfCliente", true);
@@ -341,7 +340,7 @@ public class ContaDespesaController {
 		teste.put("saldoLiquido", SaldoLiquido);
 		teste.put("saldoGeral", SaldoGeral);
 		datasource.add(teste);
-		
+
 		List<Map<String, ?>> itemArray = new ArrayList<Map<String, ?>>();
 
 		for (MovimentacaoConta mov : movimentacoes) {
@@ -369,7 +368,7 @@ public class ContaDespesaController {
 
 		String nome = request.getServletContext().getRealPath("/relatorio/relatorio.jasper");
 		String logo = request.getServletContext().getRealPath("/resources/imagens/logo_safe_pequeno.png");
-		
+
 		parameters.put("ItemDataSource", itemDataSource);
 		parameters.put("logo", logo);
 
@@ -378,14 +377,14 @@ public class ContaDespesaController {
 		String filename = "Relatorio " + colaborador + "-" + cliente + ".pdf";
 		response.setContentType("application/x-pdf");
 		response.setHeader("Content-disposition", "inline; filename=" + filename);
-		
+
 		OutputStream outStream = response.getOutputStream();
 		JasperExportManager.exportReportToPdfStream(jasperPrint, outStream);
-		
+
 		outStream.flush();
 		outStream.close();
-		
-		return new ModelAndView("redirect:/movimentacoes/ver?id="+conta);
+
+		return new ModelAndView("redirect:/movimentacoes/ver?id=" + conta);
 	}
 
 	// Converte strings (dd/MM/yyyy) para Calendar
@@ -401,21 +400,13 @@ public class ContaDespesaController {
 
 		return cal_data;
 	}
-	
-	// Converte dinheiro para o padrao americano
-		private String ConverterParaDinheiroAmericano(String valor){
-			//1.710,60
-			
-			valor = valor.replace(",", "a");
-			//1.710a60
-			
-			valor = valor.replace(".", ",");
-			//1,710a60
-			
-			valor = valor.replace("a", ".");
-			//1,710.60
 
-			return valor;
-		}
+	// Converte dinheiro para o padrao americano
+	private String ConverterParaDinheiroAmericano(String valor) {
+		return valor.replace(",", "a").replace(".", ",").replace("a", ".");
+		// valor = valor.replace(".", ",");
+		// valor = valor.replace("a", ".");
+		// return valor;
+	}
 
 }

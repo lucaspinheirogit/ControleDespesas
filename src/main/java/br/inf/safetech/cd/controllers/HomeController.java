@@ -46,11 +46,13 @@ public class HomeController {
 	@Autowired
 	private RoleDAO roleDAO;
 
+	//Raiz do projeto redireciona para /contas ou /login caso o usuario nao esteja logado
 	@RequestMapping("/")
 	public ModelAndView index() {
 		return new ModelAndView("redirect:/contas");
 	}
 
+	//Geracao de dados para o dev testar a aplicacao
 	@Transactional
 	@ResponseBody
 	@RequestMapping("/magia")

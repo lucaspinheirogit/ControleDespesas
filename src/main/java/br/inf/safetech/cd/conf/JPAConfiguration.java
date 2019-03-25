@@ -20,22 +20,16 @@ public class JPAConfiguration {
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource,
 			Properties additionalProperties) {
-
 		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		factoryBean.setJpaVendorAdapter(vendorAdapter);
-
 		factoryBean.setPackagesToScan("br.inf.safetech.cd.models");
-
 		factoryBean.setDataSource(dataSource);
 		factoryBean.setJpaProperties(additionalProperties);
-
 		return factoryBean;
 	}
 
 	@Bean
-	@Profile("dev")
 	public Properties additionalProperties() {
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
@@ -45,7 +39,6 @@ public class JPAConfiguration {
 	}
 
 	@Bean
-	@Profile("dev")
 	private DriverManagerDataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setUsername("root");

@@ -40,19 +40,23 @@ public class ContaDespesaDAO {
 	@PersistenceContext
 	private EntityManager manager;
 
+	//Buscar uma conta com id específico
 	public ContaDespesa find(Integer id) {
 		return manager.find(ContaDespesa.class, id);
 	}
 
+	//Listar todas as contas ativas
 	public List<ContaDespesa> listar() {
 		return manager.createQuery("select c from ContaDespesa c where c.situacao = :situacao", ContaDespesa.class)
 				.setParameter("situacao", Situacao.ATIVA).getResultList();
 	}
 
+	//Gravar uma nova conta
 	public void gravar(ContaDespesa conta) {
 		manager.persist(conta);
 	}
 
+	//Listar todas as contas pertencentes a determinado colaborador
 	public List<ContaDespesa> listarPorColaborador(Usuario usuario) {
 		return manager
 				.createQuery("select c from ContaDespesa c where c.usuario.id = :id and c.situacao = :situacao",
@@ -60,6 +64,7 @@ public class ContaDespesaDAO {
 				.setParameter("id", usuario.getId()).setParameter("situacao", Situacao.ATIVA).getResultList();
 	}
 
+	//Encerrar uma conta com um id específico
 	public void encerrar(int id) throws ParseException {
 		ContaDespesa conta = this.find(id);
 
@@ -74,6 +79,8 @@ public class ContaDespesaDAO {
 		conta.setSituacao(Situacao.ENCERRADA);
 	}
 
+	//Método que checa se a conta está liquidada
+	//Com todas as movimentações conciliadadas e com o responsável definido
 	public boolean estaLiquidada(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		for (MovimentacaoConta movimentacao : movimentacoes) {
@@ -84,6 +91,7 @@ public class ContaDespesaDAO {
 		return true;
 	}
 
+	//Cálculo do saldo líquido da conta
 	public BigDecimal calculaSaldoLiquido(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		BigDecimal credito = new BigDecimal(0);
@@ -106,6 +114,7 @@ public class ContaDespesaDAO {
 		return saldo;
 	}
 
+	//Calculo do saldo geral da conta
 	public BigDecimal calculaSaldoGeral(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		BigDecimal credito = new BigDecimal(0);
@@ -128,6 +137,9 @@ public class ContaDespesaDAO {
 		return saldo;
 	}
 
+	//Calcula o saldo da conta através de suas movimentações
+	//Útil em casos onde já temos as movimentações "em mão"
+	//e não queremos fazer outra operação no banco de dados
 	public BigDecimal calculaSaldoMovimentacoes(List<MovimentacaoConta> movimentacoes) {
 		BigDecimal credito = new BigDecimal(0);
 		BigDecimal debito = new BigDecimal(0);
@@ -145,6 +157,10 @@ public class ContaDespesaDAO {
 		return saldo;
 	}
 
+
+	//Calcula o crédito da conta através de suas movimentações
+	//Útil em casos onde já temos as movimentações "em mão"
+	//e não queremos fazer outra operação no banco de dados
 	public BigDecimal calculaCreditoMovimentacoes(List<MovimentacaoConta> movimentacoes) {
 		BigDecimal credito = new BigDecimal(0);
 
@@ -157,6 +173,9 @@ public class ContaDespesaDAO {
 		return credito;
 	}
 
+	//Calcula o débito da conta através de suas movimentações
+	//Útil em casos onde já temos as movimentações "em mão"
+	//e não queremos fazer outra operação no banco de dados
 	public BigDecimal calculaDebitoMovimentacoes(List<MovimentacaoConta> movimentacoes) {
 		BigDecimal debito = new BigDecimal(0);
 
@@ -169,6 +188,7 @@ public class ContaDespesaDAO {
 		return debito;
 	}
 
+	//Busca de contas através de parametros (colaborador, cliente, dataInicio, dataFinal, situacao)
 	public List<ContaDespesa> listarComFiltro(String user, String cliente, Calendar dataInicio, Calendar dataFinal,
 			Situacao situacao) {
 
@@ -217,6 +237,7 @@ public class ContaDespesaDAO {
 		return resultado;
 	}
 
+	//Calcula o valor total das movimentações que o responsável é definido como Cliente
 	public BigDecimal calculaTotalCliente(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		BigDecimal total = new BigDecimal(0);
@@ -230,6 +251,7 @@ public class ContaDespesaDAO {
 		return total;
 	}
 
+	//Calcula o valor total das movimentações que o responsável é definido como Colaborador
 	public BigDecimal calculaTotalColaborador(int id) {
 		List<MovimentacaoConta> movimentacoes = movimentacaoContaDAO.listarPorId(id);
 		BigDecimal total = new BigDecimal(0);

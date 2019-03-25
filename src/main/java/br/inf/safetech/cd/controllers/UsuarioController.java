@@ -24,14 +24,7 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioDAO usuarioDao;
 
-	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView listar() {
-		List<Usuario> usuarios = usuarioDao.listar();
-		ModelAndView modelAndView = new ModelAndView("usuarios/lista");
-		modelAndView.addObject("usuarios", usuarios);
-		return modelAndView;
-	}
-
+	//Formulario de cadastro de novo usuário
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	public ModelAndView form(Usuario usuario) {
 		List<Usuario> usuarios = usuarioDao.listar();
@@ -40,17 +33,21 @@ public class UsuarioController {
 		return modelAndView;
 	}
 
+	//Criação de novo usuário
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView gravar(@Valid Usuario usuario, BindingResult result, RedirectAttributes redirectAttributes) {
+	public ModelAndView gravar(Usuario usuario, RedirectAttributes redirectAttributes) {
 		if (usuarioDao.usuarioJaExiste(usuario)) {
 			redirectAttributes.addFlashAttribute("message", "Erro! Colaborador já existe!");
 			return new ModelAndView("redirect:/usuarios/form");
 		}
+		System.out.println("usuario no controller");
+		System.out.println(usuario);
 		usuarioDao.gravar(usuario);
 		redirectAttributes.addFlashAttribute("message", "Usuário cadastrado com sucesso!");
 		return new ModelAndView("redirect:/contas");
 	}
 
+	//Formulário de alteração de senha do usuário
 	@RequestMapping(value = "/alterarSenhaForm", method = RequestMethod.GET)
 	public ModelAndView alterarSenhaForm(Principal principal) {
 		Usuario usuarioLogado = (Usuario) ((Authentication) principal).getPrincipal();
@@ -60,6 +57,7 @@ public class UsuarioController {
 		return modelAndView;
 	}
 
+	//Alteração de senha do usuário
 	@RequestMapping(value = "/alterarSenha", method = RequestMethod.POST)
 	public ModelAndView alterarSenha(Usuario usuario, RedirectAttributes redirectAttributes,
 			BindingResult result, Principal principal) {
