@@ -102,10 +102,10 @@ public class HomeController {
 		MovimentacaoConta mc4 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(280), "Almoço", Responsavel.EMPRESA, usuario2);
 		MovimentacaoConta mc5 = new MovimentacaoConta(conta1, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(410), "Taxi Aeroporto", Responsavel.EMPRESA, usuario2);
 		
-		MovimentacaoConta mc6 = new MovimentacaoConta(conta2, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1200), "Passagem", Responsavel.COLABORADOR, usuario2);
+		MovimentacaoConta mc6 = new MovimentacaoConta(conta2, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1200), "Passagem", Responsavel.EMPRESA, usuario);
 		MovimentacaoConta mc7 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(50), "Comida", Responsavel.COLABORADOR, usuario);
 		MovimentacaoConta mc8 = new MovimentacaoConta(conta2, Tipo.DEBITO, Conciliada.NAO, new BigDecimal(100), "Transporte", Responsavel.CLIENTE, usuario2);
-		MovimentacaoConta mc9 = new MovimentacaoConta(conta3, Tipo.CREDITO, Conciliada.SIM, new BigDecimal(1500), "Hotel", Responsavel.COLABORADOR, usuario2);
+		MovimentacaoConta mc9 = new MovimentacaoConta(conta3, Tipo.DEBITO, Conciliada.SIM, new BigDecimal(1500), "Hotel", Responsavel.EMPRESA, usuario);
 
 		movimentacaoContaDAO.gravar(mc1);
 		movimentacaoContaDAO.gravar(mc2);

@@ -91,17 +91,12 @@ public class ContaDespesaDAO {
 		BigDecimal saldo = new BigDecimal(0);
 
 		for (MovimentacaoConta m : movimentacoes) {
-			// Se for credito, apenas soma o credito
-			if (m.getTipo() == Tipo.CREDITO) {
-				credito = credito.add(m.getValor());
+			if (m.getConta().getSituacao() == Situacao.ENCERRADA) {
+				return new BigDecimal(0); //conta encerrada tem saldo liquido 0
 			} else {
-				// Se for debito e a conta estiver encerrada, debita tudo
-				if (m.getConta().getSituacao() == Situacao.ENCERRADA && m.getTipo() == Tipo.DEBITO) {
-					debito = debito.add(m.getValor());
-				}
-				// Se for debito e a conta nao estiver encerrada, debita tudo menos as movim. do
-				// colaborador
-				else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
+				if (m.getTipo() == Tipo.CREDITO) {
+					credito = credito.add(m.getValor());
+				} else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
 					debito = debito.add(m.getValor());
 				}
 			}
@@ -118,10 +113,14 @@ public class ContaDespesaDAO {
 		BigDecimal saldo = new BigDecimal(0);
 
 		for (MovimentacaoConta m : movimentacoes) {
-			if (m.getTipo() == Tipo.CREDITO) {
-				credito = credito.add(m.getValor());
+			if (m.getConta().getSituacao() == Situacao.ENCERRADA) {
+				return new BigDecimal(0); //conta encerrada tem saldo geral 0
 			} else {
-				debito = debito.add(m.getValor());
+				if (m.getTipo() == Tipo.CREDITO) {
+					credito = credito.add(m.getValor());
+				} else {
+					debito = debito.add(m.getValor());
+				}
 			}
 		}
 

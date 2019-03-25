@@ -152,6 +152,12 @@ public class ContaDespesaController {
 		} else {
 			contas = contaDespesaDAO.listarComFiltro(Usuario, Cliente, cal_dataInicio, cal_dataFinal, sit);
 		}
+		
+		Map<Integer, BigDecimal> saldos = new HashMap<Integer, BigDecimal>();
+		for (ContaDespesa conta : contas) {
+			BigDecimal saldo = contaDespesaDAO.calculaSaldoLiquido(conta.getId());
+			saldos.put(conta.getId(), saldo);
+		}
 
 		List<Usuario> usuarios = usuarioDAO.listar();
 		List<Cliente> clientes = clienteDAO.listar();
@@ -159,6 +165,7 @@ public class ContaDespesaController {
 		modelAndView.addObject("message", "Resultados da busca: ");
 		modelAndView.addObject("usuarios", usuarios);
 		modelAndView.addObject("clientes", clientes);
+		modelAndView.addObject("saldos", saldos);
 		modelAndView.addObject("contas", contas);
 
 		return modelAndView;
