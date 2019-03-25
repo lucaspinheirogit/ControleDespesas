@@ -109,7 +109,7 @@
 				<textFieldExpression><![CDATA["Data Início: "]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="207" y="94" width="164" height="18" backcolor="#CCCCCC" uuid="b483424b-920c-46b6-a25d-abdb045d5df9"/>
+				<reportElement x="225" y="94" width="164" height="18" backcolor="#CCCCCC" uuid="b483424b-920c-46b6-a25d-abdb045d5df9"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -117,14 +117,14 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="375" y="114" width="170" height="18" backcolor="#CCCCCC" uuid="a1f07a6e-055a-41e1-b6cc-457ef6d0cac0"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Situação: " + $F{situacao}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="375" y="94" width="170" height="18" backcolor="#CCCCCC" uuid="81c1fd11-6370-40e7-a677-6db1828125c5"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Criado por: " + $F{criadorConta}]]></textFieldExpression>
@@ -153,14 +153,14 @@
 				<textFieldExpression><![CDATA[$F{dataInicio}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="207" y="114" width="82" height="18" backcolor="#CCCCCC" uuid="d7abc925-1da4-4f69-8eaf-9bc31d83a2ad"/>
+				<reportElement x="225" y="114" width="82" height="18" backcolor="#CCCCCC" uuid="d7abc925-1da4-4f69-8eaf-9bc31d83a2ad"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Data Fim: "]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="261" y="114" width="82" height="18" backcolor="#CCCCCC" uuid="856c4d4f-3fec-443f-a0b8-4c1f1f5043c3"/>
+				<reportElement x="279" y="114" width="82" height="18" backcolor="#CCCCCC" uuid="856c4d4f-3fec-443f-a0b8-4c1f1f5043c3"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -171,7 +171,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="18" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{pdfCliente} == true ? "Movimentações do cliente" : "Movimentações"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Movimentações"]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -443,7 +443,7 @@
 			</textField>
 			<textField>
 				<reportElement x="424" y="0" width="130" height="22" uuid="c59d58d6-cf3c-4034-98ce-8506111e38f3"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Usuário: " + $F{criadorPdf}]]></textFieldExpression>
