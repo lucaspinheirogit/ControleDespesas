@@ -97,13 +97,11 @@ public class ContaDespesaDAO {
 			} else {
 				// Se for debito e a conta estiver encerrada, debita tudo
 				if (m.getConta().getSituacao() == Situacao.ENCERRADA && m.getTipo() == Tipo.DEBITO) {
-					System.out.println("Conta encerrada, debitando tuto");
 					debito = debito.add(m.getValor());
 				}
 				// Se for debito e a conta nao estiver encerrada, debita tudo menos as movim. do
 				// colaborador
 				else if (m.getTipo() == Tipo.DEBITO && m.getResponsavel() != Responsavel.COLABORADOR) {
-					System.out.println("Conta ativa, nao debitando o colab");
 					debito = debito.add(m.getValor());
 				}
 			}

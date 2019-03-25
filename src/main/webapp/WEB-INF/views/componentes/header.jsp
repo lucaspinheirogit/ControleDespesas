@@ -15,7 +15,7 @@
 	<div class="collapse navbar-collapse p-2 p-sm-0" id="navbarColor01">
 		<security:authorize access="isAuthenticated()">
 			<security:authentication property="principal" var="usuario" />
-			<h6>Olá, ${usuario.username }</h6>
+			<h6>Olá, ${usuario.nome }</h6>
 			<a style="background-color: #3c546d"
 				href="${s:mvcUrl('UC#alterarSenhaForm').build() }"
 				class="btn btn-primary">Alterar senha</a>

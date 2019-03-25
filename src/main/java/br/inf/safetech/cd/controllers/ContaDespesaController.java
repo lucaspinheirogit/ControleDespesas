@@ -124,7 +124,7 @@ public class ContaDespesaController {
 		if (DataInicio.length() > 0) {
 			if (!DataInicio.matches("\\d{2}/\\d{2}/\\d{4}")) {
 				redirectAttributes.addFlashAttribute("message",
-						"Erro! Data de início deve estar no formato dd/MM/yyyy!");
+						"Erro! Data de início deve estar no formato dia/mes/ano!");
 				return new ModelAndView("redirect:/contas");
 			} else {
 				cal_dataInicio = StringToDate(DataInicio);
@@ -134,7 +134,7 @@ public class ContaDespesaController {
 		if (DataFinal.length() > 0) {
 			if (!DataFinal.matches("\\d{2}/\\d{2}/\\d{4}")) {
 				redirectAttributes.addFlashAttribute("message",
-						"Erro! Data de encerramento deve estar no formato dd/MM/yyyy!");
+						"Erro! Data de encerramento deve estar no formato dia/mes/ano!");
 				return new ModelAndView("redirect:/contas");
 			} else {
 				cal_dataFinal = StringToDate(DataFinal);

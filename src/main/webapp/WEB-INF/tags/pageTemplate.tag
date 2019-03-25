@@ -29,7 +29,7 @@
 
 <style>
 	.selectize-control{
-		min-width: 11em;
+		min-width: 13em;
 	}
 </style>
 </head>

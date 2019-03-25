@@ -84,7 +84,7 @@ form {
 					</div>
 
 					<div class="form-group">
-						<label class="mr-2">Situação: </label> <select style="min-width: 11em"
+						<label class="mr-2">Situação: </label> <select style="min-width: 13em"
 								class="form-control mr-sm-2 ml-0" name="situacao"
 								form="formBusca">
 							<option value="ATIVA">ATIVA</option>
@@ -96,17 +96,17 @@ form {
 				<div class="div-form-group">
 					<div class="form-group">
 						<label>Data de início: </label> <input class="form-control"
-								placeholder="dd/MM/yyyy" name="dataInicio"
+								placeholder="dia/mes/ano" name="dataInicio"
 								data-mask="00/00/0000" data-mask-selectonfocus="true" />
 					</div>
 
 					<div class="form-group">
 						<label>Data de encerramento: </label> <input class="form-control"
-								placeholder="dd/MM/yyyy" name="dataFinal" />
+								placeholder="dia/mes/ano" name="dataFinal" />
 					</div>
 				</div>
 
-				<button style="margin: .2em" class="btn btn-primary" type="submit">Buscar</button>
+				<button style="margin: .5em" class="btn btn-primary" type="submit">Buscar</button>
 			</div>
 		</form>
 	</div>
