@@ -221,6 +221,9 @@ small {
 		        flex-direction: column;
 		margin-bottom: 1rem;
 	}
+	.w-sm-50{
+		width: 50% !important;
+	}
 }
 
 @media ( min-width : 576px) and (max-width: 768px) {

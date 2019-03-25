@@ -34,26 +34,37 @@ $(document).ready(function() {
 		});
 		
 		$('#vale').on('blur', function() {
-			vale = this.value.replace( '.', '' ).replace( ',', '.' );
-			vale = parseFloat(vale);
-			resultado = String(saldoTotal - vale);
+			vale = parseFloat(this.value.replace( '.', '' ).replace( ',', '.' ));
 			
-			resultado = resultado.replace( '.', ',' );
-			$('#devolucao').val(resultado);
+			if(vale > saldoTotal){
+				$('#vale').val(saldoTotal);
+				$('#devolucao').val(0);
+			}else{
+				if(vale == 0) $('#vale').val(0);
+				resultado = String((saldoTotal - vale).toFixed(2));
+				resultado = resultado.replace( '.', ',' );
+				$('#devolucao').val(resultado);
+			}
 		});
 		
 		$('#devolucao').on('blur', function() {
-			devolucao = this.value.replace( '.', '' ).replace( ',', '.' );
-			devolucao = parseFloat(devolucao);
+			devolucao = parseFloat(this.value.replace( '.', '' ).replace( ',', '.' ));
 			resultado = String(saldoTotal - devolucao);
-			
-			resultado = resultado.replace( '.', ',' );
-			$('#vale').val(resultado);
+
+			if(devolucao > saldoTotal){
+				$('#devolucao').val(saldoTotal);
+				$('#vale').val(0);
+			}else{
+				if(devolucao == 0) $('#devolucao').val(0);
+				resultado = String((saldoTotal - devolucao).toFixed(2));
+				resultado = resultado.replace( '.', ',' );
+				$('#vale').val(resultado);
+			}
 		});
 		
-		$("form").submit(function(e){
-			devolucao = $('#devolucao').replace( '.', '' ).replace( ',', '.' );
-			vale = $('#vale').replace( '.', '' ).replace( ',', '.' );
+		$("form").submit(function(e){	
+			devolucao = parseFloat($('#devolucao').val().replace( '.', '' ).replace( ',', '.' ));
+			vale = parseFloat($('#vale').val().replace( '.', '' ).replace( ',', '.' ));
 			
 			valorInformado = devolucao + vale;
 			
@@ -63,7 +74,11 @@ $(document).ready(function() {
 			if(valorInformado < saldoTotal){
 				$('#message').text("Ainda há saldo remanescente de R$ " + (saldoTotal - valorInformado));
             	e.preventDefault();
-			}else{
+			}else if (valorInformado > saldoTotal){
+				$('#message').text("O valor informado excede o saldo.");
+            	e.preventDefault();
+			}
+			else{
 				$('#message').text("");
 				return confirm('Deseja encerrar?');
 			}
@@ -84,33 +99,26 @@ $(document).ready(function() {
 		<h5 id="message" class="color-red">${ message }</h5>
 
 		<div class="jumbotron">
-			<h1 class="display-3">Encerrar conta?</h1>
-			<p class="lead">O saldo da conta é: ${ saldo } ,
+			<h2 style="font-size: 2.5rem" class="display-3">Encerrar conta?</h2>
+			<p class="lead">O saldo da conta é:
+			<fmt:formatNumber value="${ saldo }" minFractionDigits="2"
+				type="currency" />, <br/>
 				informe como gostaria de encerrar a conta: </p>
 			<hr class="my-4">
 			<form action="${s:mvcUrl('CDC#encerrar').build() }" method="post">
-<%-- 					onsubmit="return confirm('Deseja encerrar?');"> --%>
 				<div class="form-group">
-					<div class="custom-control custom-radio">
-						<div>
-							<input type="checkbox" id="checkbox1" name="vale" value="Vale"
-									Class="custom-control-input" required /> <label
-									class="custom-control-label" for="checkbox1">Vale</label>
-						</div>
+						<div class="d-flex mb-2">
+								<label class="m-0 d-flex align-self-center" style="min-width: 6em" for="valorVale">Vale: </label>
 								<input style="flex-grow: 0" id="vale" type="text"
-								class="form-control formatNumber w-50" name="valorVale" required
-								disabled />
-					</div>
-					<div class="custom-control custom-radio">
-						<div>
-							<input type="checkbox" id="checkbox2" name="devolucao"
-									value="Devolução" Class="custom-control-input" required /> <label
-									class="custom-control-label" for="checkbox2">Devolução</label>
+								class="form-control formatNumber w-100 w-sm-50" name="valorVale" required />
 						</div>
+					
+						<div class="d-flex">
+								<label class="m-0 d-flex align-self-center" style="min-width: 6em" for="valorDevolucao">Devolução: </label>
 								<input style="flex-grow: 0" id="devolucao" type="text"
-								class="form-control formatNumber w-50" name="valorDevolucao"
-								required disabled />
-					</div>
+								class="form-control formatNumber w-100 w-sm-50" name="valorDevolucao"
+								required />
+						</div>
 				</div>
 				<input type="hidden" name="id" value="${ conta.id }" />
 				<button type="submit" class="btn btn-danger">Encerrar</button>
