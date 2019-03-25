@@ -16,6 +16,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>${titulo } - Controle de despesas</title>
+<link rel="shortcut icon" href="${contextPath}resources/imagens/favicon.png" />
 <link rel="stylesheet" type="text/css" media="screen"
 	href="https://bootswatch.com/4/flatly/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" media="screen"

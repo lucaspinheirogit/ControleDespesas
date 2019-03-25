@@ -97,10 +97,9 @@ $(document).ready(function() {
 									Class="custom-control-input" required /> <label
 									class="custom-control-label" for="checkbox1">Vale</label>
 						</div>
-<!-- 						<input id="vale" type="number" name="valorVale" value="0" -->
-<%-- 								max="${saldo }" min="0" step="0.01" disabled /> --%>
-								<input style="flex-grow:0" id="vale" type="text" class="form-control formatNumber w-50" name="valorVale"
-						required disabled />
+								<input style="flex-grow: 0" id="vale" type="text"
+								class="form-control formatNumber w-50" name="valorVale" required
+								disabled />
 					</div>
 					<div class="custom-control custom-radio">
 						<div>
@@ -108,10 +107,9 @@ $(document).ready(function() {
 									value="Devolução" Class="custom-control-input" required /> <label
 									class="custom-control-label" for="checkbox2">Devolução</label>
 						</div>
-<!-- 							<input id="devolucao" type="number" name="valorDevolucao" -->
-<%-- 								value="0" max="${saldo }" min="0" step="0.01" disabled /> --%>
-								<input style="flex-grow:0" id="devolucao" type="text" class="form-control formatNumber w-50" name="valorDevolucao"
-						required disabled />
+								<input style="flex-grow: 0" id="devolucao" type="text"
+								class="form-control formatNumber w-50" name="valorDevolucao"
+								required disabled />
 					</div>
 				</div>
 				<input type="hidden" name="id" value="${ conta.id }" />
